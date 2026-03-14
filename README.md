@@ -1,3 +1,14 @@
+### 커밋 컨벤션
+- Feat: 기능 추가
+- Fix: 버그 수정
+- Docs: 문서 수정 (README, TIL 등)
+- Style: 코드 포맷팅, 세미콜론 누락 등 (코드 로직 변경 없음)
+- Refactor: 코드 리팩토링 (기능 변경 없이 구조 개선)
+- Test: 테스트 코드 추가 혹은 수정
+- Deploy: 배포 관련 작업
+- Chore: 빌드 업무 수정, 패키지 매니저 설정 등 (프로덕션 코드 변경 없음)
+- Merge: 브랜치를 합치다가 난 충돌을 해결했을 때 수정
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

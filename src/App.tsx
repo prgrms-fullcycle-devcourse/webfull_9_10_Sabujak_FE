@@ -3,9 +3,11 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import { DatePicker } from "./components/DatePicker";
 
 function App() {
   const [count, setCount] = useState(0)
+  const [date, setDate] = useState<Date | null>(null);
 
   return (
     <>
@@ -114,6 +116,9 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+      <div>
+      <DatePicker value={date} onChange={setDate} />
+      </div>
     </>
   )
 }

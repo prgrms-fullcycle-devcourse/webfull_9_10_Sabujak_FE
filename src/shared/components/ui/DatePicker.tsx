@@ -14,7 +14,7 @@ const CustomInput = forwardRef<HTMLButtonElement, Props>(
             <button
                 ref={ref}
                 onClick={onClick}
-                className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#f5f5f5] cursor-pointer"
+                className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#f5f2ed] cursor-pointer"
             >
                 <span className="text-gray-700">{value || "날짜 선택"}</span>
                 <img src={calendarIcon} className="w-5 h-5 opacity-70" alt="" />

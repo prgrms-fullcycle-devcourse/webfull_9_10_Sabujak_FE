@@ -26,29 +26,23 @@ export default defineConfig([
     rules: {
       "@typescript-eslint/naming-convention": [
         "error",
-        // 변수 / 함수 → camelCase
         {
-          selector: "variableLike",
-          format: ["camelCase"]
+          selector: "variable",
+          format: ["camelCase", "PascalCase"]
         },
-        // 타입 / 인터페이스 / enum / class → PascalCase
+        {
+          selector: "variable",
+          modifiers: ["const"],
+          format: ["camelCase", "PascalCase", "UPPER_CASE"]
+        },
+        {
+          selector: "function",
+          format: ["camelCase", "PascalCase"]
+        },
         {
           selector: "typeLike",
           format: ["PascalCase"]
         },
-        // const → camelCase 또는 UPPER_CASE
-        {
-          selector: "variable",
-          modifiers: ["const"],
-          format: ["camelCase", "UPPER_CASE"]
-        },
-        // boolean 변수 → camelCase + is / has / can / should로 시작
-        {
-          selector: "variable",
-          types: ["boolean"],
-          format: ["camelCase"],
-          prefix: ["is", "has", "can", "should"]
-        }
       ]
     }
   },

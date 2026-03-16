@@ -1,0 +1,20 @@
+/* Tailwind v4에서 디자인 토큰을 정의하는 전용 문법 */
+@theme {
+  --font-sans: "Pretendard", "Noto Sans KR", system-ui, "Segoe UI", Roboto, sans-serif;
+}
+@media (min-width: 768px) {}
+/* 버튼 */
+
+/* 인풋 */
+
+/* 헤더 */
+.btn-back{
+  background: var(--ico-back) 0 center no-repeat;
+}
+.btn-menu{
+  background: var(--ico-menu) right center no-repeat;
+}
+
+/* 컨텐츠 */
+
+/* 푸터 */

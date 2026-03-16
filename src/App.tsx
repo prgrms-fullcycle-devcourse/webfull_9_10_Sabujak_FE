@@ -3,10 +3,12 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
-
+import { GlobalModal } from './components/GlobalModal';
+import { useModalStore } from './store/useModalStore';
+import { WriteMessageContent } from './components/WriteMessageContent.tsx'
 function App() {
   const [count, setCount] = useState(0)
-
+  const { openModal } = useModalStore();
   return (
     <>
       <section id="center">
@@ -28,6 +30,23 @@ function App() {
           Count is {count}
         </button>
       </section>
+
+      <div className="flex gap-8 p-4">
+        {/* 버튼 1: 메세지 입력 모달 */}
+        <button
+          onClick={() => openModal('편지 쓰기', <WriteMessageContent />, 'writeMessage')}
+        >
+          writeMessage
+        </button>
+
+        <button onClick={() => openModal('제목', <p>내용</p>, 'yes')}>
+          yes
+        </button>
+
+        <button onClick={() => openModal('제목', <p>내용</p>, 'yesno')}>
+          yesno
+        </button>
+      </div>
 
       <div className="ticks"></div>
 
@@ -114,6 +133,7 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
+      <GlobalModal />
     </>
   )
 }

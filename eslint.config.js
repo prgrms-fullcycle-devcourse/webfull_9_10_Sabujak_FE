@@ -26,12 +26,10 @@ export default defineConfig([
     rules: {
       "@typescript-eslint/naming-convention": [
         "error",
-        // 변수 → camelCase
         {
           selector: "variable",
           format: ["camelCase", "PascalCase"]
         },
-        // const → camelCase 또는 UPPER_CASE
         {
           selector: "variable",
           modifiers: ["const"],
@@ -41,7 +39,6 @@ export default defineConfig([
           selector: "function",
           format: ["camelCase", "PascalCase"]
         },
-        // 타입 / 인터페이스 / enum / class → PascalCase
         {
           selector: "typeLike",
           format: ["PascalCase"]

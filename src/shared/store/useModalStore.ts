@@ -7,12 +7,12 @@ interface ModalData {
   title: string;
   content: React.ReactNode;
   option: ModalOption | null;
-  onConfirm?: (data?: any) => void,
+  onConfirm?: (data?: unknown) => void,
 }
 
 interface ModalState {
   modals: ModalData[];
-  openModal: (title: string, content: React.ReactNode, option: ModalOption, onconfirm?: (data?: any) => void) => void;
+  openModal: (title: string, content: React.ReactNode, option: ModalOption, onconfirm?: (data?: unknown) => void) => void;
   closeModal: () => void;
   clearModals: () => void;
 }

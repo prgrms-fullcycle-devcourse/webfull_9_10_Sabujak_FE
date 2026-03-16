@@ -1,4 +1,4 @@
-import { useModalStore } from '../store/useModalStore';
+import { useModalStore } from '../shared/store/useModalStore';
 
 export const GlobalModal = () => {
   const { modals, closeModal } = useModalStore();

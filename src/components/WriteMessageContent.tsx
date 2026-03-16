@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useModalStore } from '../store/useModalStore';
+import { useModalStore } from '../shared/store/useModalStore';
 
 export const WriteMessageContent = () => {
     const { openModal, clearModals } = useModalStore();

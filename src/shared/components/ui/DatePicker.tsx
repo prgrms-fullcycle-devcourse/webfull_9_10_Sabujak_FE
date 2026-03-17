@@ -1,23 +1,28 @@
 import { forwardRef } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import calendarIcon from "../../../assets/calendar.svg";
 
 interface Props {
+    id?: string;
+    placeholder?: string;
     value?: string;
     onClick?: () => void;
 }
 
 const CustomInput = forwardRef<HTMLButtonElement, Props>(
-    ({ value, onClick }, ref) => {
+    ({ id, placeholder, value, onClick }, ref) => {
+        const hasValue = Boolean(value);
+        const datePickerClassName = "field-control field-icon-calendar cursor-pointer";
+        const textClassName = hasValue ? "" : "text-gray-400";
+
         return (
             <button
+                id={id}
                 ref={ref}
                 onClick={onClick}
-                className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#f5f2ed] cursor-pointer"
+                className={datePickerClassName}
             >
-                <span className="text-gray-700">{value || "날짜 선택"}</span>
-                <img src={calendarIcon} className="w-5 h-5 opacity-70" alt="" />
+                <span className={textClassName}>{value || placeholder || "날짜 선택"}</span>
             </button>
         );
     }
@@ -26,12 +31,13 @@ const CustomInput = forwardRef<HTMLButtonElement, Props>(
 CustomInput.displayName = "CustomInput";
 
 interface DatePickerProps {
-    readonly label?: string;
+    readonly id?: string;
     readonly value: Date | null;
     readonly onChange: (date: Date | null) => void;
+    readonly placeholder?: string;
 }
 
-export function DatePicker({ label, value, onChange }: DatePickerProps) {
+export function DatePicker({ id, value, onChange, placeholder }: DatePickerProps) {
     const now: Date = new Date();
     const tomorrow = new Date(
         now.getFullYear(),
@@ -39,24 +45,17 @@ export function DatePicker({ label, value, onChange }: DatePickerProps) {
         now.getDate() + 1
     );
     return (
-        <div className="flex flex-col gap-1">
-            {label && (
-                <label className="texta-sm">
-                    {label}
-                </label>
-            )}
-            <ReactDatePicker
-                selected={value}
-                onChange={onChange}
-                dateFormat="yyyy.MM.dd"
-                minDate={tomorrow}
-                shouldCloseOnSelect
-                placeholderText="날짜 선택"
-                popperClassName="z-50"
-                wrapperClassName="w-full"
-                customInput={<CustomInput/>}
-                className="flex-1 bg-transparent border-none outline-none"
-            />
-        </div>
+        <ReactDatePicker
+            selected={value}
+            onChange={onChange}
+            dateFormat="yyyy.MM.dd"
+            minDate={tomorrow}
+            shouldCloseOnSelect
+            placeholderText={placeholder ?? "날짜 선택"}
+            popperClassName="z-50"
+            wrapperClassName="w-full"
+            customInput={<CustomInput id={id} placeholder={placeholder} />}
+            className="flex-1 bg-transparent border-none outline-none"
+        />
     );
 }

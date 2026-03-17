@@ -38,25 +38,32 @@ const WriteMessageContent = () => {
     return (
         <div className="w-full p-6 flex flex-col justify-start items-start gap-6">
             {/* 닉네임 입력 */}
-            <div className="self-stretch">
+            <div className="self-stretch h-16 relative">
+                <label htmlFor="nickname" className="w-8 h-4 left-[4px] top-0 absolute justify-center text-neutral-500 text-xs font-medium font-['Pretendard'] leading-4">닉네임</label>
                 <Input
-                    label="닉네임"
+                    id="nickname"
                     value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
                     placeholder="닉네임을 입력해주세요"
-                    className="w-full font-['Pretendard']"
+                    className="w-72 px-4 py-3.5 left-0 top-[16px] absolute bg-neutral-50 rounded-xl outline outline-1 outline-offset-[-1px] outline-neutral-200 inline-flex justify-center items-start overflow-hidden"
                 />
             </div>
 
             {/* 편지 내용 입력 */}
-            <div className="self-stretch">
-                <Input
-                    label="편지 내용"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder="따뜻한 마음을 전해보세요..."
-                    className="w-full font-['Pretendard']"
-                />
+            <div className="self-stretch h-64 relative">
+                <label htmlFor="content" className="absolute top-0 left-1 text-neutral-500 text-xs font-medium font-['Pretendard'] leading-4">편지 내용</label>
+                <div
+                    className="field-control h-60 mt-4"
+                    onClick={() => document.getElementById('content')?.focus()}
+                >
+                    <textarea
+                        id="content"
+                        value={content}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
+                        placeholder="따뜻한 마음을 전해보세요..."
+                        className="field-input w-full h-full bg-transparent resize-none outline-none"
+                    />
+                </div>
             </div>
 
             {/* 입력 완료 버튼 */}

@@ -13,7 +13,7 @@ const CustomInput = forwardRef<HTMLButtonElement, Props>(
     ({ id, placeholder, value, onClick }, ref) => {
         const hasValue = Boolean(value);
         const datePickerClassName = "field-control field-icon-calendar cursor-pointer";
-        const textClassName = hasValue ? "" : "text-gray-400";
+        const textClassName = hasValue ? "" : "placeholder";
 
         return (
             <button

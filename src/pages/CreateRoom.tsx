@@ -1,5 +1,5 @@
 import PageLayout from "../shared/components/layout/PageLayout";
-import Button from "../shared/components/ui/Button";
+import Button from "../shared/components/ui/button";
 
 export default function CreateRoom() {
     return (

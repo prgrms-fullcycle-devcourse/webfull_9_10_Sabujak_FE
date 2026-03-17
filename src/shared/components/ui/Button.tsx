@@ -11,12 +11,12 @@ type ButtonProps = {
     className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button({
+export const Button = ({
     variant = "primary",
     children,
     className = "",
     ...props
-}: ButtonProps) {
+}: ButtonProps) => {
     const baseClassName = "rounded-2xl py-4";
     const variantClassName = buttonVariantClassNameMap[variant];
 
@@ -27,4 +27,4 @@ export default function Button({
             {children}
         </button>
     );
-}
+};

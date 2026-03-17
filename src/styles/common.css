@@ -2,16 +2,86 @@
 @theme {
   --font-sans: "Pretendard", "Noto Sans KR", system-ui, "Segoe UI", Roboto, sans-serif;
 }
+
 @media (min-width: 768px) {}
+
 /* 버튼 */
 
 /* 인풋 */
+input::placeholder, .placeholder {
+  color: #999999;
+}
+
+.field-control {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 0;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  background: #f5f2ed;
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.field-control:focus-within {
+  outline: none;
+}
+
+.field-input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  outline: none;
+}
+
+.field-error {
+  border: 1px solid #ef4444;
+}
+
+/* 데이트피커 */
+[class*="field-icon-"] {
+  position: relative;
+  padding-right: 2.75rem;
+}
+
+[class*="field-icon-"]:after{
+
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 1rem;
+  height: 1rem;
+  transform: translateY(-50%);
+  background-image: var(--field-icon);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+}
+
+.field-icon-calendar::after {
+  --field-icon: var(--ico-calendar);
+}
+
+.react-datepicker__tab-loop {
+  position: absolute;
+  z-index: 50;
+}
+
+.react-datepicker-popper {
+  z-index: 50;
+}
 
 /* 헤더 */
-.btn-back{
+.btn-back {
   background: var(--ico-back) 0 center no-repeat;
 }
-.btn-menu{
+
+.btn-menu {
   background: var(--ico-menu) right center no-repeat;
 }
 

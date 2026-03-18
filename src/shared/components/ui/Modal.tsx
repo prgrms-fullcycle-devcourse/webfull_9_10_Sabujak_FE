@@ -6,7 +6,7 @@ import { Button, Input } from './index';
 
 
 // ── WriteMessageContent (편지 쓰기 폼) ──
-const WriteMessageContent = () => {
+export const WriteMessageContent = () => {
     const { openModal, clearModals } = useModalStore();
     const [nickname, setNickname] = useState('');
     const [content, setContent] = useState('');
@@ -172,6 +172,3 @@ export default function Modal() {
         </>
     );
 }
-
-// WriteMessageContent를 외부에서 import할 수 있도록 export
-export { WriteMessageContent };

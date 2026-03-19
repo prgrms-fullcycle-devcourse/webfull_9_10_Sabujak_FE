@@ -9,6 +9,10 @@
 - Chore: 빌드 업무 수정, 패키지 매니저 설정 등 (프로덕션 코드 변경 없음)
 - Merge: 브랜치를 합치다가 난 충돌을 해결했을 때 수정
 
+## 문서
+
+- [Orval 가이드](./docs/orval-usage.md): 배포된 OpenAPI URL 기준으로 API client와 TanStack Query 훅을 생성하는 방법
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

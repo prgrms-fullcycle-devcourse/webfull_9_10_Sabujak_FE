@@ -13,13 +13,46 @@
 ## 🛠 기술 스택 (Tech Stack)
 
 ### **Frontend**
-- Vite(Build), React(UI), TS(Language), pnpm(Package Manager), Tailwind CSS(Styling), Zustand(Client State), TanStack Query(Server State), Axios(HTTP), Zod(Validation), Vercel(Deployment)
 
-### **Backend** (해당 시 작성)
-- TS(Language), pnpm(Package Manager), Express(Server), Render(Deployment), Docker(Container), Jest(Testing), Neon PostgreSQL(Database), DrizzleORM(ORM), OpenAPI(API Spec), Sentry(Monitoring), Pino(Logging)
+| 영역              | 기술 |
+|------------------|------|
+| Build            | Vite |
+| UI               | React |
+| Language         | TypeScript |
+| Package Manager  | pnpm |
+| Styling          | Tailwind CSS |
+| State (Client)   | Zustand |
+| State (Server)   | TanStack Query |
+| HTTP             | Axios |
+| Validation       | Zod |
+| Deployment       | Vercel |
 
-### **DevOps/QA**
-- GitHub Actions(CI), Render(CD), Sentry(Monitoring), Husky & lint-staged(Git Hook), Jest(Testing), Pino(Logging)
+### **Backend**
+
+| 영역              | 기술 |
+|------------------|------|
+| Language         | TypeScript |
+| Package Manager  | pnpm |
+| Server           | Express |
+| Deployment       | Render |
+| Container        | Docker |
+| Testing          | Jest |
+| Database         | Neon PostgreSQL |
+| ORM              | Drizzle ORM |
+| API Spec         | OpenAPI |
+| Monitoring       | Sentry |
+| Logging          | Pino |
+
+### **DevOps / QA**
+
+| 영역              | 기술 |
+|------------------|------|
+| CI               | GitHub Actions |
+| CD               | Render |
+| Monitoring       | Sentry |
+| Git Hooks        | Husky, lint-staged |
+| Testing          | Jest |
+| Logging          | Pino |
 
 ---
 
@@ -71,6 +104,7 @@ src/
 ### 1. 레포지토리 클론 및 폴더 이동
 ```bash
 git clone https://github.com/prgrms-fullcycle-devcourse/webfull_9_10_Sabujak_FE
+
 cd webfull_9_10_Sabujak_FE
 ```
 
@@ -84,23 +118,22 @@ pnpm install
 
 ### 4. 프로젝트 실행
 ```bash
-pnpm start
+pnpm dev        # 개발 모드 실행
+
+pnpm start      # 프로덕션 실행
 ```
 
 ---
 
 ## 🧑‍💻 팀원 소개 (Team)
 
-| 이름 | 역할 | GitHub |
-| --- | --- | --- |
-| 이윤하 | Backend | [@labyrinth30](https://github.com/labyrinth30) |
-| 김인수 | Backend | [@insu1170](https://github.com/insu1170) |
-| 한재민 | Frontend | [@s576air](http://github.com/s576air) |
-| 송창욱 | Frontend | [@supersoldier132](https://github.com/supersoldier132) |
-| 이연희 | Frontend | [@yomiyoni](https://github.com/yomiyoni) |
+| 프로필 | 이름 | 역할 | GitHub |
+|--------|------|------|--------|
+| <img src="https://github.com/labyrinth30.png" width="50" /> | 이윤하 | Backend | [@labyrinth30](https://github.com/labyrinth30) |
+| <img src="https://github.com/insu1170.png" width="50" /> | 김인수 | Backend | [@insu1170](https://github.com/insu1170) |
+| <img src="https://github.com/s576air.png" width="50" /> | 한재민 | Frontend | [@s576air](http://github.com/s576air) |
+| <img src="https://github.com/supersoldier132.png" width="50" /> | 송창욱 | Frontend | [@supersoldier132](https://github.com/supersoldier132) |
+| <img src="https://github.com/yomiyoni.png" width="50" /> | 이연희 | Frontend | [@yomiyoni](https://github.com/yomiyoni) |
 
 ---
 
-**💡 추가 팁:**
-- 작성하신 부분 외에 **프로젝트 로컬 실행 방법**과 **브랜치 전략** 파트도 협업 시 매우 중요하여 기본 양식에 추가해 두었습니다. 
-- 추후 실제 `README.md` 파일에 적용하실 때 불필요한 부분은 가볍게 지우고 필요한 내용을 덧붙여 사용하시면 됩니다!

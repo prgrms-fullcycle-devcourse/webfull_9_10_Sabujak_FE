@@ -144,7 +144,7 @@ export default function Modal() {
                             </Button>
                             <Button
                                 onClick={closeModal}
-                                variant="white"
+                                variant="secondary"
                                 className="flex-1 bg-neutral-200"
                             >
                                 아니요

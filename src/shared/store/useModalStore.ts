@@ -4,7 +4,7 @@ export type ModalOption = 'writeMessage' | 'oneButton' | 'twoButton';
 
 interface ModalData {
   id: string;
-  title: string;
+  title?: string;
   content: React.ReactNode;
   option: ModalOption | null;
   buttonText?: Array<string>;

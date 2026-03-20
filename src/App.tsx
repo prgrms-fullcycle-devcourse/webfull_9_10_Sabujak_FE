@@ -25,12 +25,18 @@ export default function App() {
           writeMessage
         </Button>
 
-        <Button onClick={() => openModal("제목", <p>내용</p>, "yes")}>
-          yes
+        <Button
+          onClick={() => openModal("제목", "내용123", "oneButton", ["확인"])}
+        >
+          oneButton
         </Button>
 
-        <Button onClick={() => openModal("제목", <p>내용</p>, "yesno")}>
-          yesno
+        <Button
+          onClick={() =>
+            openModal("제목", <p>내용</p>, "twoButton", ["확인", "취소"])
+          }
+        >
+          twoButton
         </Button>
       </div>
       <Modal />

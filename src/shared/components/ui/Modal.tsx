@@ -1,95 +1,69 @@
-import { Button } from './index';
-import { useModalStore } from '../../store/useModalStore';
-import { ModalLayout } from '../layout';
-// ── Modal (글로벌 모달 렌더러) ──
+import { useModalStore } from "../../store/useModalStore";
+import { ModalLayout } from "../layout";
+
+// ── Modal (글로벌 모달 관리자) ──
 export default function Modal() {
-    const { modals, closeModal } = useModalStore();
+  const { modals, closeModal } = useModalStore();
 
-    if (modals.length === 0) return null;
+  if (modals.length === 0) return null;
 
-    return (
-        <>
-            {modals.map((modal, index) => {
-                // 헤더 구성
-                const header = (
-                    <>
-                        <h2 className="justify-center text-neutral-900 text-lg font-semibold font-['Pretendard'] leading-7">
-                            {modal.title}
-                        </h2>
-                        {(modal.option === 'writeMessage' || modal.option === 'yesno') && (
-                            <button
-                                onClick={closeModal}
-                                className="text-neutral-400 text-xl font-black leading-5"
-                            >
-                                ✕
-                            </button>
-                        )}
-                    </>
-                );
+  return (
+    <>
+      {modals.map((modal, index) => {
+        const { id, title, content, option, buttonText, onConfirm } = modal;
+        const zIndex = 9999 + index;
 
-                // 버튼 영역 구성
-                let bottomArea = null;
+        // 1. 메시지 작성형 모달 (writeMessage)
+        if (option === "writeMessage") {
+          return (
+            <ModalLayout
+              key={id}
+              title={title}
+              onClose={closeModal}
+              showCloseButton={true}
+              zIndex={zIndex}
+            >
+              {content}
+            </ModalLayout>
+          );
+        }
 
-                if (modal.option === 'yes') {
-                    bottomArea = (
-                        <Button
-                            onClick={() => {
-                                if (modal.onConfirm) {
-                                    modal.onConfirm();
-                                } else {
-                                    closeModal();
-                                }
-                            }}
-                            className="flex-1"
-                        >
-                            확인
-                        </Button>
-                    );
-                }
+        // 2. 버튼형 모달 (oneButton, twoButton)
+        // 기본적으로 p-6 패딩을 본문에 추가
+        const body = <div className="p-6">{content}</div>;
 
-                if (modal.option === 'yesno') {
-                    bottomArea = (
-                        <>
-                            <Button
-                                onClick={() => {
-                                    if (modal.onConfirm) {
-                                        closeModal();
-                                        modal.onConfirm();
-                                    } else {
-                                        closeModal();
-                                    }
-                                }}
-                                className="flex-1"
-                            >
-                                예
-                            </Button>
-                            <Button
-                                onClick={closeModal}
-                                variant="white"
-                                className="flex-1 bg-neutral-200"
-                            >
-                                아니요
-                            </Button>
-                        </>
-                    );
-                }
+        // 버튼 상세 설정 (Layout에서 버튼을 그리도록 데이터만 전달)
+        const primaryButton = {
+          text: buttonText?.[0] || (option === "oneButton" ? "확인" : "예"),
+          onClick: () => {
+            closeModal();
+            if (onConfirm?.[0]) onConfirm[0]();
+          },
+        };
 
-                // 본문 영역: writeMessage는 padding 없음, 나머지는 p-6
-                const body = modal.option === 'writeMessage'
-                    ? modal.content
-                    : <div className="p-6">{modal.content}</div>;
+        const secondaryButton = option === "twoButton"
+          ? {
+            text: buttonText?.[1] || "아니요",
+            onClick: () => {
+              closeModal();
+              if (onConfirm?.[1]) onConfirm[1]();
+            },
+          }
+          : undefined;
 
-                return (
-                    <ModalLayout
-                        key={modal.id}
-                        header={header}
-                        bottomArea={bottomArea}
-                        zIndex={9999 + index}
-                    >
-                        {body}
-                    </ModalLayout>
-                );
-            })}
-        </>
-    );
+        return (
+          <ModalLayout
+            key={id}
+            title={title}
+            onClose={closeModal}
+            primaryButton={primaryButton}
+            secondaryButton={secondaryButton}
+            zIndex={zIndex}
+          >
+            {body}
+          </ModalLayout>
+        );
+      })}
+    </>
+  );
 }

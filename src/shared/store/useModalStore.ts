@@ -1,18 +1,19 @@
 import { create } from 'zustand';
 
-export type ModalOption = 'writeMessage' | 'yes' | 'yesno';
+export type ModalOption = 'writeMessage' | 'oneButton' | 'twoButton';
 
 interface ModalData {
   id: string;
   title: string;
   content: React.ReactNode;
   option: ModalOption | null;
-  onConfirm?: (data?: unknown) => void,
+  buttonText?: Array<string>;
+  onConfirm?: Array<(data?: unknown) => void>
 }
 
 interface ModalState {
   modals: ModalData[];
-  openModal: (title: string, content: React.ReactNode, option: ModalOption, onconfirm?: (data?: unknown) => void) => void;
+  openModal: (title: string, content: React.ReactNode, option: ModalOption, buttonText?: Array<string>, onconfirm?: Array<(data?: unknown) => void>) => void;
   closeModal: () => void;
   clearModals: () => void;
 }
@@ -20,10 +21,10 @@ interface ModalState {
 export const useModalStore = create<ModalState>((set) => ({
   modals: [],
 
-  openModal: (title, content, option, onConfirm) => set((state) => ({
+  openModal: (title, content, option, buttonText, onConfirm) => set((state) => ({
     modals: [
       ...state.modals,
-      { id: Math.random().toString(36).substring(2, 11), title, content, option, onConfirm }
+      { id: Math.random().toString(36).substring(2, 11), title, content, option, buttonText, onConfirm }
     ],
   })),
   closeModal: () =>

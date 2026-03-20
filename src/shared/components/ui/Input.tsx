@@ -1,15 +1,9 @@
-import {
-  type InputHTMLAttributes,
-  forwardRef,
-  type ReactNode,
-  useId,
-  type TextareaHTMLAttributes,
-} from "react";
+import { type InputHTMLAttributes, forwardRef, type ReactNode, useId } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  error?: string;
-  rightSlot?: ReactNode; // input 오른쪽 보조 요소(아이콘, 버튼 등)를 넣을 때 사용
-  inputClassName?: string;
+    error?: string;
+    rightSlot?: ReactNode; // input 오른쪽 보조 요소(아이콘, 버튼 등)를 넣을 때 사용
+    inputClassName?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -18,50 +12,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = props.id ?? generatedId;
 
     /*
-     * Input, DatePicker, Textarea 등 공통 스타일 사용
-     * .field-control: 공통 필드 스타일
-     * .field-error: 에러일 때 빨간 테두리를 적용합니다.
-     */
-    const wrapperClassName = `field-control ${error ? "field-error" : ""} ${
-      className ?? ""
-    }`.trim();
+    * Input, DatePicker, Textarea 등 공통 스타일 사용
+    * .field-control: 공통 필드 스타일
+    * .field-error: 에러일 때 빨간 테두리를 적용합니다.
+    */
+    const wrapperClassName = `field-control ${error ? "field-error" : ""} ${className ?? ""}`.trim();
     const controlClassName = `field-input ${inputClassName}`.trim();
 
     return (
-      <div className={wrapperClassName}>
-        <input ref={ref} id={inputId} className={controlClassName} {...props} />
-        {rightSlot}
-      </div>
+        <div className={wrapperClassName}>
+            <input
+                ref={ref}
+                id={inputId}
+                className={controlClassName}
+                {...props}
+            />
+            {rightSlot}
+        </div>
     );
   }
 );
 
 Input.displayName = "Input";
-
-interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  error?: string;
-  TextareaClassName?: string;
-}
-
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ error, className, TextareaClassName = "", ...props }, ref) => {
-    const generatedId = useId();
-    const TextareaId = props.id ?? generatedId;
-    const wrapperClassName = `field-control ${error ? "field-error" : ""} ${
-      className ?? ""
-    }`.trim();
-    const controlClassName = `field-input ${TextareaClassName}`.trim();
-
-    return (
-      <div className={wrapperClassName}>
-        <textarea
-          ref={ref}
-          id={TextareaId}
-          className={`${controlClassName}`}
-          rows={9}
-          {...props}
-        />
-      </div>
-    );
-  }
-);

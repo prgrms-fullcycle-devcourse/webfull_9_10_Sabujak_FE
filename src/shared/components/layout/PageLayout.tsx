@@ -30,8 +30,8 @@ export default function PageLayout({
         }
 
         // 하단 영역 높이를 체크하고, 콜백에서 state를 갱신. fixed-bottom에 높이 추가
-        const resizeObserver = new ResizeObserver(([entry]) => {
-            setBottomAreaHeight(entry.contentRect.height);
+        const resizeObserver = new ResizeObserver(() => {
+            setBottomAreaHeight(element.offsetHeight);
         });
 
         resizeObserver.observe(element);

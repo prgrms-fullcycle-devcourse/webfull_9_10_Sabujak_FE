@@ -1,4 +1,9 @@
-import { type InputHTMLAttributes, forwardRef, type ReactNode, useId } from "react";
+import {
+  type InputHTMLAttributes,
+  forwardRef,
+  type ReactNode,
+  useId,
+} from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;

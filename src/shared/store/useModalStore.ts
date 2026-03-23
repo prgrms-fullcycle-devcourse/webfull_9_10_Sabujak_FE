@@ -1,35 +1,52 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-export type ModalOption = 'writeMessage' | 'yes' | 'yesno';
+export type ModalOption = "writeMessage" | "oneButton" | "twoButton" | "adminCheck" | "admin";
 
 interface ModalData {
   id: string;
-  title: string;
-  content: React.ReactNode;
+  title?: string;
+  content?: React.ReactNode;
   option: ModalOption | null;
-  onConfirm?: (data?: unknown) => void,
+  buttonText?: Array<string>;
+  onConfirm?: Array<(data?: unknown) => void>;
 }
 
 interface ModalState {
   modals: ModalData[];
-  openModal: (title: string, content: React.ReactNode, option: ModalOption, onconfirm?: (data?: unknown) => void) => void;
+  openModal: (props: OpenModalProps) => void;
   closeModal: () => void;
   clearModals: () => void;
+}
+
+interface OpenModalProps {
+  title?: string; // 기본값을 가질 수 있도록 선택사항(?)으로 변경
+  content: React.ReactNode;
+  option: ModalOption;
+  buttonText?: string[];
+  onConfirm?: Array<(data?: unknown) => void>;
 }
 
 export const useModalStore = create<ModalState>((set) => ({
   modals: [],
 
-  openModal: (title, content, option, onConfirm) => set((state) => ({
-    modals: [
-      ...state.modals,
-      { id: Math.random().toString(36).substring(2, 11), title, content, option, onConfirm }
-    ],
-  })),
+  openModal: (props: OpenModalProps) => void
+    set((state) => ({
+      modals: [
+        ...state.modals,
+        {
+          id: Math.random().toString(36).substring(2, 11),
+          title: props.title,
+          content: props.content,
+          option: props.option,
+          buttonText: props.buttonText,
+          onConfirm: props.onConfirm,
+        },
+      ],
+    })),
   closeModal: () =>
     set((state) => ({
       modals: state.modals.slice(0, -1),
     })),
 
   clearModals: () => set({ modals: [] }),
-}))
+}));

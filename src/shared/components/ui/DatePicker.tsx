@@ -39,18 +39,25 @@ interface DatePickerProps {
 
 export function DatePicker({ id, value, onChange, placeholder }: DatePickerProps) {
   const now: Date = new Date();
-  const tomorrow = new Date(
+  const minDate = new Date(
     now.getFullYear(),
     now.getMonth(),
     now.getDate() + 1
+  );
+  const maxDate = new Date(
+    now.getFullYear() + 1,
+    now.getMonth(),
+    now.getDate()
   );
   return (
     <ReactDatePicker
       selected={value}
       onChange={onChange}
-      dateFormat="yyyy.MM.dd"
-      minDate={tomorrow}
+      dateFormat="yyyy.MM.dd. HH:mm"
+      minDate={minDate}
+      maxDate={maxDate}
       shouldCloseOnSelect
+      showTimeInput
       placeholderText={placeholder ?? "날짜 선택"}
       popperClassName="z-50"
       wrapperClassName="w-full"

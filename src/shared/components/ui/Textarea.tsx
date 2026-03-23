@@ -20,7 +20,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={TextareaId}
           className={`${controlClassName}`}
-          rows={9}
+          rows={8}
           {...props}
         />
       </div>

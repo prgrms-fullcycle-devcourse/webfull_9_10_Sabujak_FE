@@ -32,9 +32,8 @@ export default function MainPage() {
                 전달받은 방코드 또는 주소를
                 <br/>입력해 주세요
             </p>
-            <br/>
             
-            <div className="mt-4 space-y-4">
+            <div className="mt-10 space-y-4">
                 <Field id="roomTitle">
                     <Input placeholder="방 코드 또는 링크 입력" />
                 </Field>
@@ -45,7 +44,6 @@ export default function MainPage() {
                     방 입장하기
                 </Button>
             </div>
-            <br/>
         </PageLayout>
     );
 }

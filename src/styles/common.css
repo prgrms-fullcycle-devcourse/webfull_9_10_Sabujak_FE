@@ -63,6 +63,10 @@ input::placeholder, .placeholder {
   text-align: left;
 }
 
+.field-control:has(textarea){
+  height: inherit;
+}
+
 .field-control:focus-within {
   outline: none;
 }

@@ -1,8 +1,9 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import CreateRoom from "./pages/CreateRoom";
-import TestPage from './pages/TestPage';
 import MainPage from './pages/MainPage';
+import CreateRoom from "./pages/CreateRoom";
+import RoomPage from "./pages/RoomPage";
+import TestPage from './pages/TestPage';
 
 export default function App() {
   return (
@@ -11,8 +12,11 @@ export default function App() {
         <Route path="/" element={<MainPage />} />
         {/* 방만들기 */}
         <Route path="/create-room" element={<CreateRoom />} />
+        {/* 메세지 오픈 전 */}
+        <Route path="/room" element={<RoomPage />} />
         <Route path='/test' element={<TestPage />} />
       </Routes>
     </>
   );
+
 }

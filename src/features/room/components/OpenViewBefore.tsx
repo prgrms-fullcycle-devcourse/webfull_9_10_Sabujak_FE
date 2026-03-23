@@ -1,8 +1,8 @@
 import PageLayout from "../../../shared/components/layout/PageLayout";
 import { Button } from "../../../shared/components/ui";
 import type { RoomBeforeOpen } from "../types/room";
-import CountdownTimer from "./CountdownTimer";
-import HeartJar from "./HeartJar";
+// import CountdownTimer from "./CountdownTimer";
+// import HeartJar from "./HeartJar";
 
 interface OpenViewBeforeProps {
   room: RoomBeforeOpen;
@@ -29,6 +29,7 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
       )}
       contentClassName="flex flex-col items-center text-center"
     >
+ 
     </PageLayout>
   );
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type PageLayoutProps = {
     header?: ReactNode;
-    children: ReactNode;
+    children?: ReactNode;
     bottomArea?: ReactNode;
     contentClassName?: string;
 };

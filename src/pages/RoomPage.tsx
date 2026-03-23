@@ -1,6 +1,6 @@
 import OpenViewBefore from "../features/room/components/OpenViewBefore";
 import OpenedView from "../features/room/components/OpenView";
-import UnavailableView from "../features/room/components/UnavailableView";
+// import UnavailableView from "../features/room/components/UnavailableView";
 import { useRoomDetail } from "../features/room/hooks/useRoomDetail";
 
 export default function RoomPage() {
@@ -10,7 +10,7 @@ export default function RoomPage() {
   const data = useRoomDetail(slug);
 
   if (!data) {
-    return <UnavailableView title="존재하지 않는 캡슐입니다." />;
+    // return <UnavailableView title="존재하지 않는 캡슐입니다." />;
   }
 
   if (!data.isOpen) {

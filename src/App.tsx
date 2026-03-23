@@ -4,15 +4,16 @@ import CreateRoom from "./pages/CreateRoom";
 import { Modal, Button } from "./shared/components/ui";
 import { useModalStore } from "./shared/store";
 import { WriteMessageContent } from "./pages/ModalWriteMessage";
+import TestPage from './pages/TestPage';
 
 export default function App() {
-  const { openModal } = useModalStore();
   return (
     <>
       <Routes>
         <Route path="/" element={<div>홈</div>} />
         {/* 방만들기 */}
         <Route path="/create-room" element={<CreateRoom />} />
+        <Route path='/test' element={<TestPage />} />
       </Routes>
 
       <div className="flex gap-8 p-4">

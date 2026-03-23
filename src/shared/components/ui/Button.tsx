@@ -1,30 +1,39 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 const buttonVariantClassNameMap = {
-    primary: "bg-[#000000] text-[#ffffff]",
-    white: "text-[#000000]",
+  primary: "bg-[#000000] text-[#ffffff] p-4",
+  secondary: "text-[#000000] p-4",
+  sm: "w-fit bg-[#ffb5b5] p-2.5 text-sm",
 } as const;
 
 type ButtonProps = {
-    variant?: keyof typeof buttonVariantClassNameMap;
-    children: ReactNode;
-    className?: string;
+  variant?: keyof typeof buttonVariantClassNameMap;
+  children: ReactNode;
+  className?: string;
+  iconClassName?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = ({
-    variant = "primary",
-    children,
-    className = "",
-    ...props
+  variant = "primary",
+  children,
+  className = "",
+  iconClassName,
+  ...props
 }: ButtonProps) => {
-    const baseClassName = "rounded-2xl py-4";
-    const variantClassName = buttonVariantClassNameMap[variant];
+  const baseClassName = "inline-flex items-center justify-center gap-2 rounded-lg";
+  const variantClassName = buttonVariantClassNameMap[variant];
 
-    const buttonClassName = `${baseClassName} ${variantClassName} ${className}`.trim();
+  const buttonClassName = `${baseClassName} ${variantClassName} ${className}`.trim();
 
-    return (
-        <button className={buttonClassName} {...props}>
-            {children}
-        </button>
-    );
+  return (
+    <button className={buttonClassName} {...props}>
+      {iconClassName && (
+        <span
+          className={`btn-icon ${iconClassName}`}
+          aria-hidden="true"
+        />
+      )}
+      <span className="btn-text">{children}</span>
+    </button>
+  );
 };

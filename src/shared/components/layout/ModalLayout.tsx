@@ -46,10 +46,14 @@ export default function ModalLayout({
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="text-neutral-400 text-xl font-black leading-5 p-1"
+                className="text-neutral-400 text-xl font-black leading-5 p-1 w-6 h-6 flex-shrink-0"
                 aria-label="닫기"
+                style={{
+                  backgroundImage: "var(--ico-close)",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center"
+                }}
               >
-                ✕
               </button>
             )}
           </div>

@@ -71,7 +71,7 @@ export default function ModalLayout({
             {secondaryButton && (
               <Button
                 onClick={secondaryButton.onClick}
-                variant="white"
+                variant="secondary"
                 className="flex-1 bg-neutral-200"
               >
                 {secondaryButton.text}

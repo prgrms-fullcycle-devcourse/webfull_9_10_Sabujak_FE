@@ -26,6 +26,18 @@ export default function Modal() {
               {content}
             </ModalLayout>
           );
+        } else if (option === "adminCheck" || option === "admin") {
+          return (
+            <ModalLayout
+              key={id}
+              title={title}
+              onClose={closeModal}
+              showCloseButton = {true}
+              full="full"
+            >
+              {content}
+            </ModalLayout>
+          );
         }
 
         // 2. 버튼형 모달 (oneButton, twoButton)
@@ -41,15 +53,16 @@ export default function Modal() {
           },
         };
 
-        const secondaryButton = option === "twoButton"
-          ? {
-            text: buttonText?.[1] || "아니요",
-            onClick: () => {
-              closeModal();
-              if (onConfirm?.[1]) onConfirm[1]();
-            },
-          }
-          : undefined;
+        const secondaryButton =
+          option === "twoButton"
+            ? {
+                text: buttonText?.[1] || "아니요",
+                onClick: () => {
+                  closeModal();
+                  if (onConfirm?.[1]) onConfirm[1]();
+                },
+              }
+            : undefined;
 
         return (
           <ModalLayout

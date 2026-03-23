@@ -15,6 +15,7 @@ interface ModalLayoutProps {
     onClick: () => void;
   };
   zIndex?: number;
+  full?: "full" | "semmi";
 }
 
 export default function ModalLayout({
@@ -25,22 +26,34 @@ export default function ModalLayout({
   primaryButton,
   secondaryButton,
   zIndex = 9999,
+  full = "semmi",
 }: ModalLayoutProps) {
+  const isFull = full === "full";
+
+  const overlayClasses = isFull
+    ? "fixed inset-0 bg-stone-50 overflow-hidden"
+    : "fixed inset-0 flex items-center justify-center bg-black/50";
+
+  const modalClasses = isFull
+    ? "w-full h-dvh flex flex-col overflow-hidden"
+    : "w-96 bg-white rounded-[32px] shadow-2xl flex flex-col overflow-hidden";
+
+  const modalTitle = isFull
+    ? ""
+    : title;
+
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center bg-black/50"
-      style={{ zIndex }}
-    >
+    <div className={overlayClasses} style={{ zIndex }}>
       <div
-        className="w-96 bg-white rounded-[32px] shadow-2xl flex flex-col justify-start items-start overflow-hidden"
+        className={modalClasses}
         onClick={(e) => e.stopPropagation()} // 카드 클릭 시 닫히지 않도록
       >
         {/* 헤더 */}
         {(title || showCloseButton) && (
-          <div className="self-stretch px-6 py-5 border-b border-neutral-100 inline-flex justify-between items-center">
+          <div className={"flex-none px-6 py-5 border-b border-neutral-100 inline-flex justify-between items-center"}>
             {title && (
               <h2 className="justify-center text-neutral-900 text-lg font-semibold font-['Pretendard'] leading-7">
-                {title}
+                {modalTitle}
               </h2>
             )}
             {showCloseButton && (
@@ -51,18 +64,15 @@ export default function ModalLayout({
                 style={{
                   backgroundImage: "var(--ico-close)",
                   backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center"
+                  backgroundPosition: "center",
                 }}
-              >
-              </button>
+              ></button>
             )}
           </div>
         )}
 
         {/* 본문 */}
-        <div className="self-stretch flex-1 overflow-y-auto">
-          {children}
-        </div>
+        <div className="flex-1 h-0 overflow-y-auto">{children}</div>
 
         {/* 버튼 영역 */}
         {(primaryButton || secondaryButton) && (

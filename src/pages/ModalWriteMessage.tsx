@@ -9,44 +9,44 @@ export const WriteMessageContent = () => {
 
   const handleComplete = () => {
     if (!nickname.trim()) {
-      openModal(
-        "닉네임이 없어요!",
-        <p>닉네임을 입력해주세요!!!</p>,
-        "oneButton"
-      );
+      openModal({
+        title: "닉네임이 없어요!",
+        content: <p>닉네임을 입력해주세요!!!</p>,
+        option: "oneButton"
+      });
       return;
     }
 
     if (!content.trim()) {
-      openModal("내용이 없어요!", <p>내용을 입력해 주세요</p>, "oneButton");
+      openModal({
+        title: "내용이 없어요!",
+        content: <p>내용을 입력해 주세요</p>,
+        option: "oneButton"
+      });
       return;
     }
 
-    openModal(
-      "작성 확인",
-      <p className="text-left">
-        작성 완료하셨습니까?
-        <br />
-        전송 후에는 수정이 불가능합니다.
-      </p>,
-      "twoButton",
-      ["예", "아니요"],
-      [
+    openModal({
+      title: "작성 확인",
+      content: <p className="text-left">작성 완료하셨습니까?<br />전송 후에는 수정이 불가능합니다.</p>,
+      option: "twoButton",
+      buttonText: ["예", "아니요"],
+      onConfirm: [
         () => {
-          openModal(
-            "작성 완료",
-            <p>편지가 배송되었습니다.</p>,
-            "oneButton",
-            ["확인"],
-            [
+          openModal({
+            title: "작성 완료",
+            content: <p>편지가 배송되었습니다.</p>,
+            option: "oneButton",
+            buttonText: ["확인"],
+            onConfirm: [
               () => {
                 clearModals();
               },
             ]
-          );
+          });
         },
       ]
-    );
+    });
   };
 
   return (

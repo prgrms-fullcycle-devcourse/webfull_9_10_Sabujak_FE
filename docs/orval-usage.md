@@ -30,9 +30,10 @@ Orval은 백엔드 OpenAPI 문서를 읽어서 아래 코드를 자동으로 만
 pnpm orval
 ```
 
-이 명령어를 실행하면 `src/shared/api/generated` 아래 코드가 다시 만들어집니다.
+이 명령어를 실행하면 `src/shared/api/generated` 아래 코드와
+`src/shared/api/generated/index.ts`가 다시 만들어집니다.
 
-현재 프로젝트는 로컬 Node 버전이 `20.12.1`이라 `orval@7.7.0`을 사용하고 있습니다.
+현재 `package.json` 기준으로 이 프로젝트는 `orval@7.7.0`을 사용합니다.
 
 ## 생성되는 위치
 
@@ -40,9 +41,12 @@ pnpm orval
 - `src/shared/api/generated/message/message.ts`
 - `src/shared/api/generated/model`
 
-또한 `src/shared/api/orval/mutator.ts`에서 기존 Axios 인스턴스인 `src/shared/api/axios.ts`를 재사용합니다.
+또한 `src/shared/api/orval/mutator.ts`에서 기존 Axios 인스턴스인
+`src/shared/api/axios.ts`를 재사용합니다.
 
-그래서 generated 코드도 같은 `baseURL`, `withCredentials` 설정을 그대로 사용합니다.
+그래서 generated 코드도 같은 `withCredentials` 설정을 그대로 사용합니다.
+런타임 요청 주소는 `src/shared/api/axios.ts`의 `baseURL` 설정을 따르며,
+현재 예제 환경 변수 파일인 `.env.example`에서는 `VITE_API_URL=http://localhost:3000`으로 되어 있습니다.
 
 ## 직접 수정하면 안 되는 파일
 
@@ -65,7 +69,7 @@ pnpm orval
 
 그래서 `useGetCapsulesSlug`, `usePostCapsules` 같은 훅을 쓰려면 앱이 `QueryClientProvider`로 감싸져 있어야 합니다.
 
-이 프로젝트는 이미 [`/Users/younhalee/PJ/programmers/webfull_9_10_Sabujak_FE/src/main.tsx`](/Users/younhalee/PJ/programmers/webfull_9_10_Sabujak_FE/src/main.tsx)에서 설정되어 있습니다.
+이 프로젝트는 이미 `src/main.tsx`에서 `QueryClientProvider`를 설정해 두었습니다.
 
 대부분의 페이지나 컴포넌트에서는 바로 사용하면 됩니다.
 
@@ -93,6 +97,9 @@ export function CapsuleDetail({ slug }: CapsuleDetailProps) {
   );
 }
 ```
+
+위 import 경로는 예시입니다.
+실제 코드에서는 현재 컴포넌트 위치에 맞게 상대 경로를 조정해야 합니다.
 
 ## 예시: 생성 훅
 
@@ -129,6 +136,7 @@ export function CreateCapsuleButton() {
 ## 정리
 
 - 기준 명세는 로컬 파일이 아니라 배포 URL입니다.
+- Orval 입력 명세 URL과 런타임 API `baseURL`은 서로 다른 설정입니다.
 - generated 파일은 직접 수정하지 않습니다.
 - 백엔드 배포 후 `pnpm orval`로 다시 생성합니다.
 - 생성된 훅은 이미 설정된 `QueryClientProvider` 안에서 바로 사용할 수 있습니다.

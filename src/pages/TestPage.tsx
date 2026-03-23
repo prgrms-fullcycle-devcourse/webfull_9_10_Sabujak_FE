@@ -1,4 +1,5 @@
-import { Modal, WriteMessageContent, Button } from '../shared/components/ui';
+import { Modal, Button } from '../shared/components/ui';
+import { WriteMessageContent } from './ModalWriteMessage';
 
 import { useModalStore } from '../shared/store/useModalStore';
 
@@ -14,11 +15,11 @@ export default function TestPage() {
           writeMessage
         </Button>
 
-        <Button onClick={() => openModal('제목', <p>내용</p>, 'yes')}>
+        <Button onClick={() => openModal('제목', <p>내용</p>, 'oneButton')}>
           yes
         </Button>
 
-        <Button onClick={() => openModal('제목', <p>내용</p>, 'yesno')}>
+        <Button onClick={() => openModal('제목', <p>내용</p>, 'twoButton')}>
           yesno
         </Button>
       </div>

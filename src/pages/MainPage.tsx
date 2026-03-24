@@ -39,7 +39,7 @@ export default function MainPage() {
                 </Field>
                 <Button
                     variant="secondary"
-                    className="mx-auto flex w-full min-w-2xs flex-col gap-1.5 p-6 bg-[#F6F5F1]"
+                    className="mx-auto flex w-full min-w-2xs flex-col gap-1.5 p-6 bg-[#F2F1ED]"
                 >
                     방 입장하기
                 </Button>

@@ -1,4 +1,4 @@
-import { useCountdown } from "../../../shared/hooks/useCountdown";
+import Countdown, { type CountdownRenderProps } from "react-countdown";
 
 type CountdownTimerProps = {
   targetDate: string;
@@ -8,15 +8,7 @@ function padTime(value: number) {
   return String(value).padStart(2, "0");
 }
 
-export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
-  const {
-    days,
-    hours,
-    minutes,
-    seconds,
-    completed,
-  } = useCountdown({ targetDate });
-
+function CountdownRenderer({ days, hours, minutes, seconds, completed }: CountdownRenderProps) {
   if (completed) {
     return (
       <div>
@@ -33,5 +25,14 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
         {padTime(hours)}:{padTime(minutes)}:{padTime(seconds)}
       </p>
     </div>
+  );
+}
+
+export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
+  return (
+    <Countdown
+      date={new Date(targetDate)}
+      renderer={CountdownRenderer}
+    />
   );
 }

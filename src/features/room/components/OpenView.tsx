@@ -1,12 +1,23 @@
 import PageLayout from "../../../shared/components/layout/PageLayout";
 import { Button } from "../../../shared/components/ui";
-import type { RoomOpened } from "../types/room";
+import type { CapsuleDetailResponseOneOfTwo } from "../../../shared/api/generated/model";
+import { useShare } from "../hooks";
 
 interface OpenedViewProps {
-  room: RoomOpened;
+  room: CapsuleDetailResponseOneOfTwo;
 }
 
 export default function OpenedView({ room }: OpenedViewProps) {
+  const { shareUrl } = useShare();
+
+  const handleShare = async () => {
+    await shareUrl({
+      title: room.title,
+      text: "친구들에게 타임캡슐 링크를 공유해보세요.",
+      url: window.location.href,
+    });
+  };
+
   return (
     <PageLayout
       bottomArea={(
@@ -14,7 +25,7 @@ export default function OpenedView({ room }: OpenedViewProps) {
           <Button variant="primary" iconClassName="btn-icon-download">
             이미지로 저장하기
           </Button>
-          <Button variant="secondary">
+          <Button variant="secondary" onClick={() => void handleShare()}>
             친구들에게 링크 공유하기
           </Button>
         </>

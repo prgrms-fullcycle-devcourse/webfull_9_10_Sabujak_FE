@@ -64,6 +64,8 @@ export default function CreateRoom() {
             type="password"
             iconClassName="icon-lock"
             placeholder="비밀번호 4자리를 입력해주세요"
+            inputMode="numeric"
+            maxLength={4}
           />
         </Field>
       </div>

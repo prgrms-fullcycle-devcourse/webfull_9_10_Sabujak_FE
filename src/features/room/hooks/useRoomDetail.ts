@@ -1,6 +1,18 @@
-import type { RoomBeforeOpen, RoomDetail, RoomOpened } from "../types/room";
+import type {
+  CapsuleDetailResponse,
+  CapsuleDetailResponseOneOf,
+  CapsuleDetailResponseOneOfTwo,
+} from "../../../shared/api/generated/model";
 
-const beforeOpenRoom: RoomBeforeOpen = {
+type UseRoomDetailResult = {
+  data: CapsuleDetailResponse | null;
+  isLoading: boolean;
+  isError: boolean;
+  error: Error | null;
+};
+
+// 실제 API 연결 전까지 room 화면 확인용으로 사용하는 mock fixture입니다.
+const beforeOpenRoom: CapsuleDetailResponseOneOf = {
   id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
   slug: "our-graduation-2025",
   title: "우리들의 졸업 축하",
@@ -12,7 +24,7 @@ const beforeOpenRoom: RoomBeforeOpen = {
   messageCount: 15,
 };
 
-const openedRoom: RoomOpened = {
+const openedRoom: CapsuleDetailResponseOneOfTwo = {
   id: "01ARZ3NDEKTSV4RRFFQ69G5FB0",
   slug: "opened-capsule",
   title: "우리들의 졸업 축하",
@@ -50,11 +62,18 @@ const openedRoom: RoomOpened = {
   ],
 };
 
-const roomFixtures: Record<string, RoomDetail> = {
+const roomFixtures: Record<string, CapsuleDetailResponse> = {
   [beforeOpenRoom.slug]: beforeOpenRoom,
   [openedRoom.slug]: openedRoom,
 };
 
-export function useRoomDetail(slug: string) {
-  return roomFixtures[slug] ?? null;
+export function useRoomDetail(slug: string): UseRoomDetailResult {
+  const data = roomFixtures[slug] ?? null;
+
+  return {
+    data,
+    isLoading: false,
+    isError: false,
+    error: null,
+  };
 }

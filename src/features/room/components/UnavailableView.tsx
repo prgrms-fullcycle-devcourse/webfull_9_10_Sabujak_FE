@@ -12,7 +12,7 @@ export default function UnavailableView({
       <div>
         <p className="text-2xl font-bold">{title}</p>
         <p className="mt-3 text-sm text-[#8a8a8a]">
-          슬러그를 다시 확인하거나 잠시 후 다시 시도해주세요.
+          존재하지 않는 방이에요.
         </p>
       </div>
     </PageLayout>

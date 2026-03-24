@@ -1,19 +1,25 @@
 import OpenViewBefore from "../features/room/components/OpenViewBefore";
 import OpenedView from "../features/room/components/OpenView";
 import UnavailableView from "../features/room/components/UnavailableView";
-import { useRoomDetail } from "../features/room/hooks/useRoomDetail";
+import { useRoomDetail } from "../features/room/hooks";
 
 export default function RoomPage() {
   const searchParams = new URLSearchParams(window.location.search);
   const slug = searchParams.get("slug") ?? "our-graduation-2025";
 
-  const data = useRoomDetail(slug);
+  const { data, isLoading, isError } = useRoomDetail(slug);
 
-  if (!data) {
-    return <UnavailableView title="존재하지 않는 캡슐입니다." />;
+  if (isLoading) {
+    return <div className="p-6 text-center">불러오는 중이에요...</div>;
   }
 
-  if (!data.isOpen) {
+  if (isError || !data) {
+    return <UnavailableView title="방을 찾을 수 없어요. 링크를 다시 확인해주세요." />;
+  }
+
+  /* generated 타입은 isOpen만으로는 오픈 후 타입으로 좁혀지지 않아
+  messages 필드 유무로 오픈 전/후를 구분*/ 
+  if (!("messages" in data)) {
     return <OpenViewBefore room={data} />;
   }
 

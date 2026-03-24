@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { useModalStore } from "../../store/useModalStore";
 import { ModalLayout } from "../layout";
 
@@ -5,10 +6,8 @@ import { ModalLayout } from "../layout";
 export default function Modal() {
   const { modals, closeModal } = useModalStore();
 
-  if (modals.length === 0) return null;
-
   return (
-    <>
+    <AnimatePresence mode="wait">
       {modals.map((modal, index) => {
         const { id, title, content, option, buttonText, onConfirm } = modal;
         const zIndex = 9999 + index;
@@ -32,7 +31,7 @@ export default function Modal() {
               key={id}
               title={title}
               onClose={closeModal}
-              showCloseButton = {true}
+              showCloseButton={true}
               full="full"
             >
               {content}
@@ -56,12 +55,12 @@ export default function Modal() {
         const secondaryButton =
           option === "twoButton"
             ? {
-                text: buttonText?.[1] || "아니요",
-                onClick: () => {
-                  closeModal();
-                  if (onConfirm?.[1]) onConfirm[1]();
-                },
-              }
+              text: buttonText?.[1] || "아니요",
+              onClick: () => {
+                closeModal();
+                if (onConfirm?.[1]) onConfirm[1]();
+              },
+            }
             : undefined;
 
         return (
@@ -77,6 +76,6 @@ export default function Modal() {
           </ModalLayout>
         );
       })}
-    </>
+    </AnimatePresence>
   );
 }

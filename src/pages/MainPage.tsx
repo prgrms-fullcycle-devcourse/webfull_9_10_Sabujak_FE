@@ -38,8 +38,8 @@ export default function MainPage() {
                     <Input placeholder="방 코드 또는 링크 입력" />
                 </Field>
                 <Button
-                    variant="white"
-                    className="mx-auto flex w-full min-w-2xs flex-col gap-1.5 p-6 bg-[#F6F5F1]"
+                    variant="secondary"
+                    className="mx-auto flex w-full min-w-2xs flex-col gap-1.5 p-6 bg-[#F2F1ED]"
                 >
                     방 입장하기
                 </Button>

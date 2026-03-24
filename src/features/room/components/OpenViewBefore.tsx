@@ -1,6 +1,6 @@
+import type { CapsuleDetailResponseOneOf } from "../../../shared/api/generated/model";
 import PageLayout from "../../../shared/components/layout/PageLayout";
 import { Button } from "../../../shared/components/ui";
-import type { CapsuleDetailResponseOneOf } from "../../../shared/api/generated/model";
 import { useShare } from "../hooks";
 import CountdownTimer from "./CountdownTimer";
 import HeartJar from "./HeartJar";
@@ -11,7 +11,7 @@ interface OpenViewBeforeProps {
 }
 
 export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
-  const { shareUrl } = useShare();
+  const { shareUrl, canShare } = useShare();
 
   const handleShare = async () => {
     await shareUrl({
@@ -35,7 +35,7 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
             내 마음 남기기
           </Button>
           <Button variant="secondary" iconClassName="btn-icon-share" onClick={() => void handleShare()}>
-            친구들에게 링크 공유하기
+            {canShare ? "친구들에게 링크 공유하기" : "링크 복사하기"}
           </Button>
         </>
       )}

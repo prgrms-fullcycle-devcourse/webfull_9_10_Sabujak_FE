@@ -1,6 +1,6 @@
+import type { CapsuleDetailResponseOneOfTwo } from "../../../shared/api/generated/model";
 import PageLayout from "../../../shared/components/layout/PageLayout";
 import { Button } from "../../../shared/components/ui";
-import type { CapsuleDetailResponseOneOfTwo } from "../../../shared/api/generated/model";
 import { useShare } from "../hooks";
 
 interface OpenedViewProps {
@@ -8,7 +8,7 @@ interface OpenedViewProps {
 }
 
 export default function OpenedView({ room }: OpenedViewProps) {
-  const { shareUrl } = useShare();
+  const { shareUrl, canShare } = useShare();
 
   const handleShare = async () => {
     await shareUrl({
@@ -26,7 +26,7 @@ export default function OpenedView({ room }: OpenedViewProps) {
             이미지로 저장하기
           </Button>
           <Button variant="secondary" onClick={() => void handleShare()}>
-            친구들에게 링크 공유하기
+            {canShare ? "친구들에게 링크 공유하기" : "링크 복사하기"}
           </Button>
         </>
       )}
@@ -38,7 +38,6 @@ export default function OpenedView({ room }: OpenedViewProps) {
           <button type="button" aria-label="메뉴" className="btn-menu h-10 w-10" />
         </header>
       </div>
-
     </PageLayout>
   );
 }

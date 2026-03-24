@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import CreateRoom from "./pages/CreateRoom";
 import TestPage from './pages/TestPage';
 import MainPage from './pages/MainPage';
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         {/* 방만들기 */}
         <Route path="/create-room" element={<CreateRoom />} />
         <Route path='/test' element={<TestPage />} />
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </>
   );

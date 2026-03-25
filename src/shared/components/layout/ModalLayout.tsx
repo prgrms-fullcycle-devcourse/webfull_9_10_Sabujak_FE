@@ -16,7 +16,7 @@ interface ModalLayoutProps {
     onClick: () => void;
   };
   zIndex?: number;
-  full?: "full" | "semmi";
+  full?: "full" | "semi";
 }
 
 export default function ModalLayout({
@@ -27,7 +27,7 @@ export default function ModalLayout({
   primaryButton,
   secondaryButton,
   zIndex = 9999,
-  full = "semmi",
+  full = "semi",
 }: ModalLayoutProps) {
   const isFull = full === "full";
 
@@ -110,7 +110,7 @@ export default function ModalLayout({
           animate="animate"
           exit="exit"
           transition={{ type: "tween", duration: 0.3 }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e : React.MouseEvent) => e.stopPropagation()}
         >
           {ModalContent}
         </motion.div>

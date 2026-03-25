@@ -7,10 +7,12 @@ export default function Modal() {
   const { modals, closeModal } = useModalStore();
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="popLayout">
       {modals.map((modal, index) => {
         const { id, title, content, option, buttonText, onConfirm } = modal;
         const zIndex = 9999 + index;
+
+        const handleClose = () => closeModal(id);
 
         // 1. 메시지 작성형 모달 (writeMessage)
         if (option === "writeMessage") {
@@ -18,7 +20,7 @@ export default function Modal() {
             <ModalLayout
               key={id}
               title={title}
-              onClose={closeModal}
+              onClose={handleClose}
               showCloseButton={true}
               zIndex={zIndex}
             >
@@ -30,9 +32,10 @@ export default function Modal() {
             <ModalLayout
               key={id}
               title={title}
-              onClose={closeModal}
+              onClose={handleClose}
               showCloseButton={true}
               full="full"
+              zIndex={zIndex}
             >
               {content}
             </ModalLayout>
@@ -47,7 +50,7 @@ export default function Modal() {
         const primaryButton = {
           text: buttonText?.[0] || (option === "oneButton" ? "확인" : "예"),
           onClick: () => {
-            closeModal();
+            handleClose();
             if (onConfirm?.[0]) onConfirm[0]();
           },
         };
@@ -57,7 +60,7 @@ export default function Modal() {
             ? {
               text: buttonText?.[1] || "아니요",
               onClick: () => {
-                closeModal();
+                handleClose();
                 if (onConfirm?.[1]) onConfirm[1]();
               },
             }
@@ -67,7 +70,7 @@ export default function Modal() {
           <ModalLayout
             key={id}
             title={title}
-            onClose={closeModal}
+            onClose={handleClose}
             primaryButton={primaryButton}
             secondaryButton={secondaryButton}
             zIndex={zIndex}

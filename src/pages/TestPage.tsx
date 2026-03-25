@@ -1,7 +1,7 @@
 import { Modal, Button } from '../shared/components/ui';
 import { WriteMessageContent } from './ModalWriteMessage';
-import { AdminCheck } from './AdminCheckPage';
-import { AdminPage } from './AdminPage';
+import { AdminCheck } from './RoomEditCheckModal';
+import { AdminPage } from './RoomEditModal';
 import { useModalStore } from '../shared/store/useModalStore';
 
 export default function TestPage() {

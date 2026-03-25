@@ -1,6 +1,11 @@
 import { create } from "zustand";
 
-export type ModalOption = "writeMessage" | "oneButton" | "twoButton" | "adminCheck" | "admin";
+export type ModalOption =
+  | "writeMessage"
+  | "oneButton"
+  | "twoButton"
+  | "adminCheck"
+  | "admin";
 
 interface ModalData {
   id: string;
@@ -14,7 +19,7 @@ interface ModalData {
 interface ModalState {
   modals: ModalData[];
   openModal: (props: OpenModalProps) => void;
-  closeModal: () => void;
+  closeModal: (id : string) => void;
   clearModals: () => void;
 }
 
@@ -29,8 +34,8 @@ interface OpenModalProps {
 export const useModalStore = create<ModalState>((set) => ({
   modals: [],
 
-  openModal: (props: OpenModalProps) => void
-    set((state) => ({
+  openModal: (props: OpenModalProps) =>
+    void set((state) => ({
       modals: [
         ...state.modals,
         {
@@ -43,10 +48,12 @@ export const useModalStore = create<ModalState>((set) => ({
         },
       ],
     })),
-  closeModal: () =>
+
+  closeModal: (id : string) => {
     set((state) => ({
-      modals: state.modals.slice(0, -1),
-    })),
+      modals: state.modals.filter((modal) => modal.id !== id),
+    }));
+  },
 
   clearModals: () => set({ modals: [] }),
 }));

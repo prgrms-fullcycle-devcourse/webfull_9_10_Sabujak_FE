@@ -4,7 +4,6 @@ import MainPage from './pages/MainPage';
 import CreateRoom from "./pages/CreateRoom";
 import RoomPage from "./pages/RoomPage";
 import TestPage from './pages/TestPage';
-import MainPage from './pages/MainPage';
 import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {

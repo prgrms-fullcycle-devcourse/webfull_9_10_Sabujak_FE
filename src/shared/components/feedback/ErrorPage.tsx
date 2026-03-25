@@ -72,12 +72,13 @@ export const ErrorPage: React.FC<ErrorPageProps> = ({
 
         {/* 보조 액션: 이전으로 */}
         {secondaryButton && (
-            <button
-            onClick={secondaryButton.onClick}
+            <Button
+              variant='secondary'
+              onClick={secondaryButton.onClick}
             className="w-full bg-transparent text-gray-400 py-2 text-[14px] font-medium hover:text-gray-600 transition-colors"
             >
                 {secondaryButton.label}
-            </button>
+            </Button>
         )}
       </footer>
 

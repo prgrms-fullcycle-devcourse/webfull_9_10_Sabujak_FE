@@ -2,7 +2,7 @@ import { useState } from "react";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, DatePicker, Field, Input } from "../shared/components/ui";
 
-export default function CreateRoom() {
+export default function CreateCapsulePage() {
   const [openDate, setOpenDate] = useState<Date | null>(null);
 
   return (
@@ -64,6 +64,8 @@ export default function CreateRoom() {
             type="password"
             iconClassName="icon-lock"
             placeholder="비밀번호 4자리를 입력해주세요"
+            inputMode="numeric"
+            maxLength={4}
           />
         </Field>
       </div>

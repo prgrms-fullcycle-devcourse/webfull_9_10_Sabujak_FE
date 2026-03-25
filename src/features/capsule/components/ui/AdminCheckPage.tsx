@@ -1,6 +1,6 @@
-import { Input, Button } from "../shared/components/ui";
+import { Input, Button } from "../../../../shared/components/ui";
 import { useState } from "react";
-import { useModalStore } from "../shared/store";
+import { useModalStore } from "../../../../shared/store";
 
 export const AdminCheck = () => {
   const [password, setPassword] = useState("");

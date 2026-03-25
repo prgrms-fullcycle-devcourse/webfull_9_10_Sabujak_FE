@@ -1,9 +1,9 @@
-import type { CapsuleDetailResponseOneOf } from "../../../shared/api/generated/model";
-import PageLayout from "../../../shared/components/layout/PageLayout";
-import { Button } from "../../../shared/components/ui";
-import { useShare } from "../hooks";
-import CountdownTimer from "./CountdownTimer";
-import HeartJar from "./HeartJar";
+import type { CapsuleDetailResponseOneOf } from "../../../../shared/api/generated/model";
+import PageLayout from "../../../../shared/components/layout/PageLayout";
+import { Button } from "../../../../shared/components/ui";
+import { useShare } from "../../hooks";
+import CountdownTimer from "../CountdownTimer";
+import HeartJar from "../HeartJar";
 import "./OpenViewBefore.css";
 
 interface OpenViewBeforeProps {

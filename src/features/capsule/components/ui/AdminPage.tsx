@@ -1,4 +1,4 @@
-import { Input, Button, Field, DatePicker } from "../shared/components/ui";
+import { Input, Button, Field, DatePicker } from "../../../../shared/components/ui";
 import { useState } from "react";
 
 interface AdminPageProps {

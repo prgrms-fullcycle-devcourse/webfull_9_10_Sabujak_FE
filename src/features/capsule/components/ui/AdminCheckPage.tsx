@@ -1,4 +1,4 @@
-import { Input, Button } from "../shared/components/ui";
+import { Input, Button } from "../../../../shared/components/ui";
 import { useState } from "react";
 
 export const AdminCheck = () => {

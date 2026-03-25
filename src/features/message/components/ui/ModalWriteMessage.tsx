@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useModalStore } from "../shared/store/useModalStore";
-import { Button, Input, Textarea, Field } from "../shared/components/ui/index";
+import { useModalStore } from "../../../../shared/store/useModalStore";
+import { Button, Input, Textarea, Field } from "../../../../shared/components/ui/index";
 
 export const WriteMessageContent = () => {
   const { openModal, clearModals } = useModalStore();

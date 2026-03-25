@@ -2,7 +2,7 @@ import { useState } from "react";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, DatePicker, Field, Input } from "../shared/components/ui";
 
-export default function CreateRoom() {
+export default function CreateCapsulePage() {
   const [openDate, setOpenDate] = useState<Date | null>(null);
 
   return (

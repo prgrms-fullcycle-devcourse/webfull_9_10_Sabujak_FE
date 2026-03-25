@@ -6,9 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CapsuleMessage {
-  id: number;
-  nickname: string;
-  content: string;
-  createdAt: string;
+export interface DeleteCapsuleRequest {
+  /** @pattern ^\d{4}$ */
+  password: string;
 }

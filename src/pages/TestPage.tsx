@@ -1,7 +1,7 @@
 import { Modal, Button } from '../shared/components/ui';
-import { WriteMessageContent } from './ModalWriteMessage';
-import { AdminCheck } from './AdminCheckPage';
-import { AdminPage } from './AdminPage';
+import { WriteMessageContent } from '../features/message/components/ui/ModalWriteMessage';
+import { AdminCheck } from '../features/capsule/components/ui/AdminCheckPage';
+import { AdminPage } from '../features/capsule/components/ui/AdminPage';
 import { useModalStore } from '../shared/store/useModalStore';
 
 export default function TestPage() {

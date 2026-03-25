@@ -1,0 +1,25 @@
+.heart-jar {
+  width: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.heart-jar__svg {
+  display: block;
+  width: clamp(140px, 32vw, 220px);
+  height: auto;
+  overflow: visible;
+}
+
+.heart {
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.35));
+  will-change: transform, opacity;
+}
+
+.jar-shadow {
+  filter: drop-shadow(0 18px 18px rgba(36, 79, 90, 0.12));
+}

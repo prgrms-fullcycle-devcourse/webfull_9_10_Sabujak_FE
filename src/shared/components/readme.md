@@ -30,13 +30,13 @@ export default function Example() {
     <div className="flex flex-col gap-2">
       <Button variant="primary">롤링페이퍼 방 만들기</Button>
 
-      <Button variant="white" className="border border-gray-300">
+      <Button variant="secondary" className="border border-gray-300">
         취소
       </Button>
 
       <Button
         type="button"
-        variant="white"
+        variant="secondary"
         iconClassName="btn-icon-lock"
         className="border border-gray-300"
       >

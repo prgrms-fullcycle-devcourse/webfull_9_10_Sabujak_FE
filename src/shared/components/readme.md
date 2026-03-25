@@ -20,7 +20,7 @@
 
 ## Button 사용법
 
-`Button`은 현재 `primary`, `white`, `sm` variant를 지원합니다.
+`Button`은 현재 `primary`, `secondary`, `sm` variant를 지원합니다.
 
 ```tsx
 import { Button } from "./ui";
@@ -35,7 +35,6 @@ export default function Example() {
       </Button>
 
       <Button
-        type="button"
         variant="secondary"
         iconClassName="btn-icon-lock"
         className="border border-gray-300"
@@ -54,12 +53,15 @@ export default function Example() {
 - 공통 아이콘 스타일인 `btn-icon`은 내부에서 자동으로 붙습니다.
 - 사용처에서는 실제 아이콘 클래스명만 넘기면 됩니다.
 - 기본 `button` 속성(`type`, `disabled`, `onClick`)도 그대로 사용할 수 있습니다.
+- `Button`의 기본 `type`은 `button`입니다.
+- `form` 제출이 필요한 경우에만 `type="submit"`을 명시해서 사용합니다.
 
 예시:
 
 ```tsx
 <Button iconClassName="btn-icon-download">이미지로 저장하기</Button>
 <Button iconClassName="btn-icon-lock">방 삭제하기</Button>
+<Button type="submit">저장</Button>
 ```
 
 아이콘 클래스는 `src/styles/common.css`와 `src/styles/icons.css`에 정의되어 있어야 합니다.
@@ -105,7 +107,7 @@ export default function Example() {
       <Input
         placeholder="나만의 URL 주소를 입력해주세요"
         rightSlot={(
-          <Button type="button" variant="sm">
+          <Button variant="sm">
             중복확인
           </Button>
         )}

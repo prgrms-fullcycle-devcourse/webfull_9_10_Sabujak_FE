@@ -1,7 +1,7 @@
 import { Modal, Button } from '../shared/components/ui';
 import { WriteMessageContent } from '../features/message/components/ui/ModalWriteMessage';
-import { AdminCheck } from '../features/capsule/components/ui/AdminCheckPage';
-import { AdminPage } from '../features/capsule/components/ui/AdminPage';
+import { CapsuleEditCheckModal } from '../features/capsule/components/ui/CapsuleEditCheckModal';
+import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditModal';
 import { useModalStore } from '../shared/store/useModalStore';
 
 export default function TestPage() {
@@ -38,18 +38,18 @@ export default function TestPage() {
 
         <Button onClick={() => openModal({
           title: '어드민 체크',
-          content: <AdminCheck />,
-          option: 'adminCheck'
+          content: <CapsuleEditCheckModal />,
+          option: 'capsuleEditCheckModal'
         })}>
-          adminCheck
+          capsuleEditCheckModal
         </Button>
 
         <Button onClick={() => openModal({
           title: '어드민',
-          content: <AdminPage getRoomName="우리의 소중한 기록" getOpenDate={new Date()} />,
-          option: 'admin'
+          content: <CapsuleEditModal getRoomName="우리의 소중한 기록" getOpenDate={new Date()} />,
+          option: 'capsuleEditModal'
         })}>
-          admin
+          CapsuleEditModal
         </Button>
       </div>
       <Modal />

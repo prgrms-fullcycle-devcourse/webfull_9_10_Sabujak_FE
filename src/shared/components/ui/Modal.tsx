@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import { useModalStore } from "../../store/useModalStore";
 import { ModalLayout } from "../layout";
 
@@ -5,13 +6,13 @@ import { ModalLayout } from "../layout";
 export default function Modal() {
   const { modals, closeModal } = useModalStore();
 
-  if (modals.length === 0) return null;
-
   return (
-    <>
+    <AnimatePresence mode="popLayout">
       {modals.map((modal, index) => {
         const { id, title, content, option, buttonText, onConfirm } = modal;
         const zIndex = 9999 + index;
+
+        const handleClose = () => closeModal(id);
 
         // 1. 메시지 작성형 모달 (writeMessage)
         if (option === "writeMessage") {
@@ -19,21 +20,22 @@ export default function Modal() {
             <ModalLayout
               key={id}
               title={title}
-              onClose={closeModal}
+              onClose={handleClose}
               showCloseButton={true}
               zIndex={zIndex}
             >
               {content}
             </ModalLayout>
           );
-        } else if (option === "adminCheck" || option === "admin") {
+        } else if (option === "capsuleEditCheckModal" || option === "capsuleEditModal") {
           return (
             <ModalLayout
               key={id}
               title={title}
-              onClose={closeModal}
-              showCloseButton = {true}
+              onClose={handleClose}
+              showCloseButton={true}
               full="full"
+              zIndex={zIndex}
             >
               {content}
             </ModalLayout>
@@ -48,7 +50,7 @@ export default function Modal() {
         const primaryButton = {
           text: buttonText?.[0] || (option === "oneButton" ? "확인" : "예"),
           onClick: () => {
-            closeModal();
+            handleClose();
             if (onConfirm?.[0]) onConfirm[0]();
           },
         };
@@ -56,19 +58,19 @@ export default function Modal() {
         const secondaryButton =
           option === "twoButton"
             ? {
-                text: buttonText?.[1] || "아니요",
-                onClick: () => {
-                  closeModal();
-                  if (onConfirm?.[1]) onConfirm[1]();
-                },
-              }
+              text: buttonText?.[1] || "아니요",
+              onClick: () => {
+                handleClose();
+                if (onConfirm?.[1]) onConfirm[1]();
+              },
+            }
             : undefined;
 
         return (
           <ModalLayout
             key={id}
             title={title}
-            onClose={closeModal}
+            onClose={handleClose}
             primaryButton={primaryButton}
             secondaryButton={secondaryButton}
             zIndex={zIndex}
@@ -77,6 +79,6 @@ export default function Modal() {
           </ModalLayout>
         );
       })}
-    </>
+    </AnimatePresence>
   );
 }

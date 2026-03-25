@@ -1,8 +1,10 @@
 import { Input, Button } from "../../../../shared/components/ui";
 import { useState } from "react";
+import { useModalStore } from "../../../../shared/store";
 
-export const AdminCheck = () => {
+export const CapsuleEditCheckModal = () => {
   const [password, setPassword] = useState("");
+  const { openModal } = useModalStore();
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -13,7 +15,6 @@ export const AdminCheck = () => {
   return (
     /* 1. 전체 화면을 Flex 컬럼으로 설정 (스크롤 방지) */
     <div className="flex h-full flex-col p-6">
-
       {/* 2. 메인 콘텐츠 영역 (flex-1로 남은 공간을 다 차지하게 함) */}
       <main className="flex-1 flex flex-col items-center pt-12">
         <div className="text-center">
@@ -41,9 +42,15 @@ export const AdminCheck = () => {
       <footer className="pb-[env(safe-area-inset-bottom)] pt-4">
         <Button
           className="w-full"
-          disabled={password.length < 4}
           onClick={() => {
-            console.log("확인", password)
+            if (password.length < 4) {
+              return (openModal({
+                title: "비밀번호가 부족해요!",
+                content: <p>비밀번호를 4자리 입력해 주세요</p>,
+                option: "oneButton",
+              }));
+            }
+
           }}
         >
           확인

@@ -4,8 +4,8 @@ export type ModalOption =
   | "writeMessage"
   | "oneButton"
   | "twoButton"
-  | "adminCheck"
-  | "admin";
+  | "capsuleEditCheckModal"
+  | "capsuleEditModal";
 
 interface ModalData {
   id: string;

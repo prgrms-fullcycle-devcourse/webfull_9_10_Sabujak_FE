@@ -2,7 +2,7 @@ import { Input, Button } from "../../../../shared/components/ui";
 import { useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 
-export const AdminCheck = () => {
+export const CapsuleEditCheckModal = () => {
   const [password, setPassword] = useState("");
   const { openModal } = useModalStore();
 

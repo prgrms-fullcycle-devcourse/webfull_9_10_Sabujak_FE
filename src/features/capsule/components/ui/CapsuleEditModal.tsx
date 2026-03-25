@@ -1,14 +1,14 @@
 import { Input, Button, Field, DatePicker } from "../../../../shared/components/ui";
 import { useState } from "react";
 
-interface AdminPageProps {
+interface CapsuleEditModalProps {
     getRoomName: string
     getOpenDate: Date
 }
 
-export const AdminPage = (adminPageProps: AdminPageProps) => {
-    const [openDate, setOpenDate] = useState<Date | null>(adminPageProps.getOpenDate);
-    const [roomName, setRoomName] = useState<string>(adminPageProps.getRoomName);
+export const CapsuleEditModal = (CapsuleEditModalProps: CapsuleEditModalProps) => {
+    const [openDate, setOpenDate] = useState<Date | null>(CapsuleEditModalProps.getOpenDate);
+    const [roomName, setRoomName] = useState<string>(CapsuleEditModalProps.getRoomName);
     return (
         <>
             {/* 1. 전체를 감싸는 중앙 정렬 컨테이너 추가 */}

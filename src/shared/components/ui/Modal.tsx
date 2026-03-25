@@ -27,7 +27,7 @@ export default function Modal() {
               {content}
             </ModalLayout>
           );
-        } else if (option === "adminCheck" || option === "admin") {
+        } else if (option === "capsuleEditCheckModal" || option === "capsuleEditModal") {
           return (
             <ModalLayout
               key={id}

@@ -5,10 +5,8 @@
  * 사부작 백엔드 API 문서입니다.
  * OpenAPI spec version: 1.0.0
  */
+import type { ErrorResponseError } from './errorResponseError';
 
-export interface CapsuleMessage {
-  id: number;
-  nickname: string;
-  content: string;
-  createdAt: string;
+export interface ErrorResponse {
+  error: ErrorResponseError;
 }

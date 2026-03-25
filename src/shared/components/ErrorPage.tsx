@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/Button';
 
 type ErrorPageProps = {
@@ -27,13 +28,15 @@ export const ErrorPage: React.FC<ErrorPageProps> = ({
         { id: 3, content: "이 페이지는\n비어있어요.", color: "bg-[#F0F4FF]" },
         { id: 4, content: "메인에서 다시\n시작해볼까요?", color: "bg-[#F2F8EE]" },
     ],
-    primaryButton = {
-        label: "메인 페이지로 돌아가기",
-        onClick: () => window.location.href = '/'
-    },
+    primaryButton,
     secondaryButton
 }) => {
-
+  const navigate = useNavigate();
+  primaryButton = primaryButton ?? {
+    label: "메인 페이지로 돌아가기",
+    onClick: () => void navigate('/')
+  };
+  
   return (
     <div className="min-h-screen flex flex-col items-center justify-between p-6 font-sans text-[#333]">
 

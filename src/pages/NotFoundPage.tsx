@@ -1,4 +1,4 @@
-import { ErrorPage } from '../shared/components/ErrorPage';
+import { ErrorPage } from '../shared/components/feedback/ErrorPage';
 
 const NotFoundPage = () => {
   return (

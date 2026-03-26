@@ -1,8 +1,9 @@
-import { Modal, Button } from '../shared/components/ui';
+import { Button } from '../shared/components/ui';
 import { WriteMessageContent } from '../features/message/components/ui/ModalWriteMessage';
 import { CapsuleEditCheckModal } from '../features/capsule/components/ui/CapsuleEditCheckModal';
 import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditModal';
 import { useModalStore } from '../shared/store/useModalStore';
+import Modal from '../shared/components/ui/Modal';
 
 export default function TestPage() {
   const { openModal } = useModalStore();

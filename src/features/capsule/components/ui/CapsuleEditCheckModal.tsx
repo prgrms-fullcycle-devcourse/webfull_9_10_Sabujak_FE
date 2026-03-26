@@ -1,4 +1,4 @@
-import { Input, Button } from "../../../../shared/components/ui";
+import { Input, Button, Field } from "../../../../shared/components/ui";
 import { useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 
@@ -14,9 +14,9 @@ export const CapsuleEditCheckModal = () => {
 
   return (
     /* 1. 전체 화면을 Flex 컬럼으로 설정 (스크롤 방지) */
-    <div className="flex h-full flex-col p-6">
+    <div className="flex h-full flex-col items-center p-6">
       {/* 2. 메인 콘텐츠 영역 (flex-1로 남은 공간을 다 차지하게 함) */}
-      <main className="flex-1 flex flex-col items-center pt-12">
+      <main className="flex-1 flex flex-col items-center pt-12 ">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-zinc-800 leading-9">
             방장 권한 확인
@@ -27,6 +27,7 @@ export const CapsuleEditCheckModal = () => {
         </div>
 
         <div className="w-full pt-16">
+                  <Field id="roomPassword">
           <Input
             type="password"
             iconClassName="icon-lock"
@@ -36,10 +37,11 @@ export const CapsuleEditCheckModal = () => {
             value={password}
             onChange={handlePasswordChange}
           />
+          </Field>
         </div>
       </main>
 
-      <footer className="pb-[env(safe-area-inset-bottom)] pt-4">
+      <footer className="w-full max-w-md px-6 pt-6 pb-12 flex flex-col items-center gap-8 mt-auto">
         <Button
           className="w-full"
           onClick={() => {

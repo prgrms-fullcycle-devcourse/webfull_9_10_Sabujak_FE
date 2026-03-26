@@ -4,7 +4,7 @@ import MainPage from './pages/MainPage';
 import CreateRoom from "./pages/CreateRoom";
 import RoomPage from "./pages/RoomPage";
 import TestPage from './pages/TestPage';
-import RoadingPage from "./pages/RoadingPage";
+import Loading from "./shared/components/ui/Loading";
 
 export default function App() {
   return (
@@ -16,7 +16,7 @@ export default function App() {
         {/* 메세지 오픈 전 */}
         <Route path="/room" element={<RoomPage />} />
         <Route path='/test' element={<TestPage />} />
-        <Route path='/roading' element={<RoadingPage />} />
+        <Route path='/roading' element={<Loading image='' text='' />} />
       </Routes>
     </>
   );

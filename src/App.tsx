@@ -5,6 +5,7 @@ import CreateCapsulePage from "./pages/CreateCapsulePage";
 import CapsulePage from "./pages/CapsulePage";
 import TestPage from './pages/TestPage';
 import Loading from "./shared/components/ui/Loading";
+import Modal from "./shared/components/ui/Modal";
 import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <Route path='/roading' element={<Loading />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
+      <Modal />
     </>
   );
 }

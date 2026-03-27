@@ -15,6 +15,7 @@ type ButtonProps = {
 
 export const Button = ({
   variant = "primary",
+  type = "button",
   children,
   className = "",
   iconClassName,
@@ -26,7 +27,7 @@ export const Button = ({
   const buttonClassName = `${baseClassName} ${variantClassName} ${className}`.trim();
 
   return (
-    <button className={buttonClassName} {...props}>
+    <button type={type} className={buttonClassName} {...props}>
       {iconClassName && (
         <span
           className={`btn-icon ${iconClassName}`}

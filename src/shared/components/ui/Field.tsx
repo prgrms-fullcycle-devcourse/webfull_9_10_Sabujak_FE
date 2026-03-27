@@ -19,7 +19,7 @@ export function Field({ id, label, helperText, children }: FieldProps) {
     return (
         <div className="flex flex-col gap-1">
             {label && (
-                <label htmlFor={id} className="texta-sm">
+                <label htmlFor={id} className="text-sm">
                     {label}
                 </label>
             )}

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
+import type { ButtonConfig } from '../../types/button';
 
 type ErrorPageProps = {
     title?: string;
@@ -9,14 +10,8 @@ type ErrorPageProps = {
         content: string;
         color: string;
     }[];
-    primaryButton?: {
-        label: string;
-        onClick: () => void;
-    }
-    secondaryButton?: {
-        label: string;
-        onClick: () => void;
-    }
+    primaryButton?: ButtonConfig;
+    secondaryButton?: ButtonConfig;
 }
 
 export const ErrorPage: React.FC<ErrorPageProps> = ({
@@ -67,6 +62,7 @@ export const ErrorPage: React.FC<ErrorPageProps> = ({
       {/* 3. 하단 액션 버튼 (공유 대신 복구/이동 액션) */}
       <footer className="w-full max-w-md mb-8 flex flex-col gap-3">
         <Button
+          variant='primary'
           onClick={primaryButton.onClick}
         >{primaryButton.label}</Button>
 
@@ -75,16 +71,11 @@ export const ErrorPage: React.FC<ErrorPageProps> = ({
             <Button
               variant='secondary'
               onClick={secondaryButton.onClick}
-            className="w-full bg-transparent text-gray-400 py-2 text-[14px] font-medium hover:text-gray-600 transition-colors"
             >
                 {secondaryButton.label}
             </Button>
         )}
       </footer>
-
-      {/* 배경 데코레이션 */}
-      <div className="fixed top-[-5%] right-[-10%] w-32 h-32 bg-[#FFE9F3] rounded-full blur-3xl opacity-40 z-[-1]" />
-      <div className="fixed bottom-[10%] left-[-5%] w-48 h-48 bg-[#FFF9E5] rounded-full blur-3xl opacity-50 z-[-1]" />
     </div>
   );
 };

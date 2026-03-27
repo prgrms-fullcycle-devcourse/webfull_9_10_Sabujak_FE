@@ -43,7 +43,7 @@ export default function CreateCapsulePage() {
           <Input
             placeholder="방 제목을 입력해주세요"
             rightSlot={(
-              <Button type="button" variant="sm">
+              <Button variant="sm">
                 중복확인
               </Button>
             )}

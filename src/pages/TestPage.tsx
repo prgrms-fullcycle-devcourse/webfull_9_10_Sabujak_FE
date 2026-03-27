@@ -1,4 +1,4 @@
-import { Modal, Button } from '../shared/components/ui';
+import { Button } from '../shared/components/ui';
 import { WriteMessageContent } from '../features/message/components/ui/ModalWriteMessage';
 import { CapsuleEditCheckModal } from '../features/capsule/components/ui/CapsuleEditCheckModal';
 import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditModal';
@@ -7,6 +7,7 @@ import Loading from "../shared/components/ui/Loading";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useServerRequest } from "../shared/hooks/useServerRequest";
+import Modal from '../shared/components/ui/Modal';
 
 export default function TestPage() {
   const { openModal } = useModalStore();

@@ -5,6 +5,7 @@ import CreateCapsulePage from "./pages/CreateCapsulePage";
 import CapsulePage from "./pages/CapsulePage";
 import TestPage from './pages/TestPage';
 import Loading from "./shared/components/ui/Loading";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/room" element={<CapsulePage />} />
         <Route path='/test' element={<TestPage />} />
         <Route path='/roading' element={<Loading />} />
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </>
   );

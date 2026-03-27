@@ -1,10 +1,13 @@
 import type { CapsuleDetailResponseOneOf } from "../../../../shared/api/generated/model";
 import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
+import { WriteMessageContent } from "../../../message/components/ui/WriteMessageModal";
 import { useShare } from "../../hooks";
 import CountdownTimer from "../CountdownTimer";
 import HeartJar from "../HeartJar";
 import "./OpenViewBefore.css";
+import { useModalStore } from "../../../../shared/store/useModalStore";
+import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";
 
 interface OpenViewBeforeProps {
   room: CapsuleDetailResponseOneOf;
@@ -12,6 +15,7 @@ interface OpenViewBeforeProps {
 
 export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
   const { shareUrl, canShare } = useShare();
+  const { openModal } = useModalStore();
 
   const handleShare = async () => {
     await shareUrl({
@@ -23,22 +27,44 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
 
   return (
     <PageLayout
-      header={(
+      header={
         <header className="flex items-center justify-between px-6 pt-4">
           <h1 className="text-lg font-bold">{room.title}</h1>
-          <button type="button" aria-label="메뉴" className="btn-menu h-10 w-10" />
+          <button
+            type="button"
+            aria-label="메뉴"
+            className="btn-menu h-10 w-10"
+            onClick={()=> openModal({
+                      title: '어드민 체크',
+                      content: <CapsuleEditCheckModal getRoomName={room.title} getOpenDate={new Date(room.openAt)} />,
+                      option: 'capsuleEditCheckModal'
+                    })}
+          />
         </header>
-      )}
-      bottomArea={(
+      }
+      bottomArea={
         <>
-          <Button variant="primary">
+          <Button
+            variant="primary"
+            onClick={() =>
+              openModal({
+                title: "편지 쓰기",
+                content: <WriteMessageContent />,
+                option: "writeMessage",
+              })
+            }
+          >
             내 마음 남기기
           </Button>
-          <Button variant="secondary" iconClassName="btn-icon-share" onClick={() => void handleShare()}>
+          <Button
+            variant="secondary"
+            iconClassName="btn-icon-share"
+            onClick={() => void handleShare()}
+          >
             {canShare ? "친구들에게 링크 공유하기" : "링크 복사하기"}
           </Button>
         </>
-      )}
+      }
       contentClassName="flex flex-col items-center text-center"
     >
       <div className="room-before">

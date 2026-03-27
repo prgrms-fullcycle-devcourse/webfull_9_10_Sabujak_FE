@@ -20,6 +20,7 @@ interface ModalState {
   modals: ModalData[];
   openModal: (props: OpenModalProps) => void;
   closeModal: (id : string) => void;
+  replaceTopModal: (props: OpenModalProps) => void;
   clearModals: () => void;
 }
 
@@ -54,6 +55,28 @@ export const useModalStore = create<ModalState>((set) => ({
       modals: state.modals.filter((modal) => modal.id !== id),
     }));
   },
+
+  replaceTopModal: (props: OpenModalProps) =>
+    void set((state) => {
+      if (state.modals.length === 0) {
+        return state;
+      }
+
+      const nextModals = [...state.modals];
+      const lastIndex = nextModals.length - 1;
+      const currentModal = nextModals[lastIndex];
+
+      nextModals[lastIndex] = {
+        ...currentModal,
+        title: props.title,
+        content: props.content,
+        option: props.option,
+        buttonText: props.buttonText,
+        onConfirm: props.onConfirm,
+      };
+
+      return { modals: nextModals };
+    }),
 
   clearModals: () => set({ modals: [] }),
 }));

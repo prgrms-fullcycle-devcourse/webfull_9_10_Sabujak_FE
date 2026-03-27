@@ -1,10 +1,19 @@
-import { Input, Button } from "../../../../shared/components/ui";
 import { useState } from "react";
+import { Button, Field, Input } from "../../../../shared/components/ui";
 import { useModalStore } from "../../../../shared/store";
+import { CapsuleEditModal } from "./CapsuleEditModal";
 
-export const CapsuleEditCheckModal = () => {
+interface CapsuleEditCheckModalProps {
+  getRoomName?: string;
+  getOpenDate?: Date;
+}
+
+export const CapsuleEditCheckModal = ({
+  getRoomName = "",
+  getOpenDate = new Date(),
+}: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
-  const { openModal } = useModalStore();
+  const { openModal, replaceTopModal } = useModalStore();
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -12,47 +21,57 @@ export const CapsuleEditCheckModal = () => {
     setPassword(numericValue);
   };
 
+  const handleSubmit = () => {
+    if (password.length < 4) {
+      openModal({
+        title: "비밀번호가 부족해요",
+        content: <p>비밀번호를 4자리 입력해 주세요.</p>,
+        option: "oneButton",
+      });
+      return;
+    }
+
+    replaceTopModal({
+      title: "캡슐 수정",
+      content: (
+        <CapsuleEditModal
+          getRoomName={getRoomName}
+          getOpenDate={getOpenDate}
+        />
+      ),
+      option: "capsuleEditModal",
+    });
+  };
+
   return (
-    /* 1. 전체 화면을 Flex 컬럼으로 설정 (스크롤 방지) */
-    <div className="flex h-full flex-col p-6">
-      {/* 2. 메인 콘텐츠 영역 (flex-1로 남은 공간을 다 차지하게 함) */}
-      <main className="flex-1 flex flex-col items-center pt-12">
+    <div className="flex h-full flex-col items-center p-6">
+      <main className="flex flex-1 flex-col items-center pt-12">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-zinc-800 leading-9">
+          <h1 className="text-3xl font-bold leading-9 text-zinc-800">
             방장 권한 확인
           </h1>
-          <p className="mt-4 text-base font-medium text-neutral-400 leading-6">
-            안전한 설정을 위해 비밀번호 4자리를 입력해주세요.
+          <p className="mt-4 text-base font-medium leading-6 text-neutral-400">
+            비밀번호 4자리를 입력해 주세요.
           </p>
         </div>
 
         <div className="w-full pt-16">
-          <Input
-            type="password"
-            iconClassName="icon-lock"
-            placeholder="비밀번호 4자리를 입력해주세요"
-            inputMode="numeric"
-            maxLength={4}
-            value={password}
-            onChange={handlePasswordChange}
-          />
+          <Field id="roomPassword">
+            <Input
+              type="password"
+              iconClassName="icon-lock"
+              placeholder="비밀번호 4자리를 입력해 주세요"
+              inputMode="numeric"
+              maxLength={4}
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </Field>
         </div>
       </main>
 
-      <footer className="pb-[env(safe-area-inset-bottom)] pt-4">
-        <Button
-          className="w-full"
-          onClick={() => {
-            if (password.length < 4) {
-              return (openModal({
-                title: "비밀번호가 부족해요!",
-                content: <p>비밀번호를 4자리 입력해 주세요</p>,
-                option: "oneButton",
-              }));
-            }
-
-          }}
-        >
+      <footer className="mt-auto flex w-full max-w-md flex-col items-center gap-8 px-6 pb-12 pt-6">
+        <Button className="w-full" onClick={handleSubmit}>
           확인
         </Button>
       </footer>

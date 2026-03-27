@@ -17,6 +17,7 @@ const CustomInput = forwardRef<HTMLButtonElement, Props>(
 
     return (
       <button
+        type="button"
         id={id}
         ref={ref}
         onClick={onClick}

@@ -106,11 +106,7 @@ export default function Example() {
 
       <Input
         placeholder="나만의 URL 주소를 입력해주세요"
-        rightSlot={(
-          <Button variant="sm">
-            중복확인
-          </Button>
-        )}
+        rightSlot={<Button variant="sm">중복확인</Button>}
       />
     </div>
   );
@@ -173,4 +169,77 @@ export default function Example() {
     placeholder="비밀번호 4자리를 입력해주세요"
   />
 </Field>
+```
+
+## Modal 사용법
+
+## 종류
+
+- `writeMessage` :메세지 쓰기 Modal
+- `oneButton` :버튼 1개 모달(alert용)
+- `twoButton` :버튼 2개 모달(confirm용)
+- `capsuleEditCheckModal` :방 수정 비밀번호 확인 모달
+
+## 옵션
+
+- `title` ? : 모달 제목
+- `content` : 모달 내용
+- `option` : 열고싶은 모달 종류 `oneButton`, `twoButton`, `capsuleEditCheckModal`
+- `buttonText` ? : 버튼 내용. 배열로 들어갑니다.
+- `onConfirm` ? : 버튼 클릭 시 작동할 동작. 배열로 들어갑니다.
+
+## 사용 예시
+
+1.oneButton
+
+```tsx
+<Button onClick={() => openModal({
+  title: '제목',
+  content: <p>내용</p>,
+  option: 'oneButton',
+  buttonText : ['예'],
+  onConfirm:[{()=> 예함수()}],
+})}>
+  oneButton
+</Button>
+
+```
+
+2.twoButton
+
+```tsx
+<Button onClick={() => openModal({
+  title: '제목',
+  content: <p>내용</p>,
+  option: 'oneButton',
+  buttonText : ['예','아니요']
+  onConfirm:[{()=> 예함수()}, {()=> 아니요함수()}]
+})}>
+  oneButton
+</Button>
+
+```
+
+3.WriteMessageModal
+
+```tsx
+<Button onClick={() => openModal({
+  title: "편지 쓰기",
+  content: <WriteMessageContent />,
+  option: "writeMessage",
+})}>
+  writeMessage
+</Button>
+```
+
+4.capsuleEditCheckModal
+
+```tsx
+<Button onClick={() => openModal({
+  title: "어드민 체크",
+  content: <CapsuleEditCheckModal  getRoomName={roomTitle}} getOpenDate={new Date(open시간)}  />,
+  option: "capsuleEditCheckModal",
+})}>
+  capsuleEditCheckModal
+</Button>
 ```

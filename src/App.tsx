@@ -16,7 +16,7 @@ export default function App() {
         {/* 메세지 오픈 전 */}
         <Route path="/room" element={<CapsulePage />} />
         <Route path='/test' element={<TestPage />} />
-        <Route path='/roading' element={<Loading image='' text='' />} />
+        <Route path='/roading' element={<Loading />} />
       </Routes>
     </>
   );

@@ -1,22 +1,30 @@
+import type { ReactNode } from "react";
+import HeartJar from "../../../features/capsule/components/HeartJar";
 import PageLayout from "../layout/PageLayout";
 
 interface LoadingProps {
-  image : string;
-  text? : string;
-  
+  image?: ReactNode | string;
+  text?: string;
 }
 
 const Loading = ({
-  image,
-  text = '아무것도 없어요',
-} : LoadingProps) => {
+  image = <HeartJar total={12} />,
+  text = "로딩 중입니다.",
+}: LoadingProps) => {
   return (
     <PageLayout>
-    <div className="flex flex-col items-center justify-center min-h-[60vh]">
-      <img src={image} alt="loading" className="w-48 h-48 object-contain" />
-      <p className="mt-21 text-xl text-center font-bold">{text}</p>
-    </div>
+      <div className="flex min-h-[60vh] flex-col items-center justify-center">
+        <div className="flex min-h-48 items-center justify-center">
+          {typeof image === "string" ? (
+            <img src={image} alt="loading" className="h-48 w-48 object-contain" />
+          ) : (
+            image
+          )}
+        </div>
+        <p className="mt-6 text-center text-xl font-bold">{text}</p>
+      </div>
     </PageLayout>
   );
 };
+
 export default Loading;

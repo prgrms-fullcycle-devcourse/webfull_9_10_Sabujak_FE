@@ -50,7 +50,7 @@ export default function TestPage() {
   };
 
   if (isLoading) {
-    return <Loading image="" />;
+    return <Loading />;
   }
 
   return (

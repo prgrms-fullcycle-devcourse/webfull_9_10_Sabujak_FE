@@ -1,8 +1,8 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import MainPage from './pages/MainPage';
-import CreateRoom from "./pages/CreateRoom";
-import RoomPage from "./pages/RoomPage";
+import CreateCapsulePage from "./pages/CreateCapsulePage";
+import CapsulePage from "./pages/CapsulePage";
 import TestPage from './pages/TestPage';
 import Loading from "./shared/components/ui/Loading";
 
@@ -12,9 +12,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         {/* 방만들기 */}
-        <Route path="/create-room" element={<CreateRoom />} />
+        <Route path="/create-room" element={<CreateCapsulePage />} />
         {/* 메세지 오픈 전 */}
-        <Route path="/room" element={<RoomPage />} />
+        <Route path="/room" element={<CapsulePage />} />
         <Route path='/test' element={<TestPage />} />
         <Route path='/roading' element={<Loading image='' text='' />} />
       </Routes>

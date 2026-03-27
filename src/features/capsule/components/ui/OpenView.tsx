@@ -1,7 +1,7 @@
-import type { CapsuleDetailResponseOneOfTwo } from "../../../shared/api/generated/model";
-import PageLayout from "../../../shared/components/layout/PageLayout";
-import { Button } from "../../../shared/components/ui";
-import { useShare } from "../hooks";
+import type { CapsuleDetailResponseOneOfTwo } from "../../../../shared/api/generated/model";
+import PageLayout from "../../../../shared/components/layout/PageLayout";
+import { Button } from "../../../../shared/components/ui";
+import { useShare } from "../../hooks";
 
 interface OpenedViewProps {
   room: CapsuleDetailResponseOneOfTwo;

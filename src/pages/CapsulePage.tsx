@@ -1,9 +1,9 @@
-import OpenViewBefore from "../features/room/components/OpenViewBefore";
-import OpenedView from "../features/room/components/OpenView";
-import UnavailableView from "../features/room/components/UnavailableView";
-import { useRoomDetail } from "../features/room/hooks";
+import OpenViewBefore from "../features/capsule/components/ui/OpenViewBefore";
+import OpenedView from "../features/capsule/components/ui/OpenView";
+import UnavailableView from "../features/capsule/components/UnavailableView";
+import { useRoomDetail } from "../features/capsule/hooks";
 
-export default function RoomPage() {
+export default function CapsulePage() {
   const searchParams = new URLSearchParams(window.location.search);
   const slug = searchParams.get("slug") ?? "our-graduation-2025";
 

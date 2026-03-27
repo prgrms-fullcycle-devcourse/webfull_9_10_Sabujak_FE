@@ -1,8 +1,8 @@
-import { Modal, Button } from "../shared/components/ui";
-import { WriteMessageContent } from "./ModalWriteMessage";
-import { AdminCheck } from "./AdminCheckPage";
-import { AdminPage } from "./AdminPage";
-import { useModalStore } from "../shared/store/useModalStore";
+import { Modal, Button } from '../shared/components/ui';
+import { WriteMessageContent } from '../features/message/components/ui/ModalWriteMessage';
+import { CapsuleEditCheckModal } from '../features/capsule/components/ui/CapsuleEditCheckModal';
+import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditModal';
+import { useModalStore } from '../shared/store/useModalStore';
 import Loading from "../shared/components/ui/Loading";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -93,33 +93,20 @@ export default function TestPage() {
           twoButton
         </Button>
 
-        <Button
-          onClick={() =>
-            openModal({
-              title: "어드민 체크",
-              content: <AdminCheck />,
-              option: "adminCheck",
-            })
-          }
-        >
-          adminCheck
+        <Button onClick={() => openModal({
+          title: '어드민 체크',
+          content: <CapsuleEditCheckModal />,
+          option: 'capsuleEditCheckModal'
+        })}>
+          capsuleEditCheckModal
         </Button>
 
-        <Button
-          onClick={() =>
-            openModal({
-              title: "어드민",
-              content: (
-                <AdminPage
-                  getRoomName="우리의 소중한 기록"
-                  getOpenDate={new Date()}
-                />
-              ),
-              option: "admin",
-            })
-          }
-        >
-          admin
+        <Button onClick={() => openModal({
+          title: '어드민',
+          content: <CapsuleEditModal getRoomName="우리의 소중한 기록" getOpenDate={new Date()} />,
+          option: 'capsuleEditModal'
+        })}>
+          CapsuleEditModal
         </Button>
 
         <input

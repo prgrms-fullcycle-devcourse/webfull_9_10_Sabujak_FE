@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Field, Input } from "../../../../shared/components/ui";
 import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
+import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 
 interface CapsuleEditCheckModalProps {
   getRoomName?: string;
@@ -15,13 +16,13 @@ export const CapsuleEditCheckModal = ({
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const numericValue = value.replace(/\D/g, "").slice(0, 4);
     setPassword(numericValue);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (password.length < 4) {
       openModal({
         title: "비밀번호가 부족해요",
@@ -30,6 +31,27 @@ export const CapsuleEditCheckModal = ({
       });
       return;
     }
+
+    let verified = false;
+
+    try {
+      const response = await postCapsulesSlugVerify("testslug4444", {password,})
+    verified = response.verified
+    } catch(error) {
+      console.error("[capsule verify] request failed", error)
+      openModal({
+        title : '서버 오류',
+        content:(
+          <p>
+            서버와 연결하는 중 문제가 발생했어요.<br />
+            {error instanceof Error ? error.message : String(error)}
+          </p>
+        ),
+        option: 'oneButton'
+      })
+      return;
+    }
+
 
     replaceTopModal({
       title: "캡슐 수정",

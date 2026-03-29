@@ -3,11 +3,11 @@ import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
 import { useShare } from "../../hooks";
 
-interface OpenedViewProps {
+interface CapsuleViewReleasedProps {
   room: CapsuleDetailResponseOneOfTwo;
 }
 
-export default function OpenedView({ room }: OpenedViewProps) {
+export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) {
   const { shareUrl, canShare } = useShare();
 
   const handleShare = async () => {

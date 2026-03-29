@@ -36,7 +36,7 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
             className="btn-menu h-10 w-10"
             onClick={()=> openModal({
                       title: '어드민 체크',
-                      content: <CapsuleEditCheckModal getRoomName={room.title} getOpenDate={new Date(room.openAt)} />,
+                      content: <CapsuleEditCheckModal slug={room.slug} getRoomName={room.title} getOpenDate={new Date(room.openAt)} />,
                       option: 'capsuleEditCheckModal'
                     })}
           />
@@ -49,7 +49,7 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
             onClick={() =>
               openModal({
                 title: "편지 쓰기",
-                content: <WriteMessageContent />,
+                content: <WriteMessageContent slug={room.slug} />,
                 option: "writeMessage",
               })
             }

@@ -3,20 +3,23 @@ import { Button, Field, Input } from "../../../../shared/components/ui";
 import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
+import { getErrorMessage } from "../../../../shared/utils/error";
 
 interface CapsuleEditCheckModalProps {
+  slug : string;
   getRoomName?: string;
   getOpenDate?: Date;
 }
 
 export const CapsuleEditCheckModal = ({
+  slug,
   getRoomName = "",
   getOpenDate = new Date(),
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
 
-  const handlePasswordChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const numericValue = value.replace(/\D/g, "").slice(0, 4);
     setPassword(numericValue);
@@ -32,37 +35,28 @@ export const CapsuleEditCheckModal = ({
       return;
     }
 
-    let verified = false;
-
     try {
-      const response = await postCapsulesSlugVerify("testslug4444", {password,})
-    verified = response.verified
-    } catch(error) {
-      console.error("[capsule verify] request failed", error)
-      openModal({
-        title : '서버 오류',
-        content:(
-          <p>
-            서버와 연결하는 중 문제가 발생했어요.<br />
-            {error instanceof Error ? error.message : String(error)}
-          </p>
+      await postCapsulesSlugVerify(slug, {
+        password,
+      });
+      replaceTopModal({
+        title: "캡슐 수정",
+        content: (
+          <CapsuleEditModal
+            getRoomName={getRoomName}
+            getOpenDate={getOpenDate}
+          />
         ),
-        option: 'oneButton'
-      })
+        option: "capsuleEditModal",
+      });
+    } catch (error) {
+      openModal({
+        title: "메세지 전송에 실패했어요!",
+        content: <p>{getErrorMessage(error)}</p>,
+        option: "oneButton",
+      });
       return;
     }
-
-
-    replaceTopModal({
-      title: "캡슐 수정",
-      content: (
-        <CapsuleEditModal
-          getRoomName={getRoomName}
-          getOpenDate={getOpenDate}
-        />
-      ),
-      option: "capsuleEditModal",
-    });
   };
 
   return (
@@ -93,7 +87,7 @@ export const CapsuleEditCheckModal = ({
       </main>
 
       <footer className="mt-auto flex w-full max-w-md flex-col items-center gap-8 px-6 pb-12 pt-6">
-        <Button className="w-full" onClick={handleSubmit}>
+        <Button className="w-full" onClick={void handleSubmit}>
           확인
         </Button>
       </footer>

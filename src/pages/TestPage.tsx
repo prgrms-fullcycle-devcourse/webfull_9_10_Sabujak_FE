@@ -5,51 +5,20 @@ import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditM
 import { useModalStore } from '../shared/store/useModalStore';
 import Loading from "../shared/components/ui/Loading";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useServerRequest } from "../shared/hooks/useServerRequest";
 import Modal from '../shared/components/ui/Modal';
 
 export default function TestPage() {
   const { openModal } = useModalStore();
   const [inputValue, setInputValue] = useState("");
-  const navigate = useNavigate();
-
-  // 1. 커스텀 훅 초기화
-  const { isLoading, sendRequest } = useServerRequest({
-    url: "https://api.example.com/data",
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: "{ id : 1}", // 기본 body 구조 (추후 inputValue가 합쳐짐)
-  });
-
+  const [isLoading, setIsLoading] = useState(false);
   // 2. 버튼 클릭 핸들러
-  const handleButtonClick = async () => {
-    const result = await sendRequest(inputValue);
-
-    if (result?.success) {
-      // 성공 시 입력값 초기화 후 이동
-      setInputValue("");
-      void navigate("/success");
-    } else if (result) {
-      // 실패 시 모달 표시 (message가 객체일 수 있으므로 JSON.stringify 활용 가능)
-      openModal({
-        title: "오류 발생",
-        content: (
-          <div>
-            {typeof result.message === "object" ? (
-              <pre className="text-xs bg-gray-100 p-2 mt-2">
-                {JSON.stringify(result.message, null, 2)}
-              </pre>
-            ) : (
-              <p>{result.message}</p>
-            )}
-          </div>
-        ),
-        option: "oneButton",
-      });
-    }
-  };
-
+  const handleButtonClick = () => {
+  if(isLoading === true){
+    setIsLoading(false)
+  } else {
+    setIsLoading(true)
+  }
+}
   if (isLoading) {
     return <Loading />;
   }

@@ -83,9 +83,9 @@ input::placeholder, .placeholder {
 }
 
 
-.is-info {
+/* .is-info {
   border: 1px solid #6b7280;
-}
+} */
 
 .is-success {
   border: 1px solid #16a34a;
@@ -105,7 +105,7 @@ input::placeholder, .placeholder {
 }
 
 .field-message-info {
-  color: #6b7280;
+  color: #000000;
 }
 
 .field-message-success {

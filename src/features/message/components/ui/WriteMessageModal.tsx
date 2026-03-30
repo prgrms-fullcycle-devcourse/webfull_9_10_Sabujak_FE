@@ -10,15 +10,15 @@ import { postCapsulesSlugMessages } from "../../../../shared/api/generated/messa
 import { getErrorMessage } from "../../../../shared/utils/error";
 
 interface WriteMessageModalProps {
-  slug : string;
+  slug: string;
 }
 
-export const WriteMessageContent = ({ 
-  slug,
- } : WriteMessageModalProps) => {
+export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   const { openModal, clearModals } = useModalStore();
   const [nickname, setNickname] = useState("");
   const [content, setContent] = useState("");
+
+  const textMaxLength = 1000;
 
   const handleComplete = () => {
     const MessageSend = async () => {
@@ -27,18 +27,18 @@ export const WriteMessageContent = ({
           nickname,
           content,
         });
-        
-      openModal({
-        title: "작성 완료",
-        content: <p>편지가 배송되었습니다.</p>,
-        option: "oneButton",
-        buttonText: ["확인"],
-        onConfirm: [
-          () => {
-            clearModals();
-          },
-        ],
-      });
+
+        openModal({
+          title: "작성 완료",
+          content: <p>편지가 배송되었습니다.</p>,
+          option: "oneButton",
+          buttonText: ["확인"],
+          onConfirm: [
+            () => {
+              clearModals();
+            },
+          ],
+        });
       } catch (error) {
         openModal({
           title: "메세지 전송에 실패했어요!",
@@ -106,14 +106,22 @@ export const WriteMessageContent = ({
           helperText="한 번 남긴 마음은 수정이나 삭제가 불가능해요."
         >
           <div onClick={() => document.getElementById("content")?.focus()}>
-            <Textarea
-              id="content"
-              value={content}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setContent(e.target.value)
-              }
-              placeholder="따뜻한 마음을 전해보세요..."
-            />
+            <div className="releative">
+              <Textarea
+                id="content"
+                value={content}
+                maxLength={textMaxLength}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setContent(e.target.value)
+                }
+                placeholder="따뜻한 마음을 전해보세요..."
+              />
+              <span
+                className={
+                  content.length >= textMaxLength ? "text-red-500" : ""}>
+                {content.length}/1000
+              </span>
+            </div>
           </div>
         </Field>
       </div>

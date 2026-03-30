@@ -1,5 +1,5 @@
 import { Button } from '../shared/components/ui';
-import { WriteMessageContent } from '../features/message/components/ui/ModalWriteMessage';
+import { WriteMessageContent } from '../features/message/components/ui/WriteMessageModal';
 import { CapsuleEditCheckModal } from '../features/capsule/components/ui/CapsuleEditCheckModal';
 import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditModal';
 import { useModalStore } from '../shared/store/useModalStore';

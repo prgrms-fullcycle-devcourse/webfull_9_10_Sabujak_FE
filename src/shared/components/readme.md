@@ -106,11 +106,7 @@ export default function Example() {
 
       <Input
         placeholder="나만의 URL 주소를 입력해주세요"
-        rightSlot={(
-          <Button variant="sm">
-            중복확인
-          </Button>
-        )}
+        rightSlot={<Button variant="sm">중복확인</Button>}
       />
     </div>
   );
@@ -121,9 +117,12 @@ export default function Example() {
 - `inputClassName`: 실제 `<input>`에 추가할 클래스
 - `rightSlot`: input 오른쪽에 붙는 보조 요소
 - `iconClassName`: 필드 아이콘 종류 클래스명
+- `status`: `info`, `success`, `warning`, `error` 상태 클래스를 적용할 수 있습니다.
+- `error`: 별도 상태값 없이 에러 스타일만 적용해야 할 때 사용할 수 있습니다.
 - `iconClassName`을 주면 `field-icon` 공통 클래스는 `Input` 내부에서 자동으로 붙습니다.
 - 사용처에서는 `field-icon icon-lock`처럼 두 개를 같이 쓰지 않고, 아이콘 종류만 넘기면 됩니다.
 - 기본 `input` 속성(`type`, `placeholder`, `value`, `onChange`)도 그대로 사용할 수 있습니다.
+
 
 예시:
 
@@ -134,7 +133,7 @@ export default function Example() {
 
 ## Field 사용법
 
-`Field`는 라벨, 입력 필드, 안내 문구를 묶어주는 컴포넌트입니다.
+`Field`는 라벨, 입력 필드, 상태 메시지, 안내 문구를 묶어주는 컴포넌트입니다.
 
 ```tsx
 import { Field, Input } from "./ui";
@@ -144,20 +143,26 @@ export default function Example() {
     <Field
       id="roomUrl"
       label="나만의 URL 주소"
+      message="에러메세지"
+      messageStatus="error"
       helperText="영문 소문자, 숫자, 하이픈(-)만 4자 이상 입력이 가능합니다."
     >
       <Input placeholder="URL을 입력해주세요" />
     </Field>
   );
 }
+
 ```
 
 - `id`: label과 input을 연결할 id
 - `label`: 필드 라벨
+- `message`: 입력 필드 아래에 표시할 상태 메시지
+- `messageStatus`: `info`, `success`, `warning`, `error` 상태를 지원합니다.
 - `helperText`: 입력 아래 안내 문구
-- `children`: 주로 `Input`, `DatePicker` 같은 입력 컴포넌트
+- `children`: 주로 `Input`, `Textarea`, `DatePicker` 같은 입력 컴포넌트
 - `Field`는 자식으로 전달한 입력 컴포넌트에 `id`를 자동으로 연결합니다.
-- `Input`, `DatePicker` 같은 입력형 컴포넌트와 함께 사용하는 것을 기본으로 합니다.
+- `messageStatus`: `info`, `success`, `warning`, `error` 상태를 지원합니다.
+- 상태값에 따라 메시지에는 `field-message-{status}`, 입력 필드에는 `is-{status}` 클래스가 적용됩니다.
 
 ## 같이 쓰는 예시
 
@@ -173,4 +178,77 @@ export default function Example() {
     placeholder="비밀번호 4자리를 입력해주세요"
   />
 </Field>
+```
+
+## Modal 사용법
+
+## 종류
+
+- `writeMessage` :메세지 쓰기 Modal
+- `oneButton` :버튼 1개 모달(alert용)
+- `twoButton` :버튼 2개 모달(confirm용)
+- `capsuleEditCheckModal` :방 수정 비밀번호 확인 모달
+
+## 옵션
+
+- `title` ? : 모달 제목
+- `content` : 모달 내용
+- `option` : 열고싶은 모달 종류 `oneButton`, `twoButton`, `capsuleEditCheckModal`
+- `buttonText` ? : 버튼 내용. 배열로 들어갑니다.
+- `onConfirm` ? : 버튼 클릭 시 작동할 동작. 배열로 들어갑니다.
+
+## 사용 예시
+
+1.oneButton
+
+```tsx
+<Button onClick={() => openModal({
+  title: '제목',
+  content: <p>내용</p>,
+  option: 'oneButton',
+  buttonText : ['예'],
+  onConfirm:[{()=> 예함수()}],
+})}>
+  oneButton
+</Button>
+
+```
+
+2.twoButton
+
+```tsx
+<Button onClick={() => openModal({
+  title: '제목',
+  content: <p>내용</p>,
+  option: 'oneButton',
+  buttonText : ['예','아니요']
+  onConfirm:[{()=> 예함수()}, {()=> 아니요함수()}]
+})}>
+  oneButton
+</Button>
+
+```
+
+3.WriteMessageModal
+
+```tsx
+<Button onClick={() => openModal({
+  title: "편지 쓰기",
+  content: <WriteMessageContent />,
+  option: "writeMessage",
+})}>
+  writeMessage
+</Button>
+```
+
+4.capsuleEditCheckModal
+
+```tsx
+<Button onClick={() => openModal({
+  title: "어드민 체크",
+  content: <CapsuleEditCheckModal  getRoomName={roomTitle}} getOpenDate={new Date(open시간)}  />,
+  option: "capsuleEditCheckModal",
+})}>
+  capsuleEditCheckModal
+</Button>
 ```

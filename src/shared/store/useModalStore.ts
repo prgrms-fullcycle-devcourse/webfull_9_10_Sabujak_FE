@@ -25,7 +25,7 @@ interface ModalState {
 }
 
 interface OpenModalProps {
-  title?: string; // 기본값을 가질 수 있도록 선택사항(?)으로 변경
+  title?: string;
   content: React.ReactNode;
   option: ModalOption;
   buttonText?: string[];

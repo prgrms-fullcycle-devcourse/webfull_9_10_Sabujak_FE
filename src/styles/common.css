@@ -98,11 +98,6 @@ input::placeholder, .placeholder {
   border: 1px solid #ef4444;
 }
 
-/*****************************
- 인풋 아이콘
-******************************/
-
-/* 인풋 아이콘 공통 스타일 */
 .field-message {
   font-size: 0.875rem;
   line-height: 1.4;
@@ -124,6 +119,13 @@ input::placeholder, .placeholder {
 .field-message-error {
   color: #ef4444;
 }
+
+/*****************************
+ 인풋 아이콘
+******************************/
+
+/* 인풋 아이콘 공통 스타일 */
+
 
 .field-icon {
   position: relative;

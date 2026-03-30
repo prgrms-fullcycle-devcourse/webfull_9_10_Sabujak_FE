@@ -6,7 +6,7 @@ type FieldChildProps = {
     status?: FieldMessageStatus;
 };
 
-type FieldMessageStatus = "info" | "success" | "warning" | "error";
+type FieldMessageStatus = "success" | "warning" | "error";
 
 interface FieldProps {
     id?: string;
@@ -21,7 +21,7 @@ export function Field({
     id,
     label,
     message,
-    messageStatus = "info",
+    messageStatus,
     helperText,
     children,
 }: FieldProps) {
@@ -32,7 +32,9 @@ export function Field({
             status: messageStatus,
         })
         : children;
-    const messageClassName = `field-message field-message-${messageStatus}`;
+    const messageClassName = messageStatus
+        ? `field-message field-message-${messageStatus}`
+        : "field-message";
 
     return (
         <div className="flex flex-col gap-1">

@@ -82,11 +82,6 @@ input::placeholder, .placeholder {
   outline: none;
 }
 
-
-/* .is-info {
-  border: 1px solid #6b7280;
-} */
-
 .is-success {
   border: 1px solid #16a34a;
 }
@@ -102,10 +97,6 @@ input::placeholder, .placeholder {
   font-size: 0.875rem;
   line-height: 1.4;
   word-break: keep-all;
-}
-
-.field-message-info {
-  color: #000000;
 }
 
 .field-message-success {

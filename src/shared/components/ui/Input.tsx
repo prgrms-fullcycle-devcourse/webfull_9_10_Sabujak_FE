@@ -7,7 +7,7 @@ import {
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
-  status?: "info" | "success" | "warning" | "error";
+  status?: "success" | "warning" | "error";
   rightSlot?: ReactNode;
   inputClassName?: string;
   iconClassName?: string;

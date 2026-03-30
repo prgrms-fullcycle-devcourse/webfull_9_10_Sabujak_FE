@@ -2,7 +2,7 @@ import { forwardRef, useId, type TextareaHTMLAttributes } from "react";
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
-  status?: "info" | "success" | "warning" | "error";
+  status?: "success" | "warning" | "error";
   TextareaClassName?: string;
 }
 

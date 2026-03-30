@@ -2,14 +2,17 @@ import { forwardRef, useId, type TextareaHTMLAttributes } from "react";
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
+  status?: "info" | "success" | "warning" | "error";
   TextareaClassName?: string;
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ error, className, TextareaClassName = "", ...props }, ref) => {
+  ({ error, status, className, TextareaClassName = "", ...props }, ref) => {
     const generatedId = useId();
     const TextareaId = props.id ?? generatedId;
-    const wrapperClassName = `field-control ${error ? "field-error" : ""} ${
+    const statusClassName = status ? `is-${status}` : "";
+    const errorClassName = error && !status ? "is-error" : "";
+    const wrapperClassName = `field-control ${statusClassName} ${errorClassName} ${
       className ?? ""
     }`.trim();
     const controlClassName = `field-input w-full h-full bg-transparent resize-none outline-none ${TextareaClassName}`.trim();

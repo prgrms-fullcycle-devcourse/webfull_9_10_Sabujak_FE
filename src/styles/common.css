@@ -82,7 +82,19 @@ input::placeholder, .placeholder {
   outline: none;
 }
 
-.field-error {
+
+.is-info {
+  border: 1px solid #6b7280;
+}
+
+.is-success {
+  border: 1px solid #16a34a;
+}
+
+.is-warning {
+  border: 1px solid #f97316;
+}
+.is-error {
   border: 1px solid #ef4444;
 }
 
@@ -91,6 +103,28 @@ input::placeholder, .placeholder {
 ******************************/
 
 /* 인풋 아이콘 공통 스타일 */
+.field-message {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.field-message-info {
+  color: #6b7280;
+}
+
+.field-message-success {
+  color: #16a34a;
+}
+
+.field-message-warning {
+  color: #f97316;
+}
+
+.field-message-error {
+  color: #ef4444;
+}
+
 .field-icon {
   position: relative;
   padding-right: 2.75rem;

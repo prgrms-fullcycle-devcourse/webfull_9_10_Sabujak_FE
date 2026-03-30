@@ -2,19 +2,37 @@ import { cloneElement, isValidElement, type ReactElement, type ReactNode } from 
 
 type FieldChildProps = {
     id?: string;
+    error?: string;
+    status?: FieldMessageStatus;
 };
+
+type FieldMessageStatus = "info" | "success" | "warning" | "error";
 
 interface FieldProps {
     id?: string;
     label?: string;
+    message?: string;
+    messageStatus?: FieldMessageStatus;
     helperText?: string;
     children: ReactElement<FieldChildProps> | ReactNode;
 }
 
-export function Field({ id, label, helperText, children }: FieldProps) {
+export function Field({
+    id,
+    label,
+    message,
+    messageStatus = "info",
+    helperText,
+    children,
+}: FieldProps) {
     const childWithId = isValidElement(children)
-        ? cloneElement(children as ReactElement<FieldChildProps>, { id })
+        ? cloneElement(children as ReactElement<FieldChildProps>, {
+            id,
+            error: messageStatus === "error" ? (message ?? " ") : undefined,
+            status: messageStatus,
+        })
         : children;
+    const messageClassName = `field-message field-message-${messageStatus}`;
 
     return (
         <div className="flex flex-col gap-1">
@@ -24,6 +42,11 @@ export function Field({ id, label, helperText, children }: FieldProps) {
                 </label>
             )}
             {childWithId}
+            {message && (
+                <p className={messageClassName}>
+                    {message}
+                </p>
+            )}
             {helperText && (
                 <p className="text-sm text-gray-500">
                     {helperText}

@@ -15,7 +15,7 @@ export default function App() {
         {/* 방만들기 */}
         <Route path="/create-room" element={<CreateCapsulePage />} />
         {/* 메세지 오픈 전 */}
-        <Route path="/room" element={<CapsulePage />} />
+        <Route path="/capsule" element={<CapsulePage />} />
         <Route path='/test' element={<TestPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>

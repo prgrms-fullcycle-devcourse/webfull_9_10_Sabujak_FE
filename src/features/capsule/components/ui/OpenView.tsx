@@ -4,7 +4,6 @@ import { Button } from "../../../../shared/components/ui";
 import { useShare } from "../../hooks";
 import { getColors } from "../../utils/color";
 import { formatYearMonth, formatYearMonthDay, getDiffDays } from "../../utils/date";
-import historyUrl from "../../../../assets/history.svg";
 
 interface OpenedViewProps {
   room: CapsuleDetailResponseOneOfTwo;
@@ -39,12 +38,20 @@ export default function OpenedView({ room }: OpenedViewProps) {
               열렸습니다.
             </div>
             <div className="mt-6 flex justify-center">
-              <div className="flex items-center gap-3 rounded-xl bg-[#F5EFE6] px-4 py-3 text-gray-800 text-center">
-                <img src={historyUrl}/>
-                <div className="text-sm leading-relaxed text-center">
-                  이 타임캡슐은 {getDiffDays(new Date(), expiresAt)}일 뒤인 {formatYearMonthDay(expiresAt)}에 영구히 사라집니다.
-                </div>
+            <div className="flex items-center gap-3 rounded-xl bg-[#F5EFE6] px-4 py-3 text-gray-800">
+              <div
+                className="w-4 h-4"
+                style={{
+                  backgroundImage: "var(--ico-hourglass)", // 아이콘 이름 맞게 변경
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  backgroundSize: "contain",
+                }}
+              />
+              <div className="text-sm leading-relaxed">
+                이 타임캡슐은 {getDiffDays(new Date(), expiresAt)}일 뒤인 {formatYearMonthDay(expiresAt)}에 영구히 사라집니다.
               </div>
+            </div>
             </div>
               {/* 5. 하단 설명 (중앙 + 회색 + 가운데 점) */}
             <div className="mt-8 text-center text-xs text-gray-400">

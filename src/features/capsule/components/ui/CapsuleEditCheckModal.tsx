@@ -20,6 +20,13 @@ export const CapsuleEditCheckModal = ({
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
 
+ const handleEnterDown = (e:React.KeyboardEvent) => {
+  if(e.nativeEvent.isComposing) return;
+  if(e.key === 'Enter') {
+    void handleSubmit()
+  }
+ }
+ 
   const handleSubmit = async () => {
     if (password.length < 4) {
       openModal({
@@ -78,6 +85,7 @@ export const CapsuleEditCheckModal = ({
               maxLength={4}
               value={password}
               onChange={(e) => {setPassword(handlePasswordChange(e.target.value))}}
+              onKeyDown={handleEnterDown}
             />
           </Field>
         </div>

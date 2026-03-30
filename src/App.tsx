@@ -4,6 +4,7 @@ import MainPage from './pages/MainPage';
 import CreateCapsulePage from "./pages/CreateCapsulePage";
 import CapsulePage from "./pages/CapsulePage";
 import TestPage from './pages/TestPage';
+import Modal from "./shared/components/ui/Modal";
 import NotFoundPage from "./pages/NotFoundPage";
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Route path='/test' element={<TestPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
+      <Modal />
     </>
   );
 

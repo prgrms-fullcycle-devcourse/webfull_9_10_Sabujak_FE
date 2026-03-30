@@ -50,7 +50,7 @@ export const CapsuleEditModal = ({
       });
     } catch (error) {
       openModal({
-        title: "수정에 실패했습니다!",
+        title: "수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
@@ -75,7 +75,7 @@ export const CapsuleEditModal = ({
       });
     } catch (error) {
       openModal({
-        title: "삭제에 실패했습니다!",
+        title: "삭제 실패",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });

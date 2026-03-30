@@ -12,16 +12,6 @@ export default function TestPage() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   // 2. 버튼 클릭 핸들러
-  const handleButtonClick = () => {
-  if(isLoading === true){
-    setIsLoading(false)
-  } else {
-    setIsLoading(true)
-  }
-}
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <>
@@ -86,12 +76,10 @@ export default function TestPage() {
         />
 
         <Button
-          onClick={() => {
-            void handleButtonClick();
-          }}
-        >
+          onClick={() => setIsLoading(!isLoading)}>
           Loading
         </Button>
+        {isLoading && <Loading />}
       </div>
       <Modal />
     </>

@@ -18,7 +18,7 @@ export default function App() {
         {/* 메세지 오픈 전 */}
         <Route path="/capsule" element={<CapsulePage />} />
         <Route path='/test' element={<TestPage />} />
-        <Route path='/roading' element={<Loading />} />
+        <Route path='/loading' element={<Loading />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Modal />

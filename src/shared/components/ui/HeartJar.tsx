@@ -1,5 +1,5 @@
 import { useId, useRef } from "react";
-import useHeartJarAnimation from "../hooks/useHeartJarAnimation";
+import useHeartJarAnimation from "../../../features/capsule/hooks/useHeartJarAnimation";
 import "./HeartJar.css";
 
 type HeartJarProps = {

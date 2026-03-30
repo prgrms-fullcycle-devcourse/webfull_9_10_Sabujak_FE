@@ -4,7 +4,7 @@ import { Button } from "../../../../shared/components/ui";
 import { WriteMessageContent } from "../../../message/components/ui/WriteMessageModal";
 import { useShare } from "../../hooks";
 import CountdownTimer from "../CountdownTimer";
-import HeartJar from "../HeartJar";
+import HeartJar from "../../../../shared/components/ui/HeartJar";
 import "./OpenViewBefore.css";
 import { useModalStore } from "../../../../shared/store/useModalStore";
 import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";

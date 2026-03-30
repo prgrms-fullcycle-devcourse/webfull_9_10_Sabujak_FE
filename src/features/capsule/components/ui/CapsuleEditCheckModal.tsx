@@ -4,9 +4,10 @@ import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
+import { handlePasswordChange } from "../../../../shared/utils/PWCheck";
 
 interface CapsuleEditCheckModalProps {
-  slug : string;
+  slug: string;
   getRoomName?: string;
   getOpenDate?: Date;
 }
@@ -18,12 +19,6 @@ export const CapsuleEditCheckModal = ({
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const numericValue = value.replace(/\D/g, "").slice(0, 4);
-    setPassword(numericValue);
-  };
 
   const handleSubmit = async () => {
     if (password.length < 4) {
@@ -43,6 +38,8 @@ export const CapsuleEditCheckModal = ({
         title: "캡슐 수정",
         content: (
           <CapsuleEditModal
+            slug={slug}
+            password={password}
             getRoomName={getRoomName}
             getOpenDate={getOpenDate}
           />
@@ -51,7 +48,7 @@ export const CapsuleEditCheckModal = ({
       });
     } catch (error) {
       openModal({
-        title: "메세지 전송에 실패했어요!",
+        title: "비밀번호 체크에 실패했어요!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
@@ -80,14 +77,19 @@ export const CapsuleEditCheckModal = ({
               inputMode="numeric"
               maxLength={4}
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => {setPassword(handlePasswordChange(e.target.value))}}
             />
           </Field>
         </div>
       </main>
 
       <footer className="mt-auto flex w-full max-w-md flex-col items-center gap-8 px-6 pb-12 pt-6">
-        <Button className="w-full" onClick={void handleSubmit}>
+        <Button
+          className="w-full"
+          onClick={() => {
+            void handleSubmit();
+          }}
+        >
           확인
         </Button>
       </footer>

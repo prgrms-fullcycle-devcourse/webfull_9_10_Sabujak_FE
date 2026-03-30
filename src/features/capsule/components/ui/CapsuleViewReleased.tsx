@@ -5,11 +5,11 @@ import { useShare } from "../../hooks";
 import { getColors } from "../../utils/color";
 import { formatYearMonth, formatYearMonthDay, getDiffDays } from "../../utils/date";
 
-interface OpenedViewProps {
+interface CapsuleViewReleasedProps {
   room: CapsuleDetailResponseOneOfTwo;
 }
 
-export default function OpenedView({ room }: OpenedViewProps) {
+export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) {
   const { shareUrl, canShare } = useShare();
 
   const handleShare = async () => {

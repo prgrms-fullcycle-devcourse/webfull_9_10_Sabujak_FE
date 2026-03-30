@@ -4,11 +4,11 @@
 
 ## components
 
-- `OpenViewBefore.tsx`: 캡슐 오픈 전 화면
-- `OpenView.tsx`: 캡슐 오픈 후 화면
+- `CapsuleViewUpcoming.tsx`: 캡슐 오픈 전 화면
+- `CapsuleViewReleased.tsx`: 캡슐 오픈 후 화면
 - `UnavailableView.tsx`: 잘못된 링크 또는 존재하지 않는 방 안내 화면
 - `HeartJar.tsx`: 오픈 전 화면의 하트병 UI
-- `CountdownTimer.tsx`: room 전용 카운트다운 표시 UI
+- `components/ui/CapsuleCountdown.tsx`: capsule 전용 카운트다운 표시 UI
 
 ## hooks
 

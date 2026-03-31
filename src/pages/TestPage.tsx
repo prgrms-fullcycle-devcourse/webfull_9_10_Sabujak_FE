@@ -18,13 +18,11 @@ export default function TestPage() {
       <div className="flex gap-8 p-4">
         {/* 버튼 1: 메세지 입력 모달 */}
         <Button
-          onClick={() =>
-            openModal({
-              title: "편지 쓰기",
-              content: <WriteMessageContent />,
-              option: "writeMessage",
-            })
-          }
+          onClick={() => openModal({
+            title: '편지 쓰기',
+            content: <WriteMessageContent slug='testslug1111' />,
+            option: 'writeMessage'
+          })}
         >
           writeMessage
         </Button>
@@ -55,7 +53,7 @@ export default function TestPage() {
 
         <Button onClick={() => openModal({
           title: '어드민 체크',
-          content: <CapsuleEditCheckModal />,
+          content: <CapsuleEditCheckModal slug='testslug1111' />,
           option: 'capsuleEditCheckModal'
         })}>
           capsuleEditCheckModal
@@ -63,7 +61,7 @@ export default function TestPage() {
 
         <Button onClick={() => openModal({
           title: '어드민',
-          content: <CapsuleEditModal getRoomName="우리의 소중한 기록" getOpenDate={new Date()} />,
+          content: <CapsuleEditModal slug='testslug1111' password='1112' getRoomName="우리의 소중한 기록" getOpenDate={new Date()} />,
           option: 'capsuleEditModal'
         })}>
           CapsuleEditModal

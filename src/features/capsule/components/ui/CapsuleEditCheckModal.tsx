@@ -2,26 +2,32 @@ import { useState } from "react";
 import { Button, Field, Input } from "../../../../shared/components/ui";
 import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
+import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
+import { getErrorMessage } from "../../../../shared/utils/error";
+import { handlePasswordChange } from "../../../../shared/utils/PWCheck";
 
 interface CapsuleEditCheckModalProps {
+  slug: string;
   getRoomName?: string;
   getOpenDate?: Date;
 }
 
 export const CapsuleEditCheckModal = ({
+  slug,
   getRoomName = "",
   getOpenDate = new Date(),
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const numericValue = value.replace(/\D/g, "").slice(0, 4);
-    setPassword(numericValue);
-  };
-
-  const handleSubmit = () => {
+ const handleEnterDown = (e:React.KeyboardEvent) => {
+  if(e.nativeEvent.isComposing) return;
+  if(e.key === 'Enter') {
+    void handleSubmit()
+  }
+ }
+ 
+  const handleSubmit = async () => {
     if (password.length < 4) {
       openModal({
         title: "비밀번호가 부족해요",
@@ -31,16 +37,30 @@ export const CapsuleEditCheckModal = ({
       return;
     }
 
-    replaceTopModal({
-      title: "캡슐 수정",
-      content: (
-        <CapsuleEditModal
-          getRoomName={getRoomName}
-          getOpenDate={getOpenDate}
-        />
-      ),
-      option: "capsuleEditModal",
-    });
+    try {
+      await postCapsulesSlugVerify(slug, {
+        password,
+      });
+      replaceTopModal({
+        title: "캡슐 수정",
+        content: (
+          <CapsuleEditModal
+            slug={slug}
+            password={password}
+            getRoomName={getRoomName}
+            getOpenDate={getOpenDate}
+          />
+        ),
+        option: "capsuleEditModal",
+      });
+    } catch (error) {
+      openModal({
+        title: "비밀번호 체크에 실패했어요!",
+        content: <p>{getErrorMessage(error)}</p>,
+        option: "oneButton",
+      });
+      return;
+    }
   };
 
   return (
@@ -64,14 +84,20 @@ export const CapsuleEditCheckModal = ({
               inputMode="numeric"
               maxLength={4}
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => {setPassword(handlePasswordChange(e.target.value))}}
+              onKeyDown={handleEnterDown}
             />
           </Field>
         </div>
       </main>
 
       <footer className="mt-auto flex w-full max-w-md flex-col items-center gap-8 px-6 pb-12 pt-6">
-        <Button className="w-full" onClick={handleSubmit}>
+        <Button
+          className="w-full"
+          onClick={() => {
+            void handleSubmit();
+          }}
+        >
           확인
         </Button>
       </footer>

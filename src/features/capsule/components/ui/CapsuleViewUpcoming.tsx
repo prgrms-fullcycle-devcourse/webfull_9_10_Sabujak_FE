@@ -16,7 +16,9 @@ interface CapsuleViewUpcomingProps {
   room: CapsuleDetailResponseOneOf;
 }
 
-export default function CapsuleViewUpcoming({ room }: CapsuleViewUpcomingProps) {
+export default function CapsuleViewUpcoming({
+  room,
+}: CapsuleViewUpcomingProps) {
   const { shareUrl, canShare } = useShare();
   const { openModal } = useModalStore();
   const [messageCount, setMessageCount] = useState<number | null>(null);
@@ -29,7 +31,7 @@ export default function CapsuleViewUpcoming({ room }: CapsuleViewUpcomingProps) 
       room.slug,
       (nextMessageCount) => {
         setMessageCount(nextMessageCount);
-      },
+      }
     );
 
     return () => {
@@ -47,7 +49,7 @@ export default function CapsuleViewUpcoming({ room }: CapsuleViewUpcomingProps) 
 
   return (
     <PageLayout
-      header={(
+      header={
         <header className="flex items-center justify-between px-6 pt-4">
           <h1 className="text-lg font-bold">{room.title}</h1>
           <button
@@ -59,33 +61,40 @@ export default function CapsuleViewUpcoming({ room }: CapsuleViewUpcomingProps) 
                 title: "어드민 체크",
                 content: (
                   <CapsuleEditCheckModal
+                    slug={room.slug}
                     getRoomName={room.title}
                     getOpenDate={new Date(room.openAt)}
                   />
                 ),
                 option: "capsuleEditCheckModal",
-              })}
+              })
+            }
           />
         </header>
-      )}
-      bottomArea={(
+      }
+      bottomArea={
         <>
           <Button
             variant="primary"
             onClick={() =>
               openModal({
                 title: "편지 쓰기",
-                content: <WriteMessageContent />,
+                content: <WriteMessageContent slug={room.slug} />,
                 option: "writeMessage",
-              })}
+              })
+            }
           >
             내 마음 남기기
           </Button>
-          <Button variant="secondary" iconClassName="btn-icon-share" onClick={() => void handleShare()}>
+          <Button
+            variant="secondary"
+            iconClassName="btn-icon-share"
+            onClick={() => void handleShare()}
+          >
             {canShare ? "친구들에게 링크 공유하기" : "링크 복사하기"}
           </Button>
         </>
-      )}
+      }
       contentClassName="flex flex-col items-center text-center"
     >
       <div className="room-before">

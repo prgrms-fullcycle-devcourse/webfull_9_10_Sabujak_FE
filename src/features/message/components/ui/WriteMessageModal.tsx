@@ -1,18 +1,59 @@
 import { useState } from "react";
 import { useModalStore } from "../../../../shared/store/useModalStore";
-import { Button, Input, Textarea, Field } from "../../../../shared/components/ui/index";
+import {
+  Button,
+  Input,
+  Textarea,
+  Field,
+} from "../../../../shared/components/ui/index";
+import { postCapsulesSlugMessages } from "../../../../shared/api/generated/message/message";
+import { getErrorMessage } from "../../../../shared/utils/error";
 
-export const WriteMessageContent = () => {
+interface WriteMessageModalProps {
+  slug: string;
+}
+
+export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   const { openModal, clearModals } = useModalStore();
   const [nickname, setNickname] = useState("");
   const [content, setContent] = useState("");
 
+  const textMaxLength = 1000;
+
   const handleComplete = () => {
+    const MessageSend = async () => {
+      try {
+        await postCapsulesSlugMessages(slug, {
+          nickname,
+          content,
+        });
+
+        openModal({
+          title: "작성 완료",
+          content: <p>편지가 배송되었습니다.</p>,
+          option: "oneButton",
+          buttonText: ["확인"],
+          onConfirm: [
+            () => {
+              clearModals();
+            },
+          ],
+        });
+      } catch (error) {
+        openModal({
+          title: "메세지 전송에 실패했어요!",
+          content: <p>{getErrorMessage(error)}</p>,
+          option: "oneButton",
+        });
+        return;
+      }
+    };
+
     if (!nickname.trim()) {
       openModal({
         title: "닉네임이 없어요!",
         content: <p>닉네임을 입력해주세요!!!</p>,
-        option: "oneButton"
+        option: "oneButton",
       });
       return;
     }
@@ -21,31 +62,23 @@ export const WriteMessageContent = () => {
       openModal({
         title: "내용이 없어요!",
         content: <p>내용을 입력해 주세요</p>,
-        option: "oneButton"
+        option: "oneButton",
       });
       return;
     }
 
     openModal({
       title: "작성 확인",
-      content: <p className="text-left">작성 완료하셨습니까?<br />전송 후에는 수정이 불가능합니다.</p>,
+      content: (
+        <p className="text-left">
+          작성 완료하셨습니까?
+          <br />
+          전송 후에는 수정이 불가능합니다.
+        </p>
+      ),
       option: "twoButton",
       buttonText: ["예", "아니요"],
-      onConfirm: [
-        () => {
-          openModal({
-            title: "작성 완료",
-            content: <p>편지가 배송되었습니다.</p>,
-            option: "oneButton",
-            buttonText: ["확인"],
-            onConfirm: [
-              () => {
-                clearModals();
-              },
-            ]
-          });
-        },
-      ]
+      onConfirm: [() => MessageSend()],
     });
   };
 
@@ -67,18 +100,28 @@ export const WriteMessageContent = () => {
 
       {/* 편지 내용 입력 */}
       <div className="self-stretch h-64 relative">
-        <Field id="content" label="편지 내용" helperText="한 번 남긴 마음은 수정이나 삭제가 불가능해요.">
-          <div
-            onClick={() => document.getElementById("content")?.focus()}
-          >
-            <Textarea
-              id="content"
-              value={content}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setContent(e.target.value)
-              }
-              placeholder="따뜻한 마음을 전해보세요..."
-            />
+        <Field
+          id="content"
+          label="편지 내용"
+          helperText="한 번 남긴 마음은 수정이나 삭제가 불가능해요."
+        >
+          <div onClick={() => document.getElementById("content")?.focus()}>
+            <div className="releative">
+              <Textarea
+                id="content"
+                value={content}
+                maxLength={textMaxLength}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setContent(e.target.value)
+                }
+                placeholder="따뜻한 마음을 전해보세요..."
+              />
+              <span
+                className={
+                  content.length >= textMaxLength ? "text-red-500" : ""}>
+                {content.length}/1000
+              </span>
+            </div>
           </div>
         </Field>
       </div>

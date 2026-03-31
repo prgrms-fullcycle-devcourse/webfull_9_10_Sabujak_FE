@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, Field, Input } from "../shared/components/ui";
 import { useState } from "react";
+import MainPageBackground from "./MainPageBackground";
+import "./MainPage.css";
 
 export default function MainPage() {
     const navigate = useNavigate();
@@ -18,54 +20,58 @@ export default function MainPage() {
                     </div>
                     <Button
                         variant="primary"
-                        onClick={() => void navigate('/create-room')}
+                        onClick={() => void navigate('/create-capsule')}
                         className="mt-6"
                     >
                         우리들만의 방 만들기
                     </Button>
-                    <p className="mt-2 text-center text-sm text-gray-600">
+                    {/* <p className="mt-2 text-center text-sm text-gray-600">
                         로그인 없이 1분 만에 시작하기
-                    </p>
+                    </p> */}
                 </>
             }
         >
-            <h3 className="mt-5 text-2xl text-center font-bold">사부작</h3>
-            <h1 className="mt-11 text-4xl text-center font-bold">
-                시간이 흐른 뒤 열어보는
-                <br/>우리들의 진심
+            <MainPageBackground />
+            <h3 className="main-page-brand mt-5 text-center text-sm font-semibold tracking-[0.24em] text-[#b1b1b1]">SABUJAK</h3>
+            <h1 className="typing-title mt-11 text-center text-4xl font-bold">
+                <span className="typing-line typing-line-delay-1">시간이 흐른 뒤 열어보는</span>
+                <span className="typing-line typing-line-delay-2">우리들의 진심</span>
             </h1>
-            <p className="mt-21 text-xl text-center font-bold">
-                이미 참여중인 방이 있나요?
-            </p>
-            <p className="mt-2 text-base text-center text-gray-600">
-                전달받은 방코드 또는 주소를
-                <br/>입력해 주세요
-            </p>
-            
-            <div className="mt-10 space-y-4">
-                <Field id="roomTitle">
-                    <Input
-                        placeholder="방 코드 또는 링크 입력"
-                        value={capsuleInfo}
-                        onChange={(e) => setCapsuleInfo(e.target.value)}
-                    />
-                </Field>
-                <Button
-                    variant="secondary"
-                    onClick={() => {
-                        const isUrl = /^https?:\/\/.+/.test(capsuleInfo);
-                        if (isUrl) {
-                            void navigate(capsuleInfo);
-                        } else {
-                            void navigate(`/capsules?slug=${capsuleInfo}`);
-                        }
-                        
-                    }}
-                    className="mx-auto flex w-full min-w-2xs flex-col gap-1.5 p-6 bg-[#F2F1ED]"
-                >
-                    방 입장하기
-                </Button>
-            </div>
+            <section className="main-page-card mt-21 rounded-[36px] border border-[#e8dfd2] bg-[#FEFDFC] px-7 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
+                <p className="text-xl font-bold leading-tight text-[#4a4a4a]">
+                    이미 참여중인 방이 있나요?
+                </p>
+                <p className="mt-2 text-base leading-6 text-[#a8a29e]">
+                    전달받은 방 코드 또는 주소를 입력해 주세요.
+                </p>
+
+                <div className="mt-8 space-y-2">
+                    <Field id="roomTitle">
+                        <Input
+                            placeholder="방 코드를 입력해 주세요"
+                            value={capsuleInfo}
+                            onChange={(e) => setCapsuleInfo(e.target.value)}
+                            className="h-[20px] rounded-[24px] border-[#e6ddd2] !bg-white px-6"
+                            inputClassName="text-center"
+                        />
+                    </Field>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            const isUrl = /^https?:\/\/.+/.test(capsuleInfo);
+                            if (isUrl) {
+                                void navigate(capsuleInfo);
+                            } else {
+                                void navigate(`/capsules?slug=${capsuleInfo}`);
+                            }
+
+                        }}
+                        className="min-h-[20px] w-full rounded-[24px] border border-[#efd7c0] bg-[#FDE8D3] px-6 py-5 font-bold text-[#6b5646] shadow-[0_8px_18px_rgba(205,178,152,0.14)] transition-colors hover:bg-[#fae1ca]"
+                    >
+                        방 입장하기
+                    </Button>
+                </div>
+            </section>
         </PageLayout>
     );
 }

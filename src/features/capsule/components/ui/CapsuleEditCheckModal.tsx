@@ -72,7 +72,7 @@ const {setLoading} = useLoadingStore();
 
   return (
     <div className="flex h-full flex-col items-center p-6">
-      <main className="flex flex-1 flex-col items-center pt-12">
+      <main className="w-full flex flex-1 flex-col items-center pt-12 ">
         <div className="text-center">
           <h1 className="text-3xl font-bold leading-9 text-zinc-800">
             방장 권한 확인
@@ -98,7 +98,7 @@ const {setLoading} = useLoadingStore();
         </div>
       </main>
 
-      <footer className="mt-auto flex w-full max-w-md flex-col items-center gap-8 px-6 pb-12 pt-6">
+      <footer className="mt-auto flex w-full max-w-md flex-col items-center">
         <Button
           className="w-full"
           onClick={() => {

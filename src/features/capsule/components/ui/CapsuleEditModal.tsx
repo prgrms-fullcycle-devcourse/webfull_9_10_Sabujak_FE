@@ -87,7 +87,7 @@ export const CapsuleEditModal = ({
       {/* 1. 전체를 감싸는 중앙 정렬 컨테이너 추가 */}
       <div className="flex h-full flex-col items-center bg-stone-50">
         {/* 3. Main: absolute 제거, flex-1로 공간 확보 */}
-        <main className="w-full max-w-md px-6 pt-10 pb-20 flex flex-col gap-10">
+        <main className="w-full px-6 pt-10 pb-20 flex flex-col gap-10">
           {/* 방 제목 섹션 */}
           <div className="flex flex-col gap-2">
             <Field id="RoomName" label="방 제목">
@@ -118,7 +118,7 @@ export const CapsuleEditModal = ({
         </main>
 
         {/* 4. Footer: 하단 배치 */}
-        <footer className="mt-auto flex w-full max-w-md flex-col items-center gap-8 px-6 pb-12 pt-6">
+        <footer className="mt-auto flex w-full flex-col items-center gap-8 px-6 pb-12 pt-6">
           <Button
             className="w-full py-5 bg-black rounded-3xl text-white font-bold"
             onClick={() => {

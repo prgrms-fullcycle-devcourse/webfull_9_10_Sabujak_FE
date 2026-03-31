@@ -4,6 +4,7 @@ import MainPage from './pages/MainPage';
 import CreateCapsulePage from "./pages/CreateCapsulePage";
 import CapsulePage from "./pages/CapsulePage";
 import TestPage from './pages/TestPage';
+import Loading from "./shared/components/ui/Loading";
 import Modal from "./shared/components/ui/Modal";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -17,10 +18,10 @@ export default function App() {
         {/* 메세지 오픈 전 */}
         <Route path="/capsules" element={<CapsulePage />} />
         <Route path='/test' element={<TestPage />} />
+        <Route path='/loading' element={<Loading />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Modal />
     </>
   );
-
 }

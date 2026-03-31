@@ -1,21 +1,42 @@
+import { useEffect, useState } from "react";
 import type { CapsuleDetailResponseOneOf } from "../../../../shared/api/generated/model";
 import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
 import { WriteMessageContent } from "../../../message/components/ui/WriteMessageModal";
 import { useShare } from "../../hooks";
-import CountdownTimer from "../CountdownTimer";
 import HeartJar from "../HeartJar";
-import "./OpenViewBefore.css";
 import { useModalStore } from "../../../../shared/store/useModalStore";
 import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";
+import CapsuleCountdown from "./CapsuleCountdown";
+import { connectCapsuleMessageCountStream } from "../../utils/messageCount";
+import "./CapsuleViewUpcoming.css";
 
-interface OpenViewBeforeProps {
+interface CapsuleViewUpcomingProps {
   room: CapsuleDetailResponseOneOf;
 }
 
-export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
+export default function CapsuleViewUpcoming({
+  room,
+}: CapsuleViewUpcomingProps) {
   const { shareUrl, canShare } = useShare();
   const { openModal } = useModalStore();
+  const [messageCount, setMessageCount] = useState<number | null>(null);
+  // 상세 조회값을 기본으로 쓰고, SSE 이벤트가 오면 그 값을 우선 반영합니다.
+  const displayMessageCount = messageCount ?? room.messageCount;
+
+  useEffect(() => {
+    // 현재 캡슐의 messageCount 스트림을 구독합니다.
+    const cleanup = connectCapsuleMessageCountStream(
+      room.slug,
+      (nextMessageCount) => {
+        setMessageCount(nextMessageCount);
+      }
+    );
+
+    return () => {
+      cleanup();
+    };
+  }, [room.slug]);
 
   const handleShare = async () => {
     await shareUrl({
@@ -34,11 +55,19 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
             type="button"
             aria-label="메뉴"
             className="btn-menu h-10 w-10"
-            onClick={()=> openModal({
-                      title: '어드민 체크',
-                      content: <CapsuleEditCheckModal slug={room.slug} getRoomName={room.title} getOpenDate={new Date(room.openAt)} />,
-                      option: 'capsuleEditCheckModal'
-                    })}
+            onClick={() =>
+              openModal({
+                title: "어드민 체크",
+                content: (
+                  <CapsuleEditCheckModal
+                    slug={room.slug}
+                    getRoomName={room.title}
+                    getOpenDate={new Date(room.openAt)}
+                  />
+                ),
+                option: "capsuleEditCheckModal",
+              })
+            }
           />
         </header>
       }
@@ -69,7 +98,7 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
     >
       <div className="room-before">
         <div className="dday-wrap">
-          <HeartJar total={room.messageCount} />
+          <HeartJar total={displayMessageCount} />
 
           <div className="mt-10">
             <p className="text-sm font-semibold tracking-[0.24em] text-[#b1b1b1]">
@@ -77,13 +106,13 @@ export default function OpenViewBefore({ room }: OpenViewBeforeProps) {
             </p>
 
             <div className="mt-3">
-              <CountdownTimer targetDate={room.openAt} />
+              <CapsuleCountdown targetDate={room.openAt} />
             </div>
           </div>
         </div>
 
         <div className="mt-14 w-full rounded-[24px] bg-[#F5F1E9] px-6 py-5 text-lg font-semibold text-[#3a3a3a]">
-          현재 <strong>{room.messageCount}</strong>개의 소중한 마음이 모였어요
+          현재 <strong>{displayMessageCount}</strong>개의 소중한 마음이 모였어요
         </div>
       </div>
     </PageLayout>

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useDimStore } from "./useDimStore";
 
 export type ModalOption =
   | "writeMessage"
@@ -19,7 +20,7 @@ interface ModalData {
 interface ModalState {
   modals: ModalData[];
   openModal: (props: OpenModalProps) => void;
-  closeModal: (id : string) => void;
+  closeModal: (id: string) => void;
   replaceTopModal: (props: OpenModalProps) => void;
   clearModals: () => void;
 }
@@ -32,12 +33,17 @@ interface OpenModalProps {
   onConfirm?: Array<(data?: unknown) => void>;
 }
 
+const syncDimState = (modalCount: number) => {
+  const { setModalCount } = useDimStore.getState();
+  setModalCount(modalCount);
+};
+
 export const useModalStore = create<ModalState>((set) => ({
   modals: [],
 
   openModal: (props: OpenModalProps) =>
-    void set((state) => ({
-      modals: [
+    void set((state) => {
+      const nextModals = [
         ...state.modals,
         {
           id: Math.random().toString(36).substring(2, 11),
@@ -47,13 +53,20 @@ export const useModalStore = create<ModalState>((set) => ({
           buttonText: props.buttonText,
           onConfirm: props.onConfirm,
         },
-      ],
-    })),
+      ];
 
-  closeModal: (id : string) => {
-    set((state) => ({
-      modals: state.modals.filter((modal) => modal.id !== id),
-    }));
+      syncDimState(nextModals.length);
+
+      return { modals: nextModals };
+    }),
+
+  closeModal: (id: string) => {
+    set((state) => {
+      const nextModals = state.modals.filter((modal) => modal.id !== id);
+      syncDimState(nextModals.length);
+
+      return { modals: nextModals };
+    });
   },
 
   replaceTopModal: (props: OpenModalProps) =>
@@ -75,8 +88,13 @@ export const useModalStore = create<ModalState>((set) => ({
         onConfirm: props.onConfirm,
       };
 
+      syncDimState(nextModals.length);
+
       return { modals: nextModals };
     }),
 
-  clearModals: () => set({ modals: [] }),
+  clearModals: () => {
+    syncDimState(0);
+    set({ modals: [] });
+  },
 }));

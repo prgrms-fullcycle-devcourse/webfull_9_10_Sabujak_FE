@@ -1,11 +1,20 @@
 import { create } from "zustand";
+import { useDimStore } from "./useDimStore";
 
 interface LoadingState {
   isLoading: boolean;
-  setLoading: (isLoading: boolean) => void;
+  startLoading: () => void;
+  stopLoading: () => void;
 }
 
 export const useLoadingStore = create<LoadingState>((set) => ({
   isLoading: false,
-  setLoading: (isLoading) => set({ isLoading }),
+  startLoading: () => {
+    useDimStore.getState().addLoading();
+    set({ isLoading: true });
+  },
+  stopLoading: () => {
+    useDimStore.getState().removeLoading();
+    set({ isLoading: false });
+  },
 }));

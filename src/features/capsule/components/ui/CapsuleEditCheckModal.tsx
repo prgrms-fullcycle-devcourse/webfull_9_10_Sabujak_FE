@@ -7,7 +7,6 @@ import { getErrorMessage } from "../../../../shared/utils/error";
 import { handlePasswordChange } from "../../../../shared/utils/PWCheck";
 import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 
-
 interface CapsuleEditCheckModalProps {
   slug: string;
   getRoomName?: string;
@@ -21,17 +20,16 @@ export const CapsuleEditCheckModal = ({
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
-const {setLoading} = useLoadingStore();
+  const { startLoading, stopLoading } = useLoadingStore();
 
- const handleEnterDown = (e:React.KeyboardEvent) => {
-  if(e.nativeEvent.isComposing) return;
-  if(e.key === 'Enter') {
-    void handleSubmit()
-  }
- }
- 
+  const handleEnterDown = (e: React.KeyboardEvent) => {
+    if (e.nativeEvent.isComposing) return;
+    if (e.key === "Enter") {
+      void handleSubmit();
+    }
+  };
+
   const handleSubmit = async () => {
-
     if (password.length < 4) {
       openModal({
         title: "비밀번호가 부족해요",
@@ -41,7 +39,7 @@ const {setLoading} = useLoadingStore();
       return;
     }
 
-    setLoading(true)
+    startLoading();
     try {
       await postCapsulesSlugVerify(slug, {
         password,
@@ -66,7 +64,7 @@ const {setLoading} = useLoadingStore();
       });
       return;
     } finally {
-      setLoading(false)
+      stopLoading();
     }
   };
 
@@ -91,7 +89,9 @@ const {setLoading} = useLoadingStore();
               inputMode="numeric"
               maxLength={4}
               value={password}
-              onChange={(e) => {setPassword(handlePasswordChange(e.target.value))}}
+              onChange={(e) => {
+                setPassword(handlePasswordChange(e.target.value));
+              }}
               onKeyDown={handleEnterDown}
             />
           </Field>

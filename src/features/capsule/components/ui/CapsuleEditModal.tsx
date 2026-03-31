@@ -31,10 +31,10 @@ export const CapsuleEditModal = ({
   const [roomName, setRoomName] = useState<string>(getRoomName);
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
-  const { setLoading } = useLoadingStore();
+  const { startLoading, stopLoading } = useLoadingStore();
 
   const CapsuleEdit = async () => {
-    setLoading(true);
+    startLoading();
     try {
       await patchCapsulesSlug(slug, {
         password,
@@ -58,12 +58,12 @@ export const CapsuleEditModal = ({
         option: "oneButton",
       });
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   };
 
   const CapsuleDelete = async () => {
-    setLoading(true);
+    startLoading();
     try {
       await deleteCapsulesSlug(slug, {
         password,
@@ -86,7 +86,7 @@ export const CapsuleEditModal = ({
         option: "oneButton",
       });
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   };
 

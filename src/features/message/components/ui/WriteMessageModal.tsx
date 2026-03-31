@@ -18,12 +18,12 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   const { openModal, clearModals } = useModalStore();
   const [nickname, setNickname] = useState("");
   const [content, setContent] = useState("");
-  const { setLoading } = useLoadingStore();
+  const { startLoading, stopLoading } = useLoadingStore();
   const textMaxLength = 1000;
 
   const handleComplete = () => {
     const MessageSend = async () => {
-      setLoading(true);
+      startLoading();
       try {
         await postCapsulesSlugMessages(slug, {
           nickname,
@@ -49,7 +49,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
         });
         return;
       } finally {
-        setLoading(false);
+        stopLoading();
       }
     };
 

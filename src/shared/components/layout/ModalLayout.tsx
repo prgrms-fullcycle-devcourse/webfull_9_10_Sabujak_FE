@@ -39,7 +39,7 @@ export default function ModalLayout({
 
   const overlayClasses = isFull
     ? "fixed inset-0 overflow-hidden"
-    : "fixed inset-0 flex items-center justify-center bg-black/50";
+    : "fixed inset-0 flex items-center justify-center";
 
   const modalClasses = isFull
     ? "w-full h-dvh flex flex-col bg-stone-50 overflow-hidden"

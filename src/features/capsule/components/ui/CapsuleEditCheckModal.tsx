@@ -5,7 +5,8 @@ import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { handlePasswordChange } from "../../../../shared/utils/PWCheck";
-import Loading from "../../../../shared/components/ui/Loading";
+import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
+
 
 interface CapsuleEditCheckModalProps {
   slug: string;
@@ -20,7 +21,7 @@ export const CapsuleEditCheckModal = ({
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
-const [isLoading, setIsLoading] = useState(false);
+const {setLoading} = useLoadingStore();
 
  const handleEnterDown = (e:React.KeyboardEvent) => {
   if(e.nativeEvent.isComposing) return;
@@ -40,7 +41,7 @@ const [isLoading, setIsLoading] = useState(false);
       return;
     }
 
-    setIsLoading(true)
+    setLoading(true)
     try {
       await postCapsulesSlugVerify(slug, {
         password,
@@ -65,7 +66,7 @@ const [isLoading, setIsLoading] = useState(false);
       });
       return;
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   };
 
@@ -107,7 +108,6 @@ const [isLoading, setIsLoading] = useState(false);
           확인
         </Button>
       </footer>
-      {isLoading && <Loading />}
     </div>
   );
 };

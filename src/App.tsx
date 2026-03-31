@@ -7,8 +7,10 @@ import TestPage from './pages/TestPage';
 import Loading from "./shared/components/ui/Loading";
 import Modal from "./shared/components/ui/Modal";
 import NotFoundPage from "./pages/NotFoundPage";
+import { useLoadingStore } from "./shared/store/useLoadingStore";
 
 export default function App() {
+const {isLoading} = useLoadingStore()
   return (
     <>
       <Routes>
@@ -22,6 +24,7 @@ export default function App() {
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Modal />
+      {isLoading && <Loading />}
     </>
   );
 }

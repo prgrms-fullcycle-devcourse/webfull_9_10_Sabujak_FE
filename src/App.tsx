@@ -23,7 +23,6 @@ export default function App() {
         {/* 메세지 오픈 전 */}
         <Route path="/capsules" element={<CapsulePage />} />
         <Route path="/test" element={<TestPage />} />
-        <Route path="/loading" element={<Loading />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {dimCount > 0 && <Dim />}

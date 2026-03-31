@@ -2,11 +2,10 @@ import { cloneElement, isValidElement, type ReactElement, type ReactNode } from 
 
 type FieldChildProps = {
     id?: string;
-    error?: string;
     status?: FieldMessageStatus;
 };
 
-type FieldMessageStatus = "success" | "warning" | "error";
+type FieldMessageStatus = "success" | "error";
 
 interface FieldProps {
     id?: string;
@@ -28,7 +27,6 @@ export function Field({
     const childWithId = isValidElement(children)
         ? cloneElement(children as ReactElement<FieldChildProps>, {
             id,
-            error: messageStatus === "error" ? (message ?? " ") : undefined,
             status: messageStatus,
         })
         : children;

@@ -5,6 +5,7 @@ import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { handlePasswordChange } from "../../../../shared/utils/PWCheck";
+import Loading from "../../../../shared/components/ui/Loading";
 
 interface CapsuleEditCheckModalProps {
   slug: string;
@@ -19,6 +20,7 @@ export const CapsuleEditCheckModal = ({
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
+const [isLoading, setIsLoading] = useState(false);
 
  const handleEnterDown = (e:React.KeyboardEvent) => {
   if(e.nativeEvent.isComposing) return;
@@ -28,6 +30,7 @@ export const CapsuleEditCheckModal = ({
  }
  
   const handleSubmit = async () => {
+
     if (password.length < 4) {
       openModal({
         title: "비밀번호가 부족해요",
@@ -37,6 +40,7 @@ export const CapsuleEditCheckModal = ({
       return;
     }
 
+    setIsLoading(true)
     try {
       await postCapsulesSlugVerify(slug, {
         password,
@@ -60,6 +64,8 @@ export const CapsuleEditCheckModal = ({
         option: "oneButton",
       });
       return;
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -101,6 +107,7 @@ export const CapsuleEditCheckModal = ({
           확인
         </Button>
       </footer>
+      {isLoading && <Loading />}
     </div>
   );
 };

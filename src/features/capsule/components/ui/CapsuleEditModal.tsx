@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../../../shared/components/ui/Loading";
 
 interface CapsuleEditModalProps {
   slug: string;
@@ -30,14 +31,17 @@ export const CapsuleEditModal = ({
   const [roomName, setRoomName] = useState<string>(getRoomName);
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   const CapsuleEdit = async () => {
+    setIsLoading(true);
     try {
       await patchCapsulesSlug(slug, {
         password,
         title: roomName,
         openAt: openDate?.toISOString() ?? "",
       });
+      setIsLoading(false);
       openModal({
         title: "수정 성공!",
         content: <p>수정 완료되었습니다.</p>,
@@ -49,15 +53,19 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
+      setIsLoading(false);
       openModal({
         title: "수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const CapsuleDelete = async () => {
+    setIsLoading(true);
     try {
       await deleteCapsulesSlug(slug, {
         password,
@@ -79,6 +87,8 @@ export const CapsuleEditModal = ({
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -137,6 +147,7 @@ export const CapsuleEditModal = ({
           </button>
         </footer>
       </div>
+      {isLoading && <Loading />}
     </>
   );
 };

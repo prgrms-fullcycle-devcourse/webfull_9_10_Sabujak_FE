@@ -8,6 +8,7 @@ import {
 } from "../../../../shared/components/ui/index";
 import { postCapsulesSlugMessages } from "../../../../shared/api/generated/message/message";
 import { getErrorMessage } from "../../../../shared/utils/error";
+import Loading from "../../../../shared/components/ui/Loading";
 
 interface WriteMessageModalProps {
   slug: string;
@@ -17,11 +18,12 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   const { openModal, clearModals } = useModalStore();
   const [nickname, setNickname] = useState("");
   const [content, setContent] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const textMaxLength = 1000;
 
   const handleComplete = () => {
     const MessageSend = async () => {
+      setIsLoading(true);
       try {
         await postCapsulesSlugMessages(slug, {
           nickname,
@@ -46,6 +48,8 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
           option: "oneButton",
         });
         return;
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -118,7 +122,9 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
               />
               <span
                 className={
-                  content.length >= textMaxLength ? "text-red-500" : ""}>
+                  content.length >= textMaxLength ? "text-red-500" : ""
+                }
+              >
                 {content.length}/1000
               </span>
             </div>
@@ -132,6 +138,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
           작성 완료
         </Button>
       </div>
+      {isLoading && <Loading />}
     </div>
   );
 };

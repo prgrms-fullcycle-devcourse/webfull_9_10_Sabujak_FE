@@ -3,7 +3,7 @@ import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, Field, Input } from "../shared/components/ui";
 import { useState } from "react";
 import MainPageBackground from "./MainPageBackground";
-import { buildCapsuleDetailPath } from "../shared/utils/routes";
+import { buildCapsuleDetailPath, extractCapsuleSlug } from "../shared/utils/routes";
 import "./MainPage.css";
 
 export default function MainPage() {
@@ -59,12 +59,14 @@ export default function MainPage() {
                     <Button
                         variant="secondary"
                         onClick={() => {
-                            const isUrl = /^https?:\/\/.+/.test(capsuleInfo);
-                            if (isUrl) {
-                                window.location.assign(capsuleInfo);
-                            } else {
-                                void navigate(buildCapsuleDetailPath(capsuleInfo.trim()));
+                            const slug = extractCapsuleSlug(capsuleInfo);
+
+                            if (!slug) {
+                                return;
                             }
+
+                            // slug와 캡슐 상세 URL 입력을 모두 path 기반 내부 경로로 통일한다.
+                            void navigate(buildCapsuleDetailPath(slug));
 
                         }}
                         className="min-h-[20px] w-full rounded-[24px] border border-[#efd7c0] bg-[#FDE8D3] px-6 py-5 font-bold text-[#6b5646] shadow-[0_8px_18px_rgba(205,178,152,0.14)] transition-colors hover:bg-[#fae1ca]"

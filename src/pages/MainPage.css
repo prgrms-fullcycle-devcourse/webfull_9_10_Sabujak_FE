@@ -1,0 +1,161 @@
+.main-page-bg {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.main-page-bg-circle {
+  position: absolute;
+  display: block;
+  border-radius: 9999px;
+  --shape-rotate: 0deg;
+  bottom: -10rem;
+  opacity: 0;
+  animation-name: main-page-float;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+.main-page-bg-heart {
+  border-radius: 0;
+  --shape-rotate: -45deg;
+}
+
+.main-page-bg-heart::before,
+.main-page-bg-heart::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+}
+
+.main-page-bg-heart::before {
+  transform: translateY(-50%);
+}
+
+.main-page-bg-heart::after {
+  transform: translateX(50%);
+}
+
+.main-page-bg-circle-pink {
+  background: rgba(255, 223, 228, 0.82);
+}
+
+.main-page-bg-circle-blue {
+  background: rgba(216, 236, 255, 0.84);
+}
+
+.main-page-bg-circle-yellow {
+  background: rgba(255, 244, 205, 0.76);
+}
+
+.main-page-bg-circle-green {
+  background: rgba(222, 241, 225, 0.76);
+}
+
+.typing-title,
+.main-page-card,
+.main-page-brand {
+  position: relative;
+  z-index: 1;
+}
+
+.typing-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15em;
+  width: fit-content;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.typing-line {
+  display: inline-block;
+  width: 0;
+  max-width: fit-content;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0;
+  animation: typing-text 1.4s steps(18, end) forwards;
+  margin-inline: auto;
+}
+
+.typing-line-delay-1 {
+  border-right: 0.08em solid transparent;
+  animation:
+    typing-text 1.4s steps(18, end) forwards,
+    typing-caret-show 0.01s linear forwards,
+    typing-caret-hide 0.35s ease-out forwards;
+  animation-delay: 0.2s, 0.2s, 1.45s;
+}
+
+.typing-line-delay-2 {
+  border-right: 0.08em solid transparent;
+  animation:
+    typing-text 1.4s steps(18, end) forwards,
+    typing-caret-show 0.01s linear forwards,
+    typing-caret 0.9s step-end 3.3,
+    typing-caret-hide 0.45s ease-out forwards;
+  animation-delay: 1.8s, 1.8s, 1.8s, 4.65s;
+}
+
+@keyframes typing-text {
+  from {
+    width: 0;
+  }
+  to {
+    width: calc(100% + 0.1em);
+  }
+}
+
+@keyframes typing-caret-show {
+  from {
+    border-color: transparent;
+  }
+  to {
+    border-color: #4a4a4a;
+  }
+}
+
+@keyframes typing-caret {
+  0%,
+  49% {
+    border-color: #4a4a4a;
+  }
+  50%,
+  100% {
+    border-color: transparent;
+  }
+}
+
+@keyframes typing-caret-hide {
+  from {
+    border-color: #4a4a4a;
+  }
+  to {
+    border-color: transparent;
+  }
+}
+
+@keyframes main-page-float {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(var(--shape-rotate)) scale(0.92);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--float-opacity, 0.82);
+  }
+  72% {
+    opacity: calc(var(--float-opacity, 0.82) * 0.72);
+  }
+  100% {
+    transform: translate3d(0, -115vh, 0) rotate(var(--shape-rotate)) scale(1.06);
+    opacity: 0;
+  }
+}

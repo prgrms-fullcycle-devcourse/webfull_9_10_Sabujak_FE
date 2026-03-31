@@ -117,9 +117,12 @@ export default function Example() {
 - `inputClassName`: 실제 `<input>`에 추가할 클래스
 - `rightSlot`: input 오른쪽에 붙는 보조 요소
 - `iconClassName`: 필드 아이콘 종류 클래스명
+- `status`: `info`, `success`, `warning`, `error` 상태 클래스를 적용할 수 있습니다.
+- `error`: 별도 상태값 없이 에러 스타일만 적용해야 할 때 사용할 수 있습니다.
 - `iconClassName`을 주면 `field-icon` 공통 클래스는 `Input` 내부에서 자동으로 붙습니다.
 - 사용처에서는 `field-icon icon-lock`처럼 두 개를 같이 쓰지 않고, 아이콘 종류만 넘기면 됩니다.
 - 기본 `input` 속성(`type`, `placeholder`, `value`, `onChange`)도 그대로 사용할 수 있습니다.
+
 
 예시:
 
@@ -130,7 +133,7 @@ export default function Example() {
 
 ## Field 사용법
 
-`Field`는 라벨, 입력 필드, 안내 문구를 묶어주는 컴포넌트입니다.
+`Field`는 라벨, 입력 필드, 상태 메시지, 안내 문구를 묶어주는 컴포넌트입니다.
 
 ```tsx
 import { Field, Input } from "./ui";
@@ -140,20 +143,26 @@ export default function Example() {
     <Field
       id="roomUrl"
       label="나만의 URL 주소"
+      message="에러메세지"
+      messageStatus="error"
       helperText="영문 소문자, 숫자, 하이픈(-)만 4자 이상 입력이 가능합니다."
     >
       <Input placeholder="URL을 입력해주세요" />
     </Field>
   );
 }
+
 ```
 
 - `id`: label과 input을 연결할 id
 - `label`: 필드 라벨
+- `message`: 입력 필드 아래에 표시할 상태 메시지
+- `messageStatus`: `info`, `success`, `warning`, `error` 상태를 지원합니다.
 - `helperText`: 입력 아래 안내 문구
-- `children`: 주로 `Input`, `DatePicker` 같은 입력 컴포넌트
+- `children`: 주로 `Input`, `Textarea`, `DatePicker` 같은 입력 컴포넌트
 - `Field`는 자식으로 전달한 입력 컴포넌트에 `id`를 자동으로 연결합니다.
-- `Input`, `DatePicker` 같은 입력형 컴포넌트와 함께 사용하는 것을 기본으로 합니다.
+- `messageStatus`: `info`, `success`, `warning`, `error` 상태를 지원합니다.
+- 상태값에 따라 메시지에는 `field-message-{status}`, 입력 필드에는 `is-{status}` 클래스가 적용됩니다.
 
 ## 같이 쓰는 예시
 

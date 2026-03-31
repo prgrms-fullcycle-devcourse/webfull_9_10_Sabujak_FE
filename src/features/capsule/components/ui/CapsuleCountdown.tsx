@@ -1,6 +1,7 @@
-import Countdown, { type CountdownRenderProps } from "react-countdown";
+import type { CountdownRenderProps } from "react-countdown";
+import Countdown from "../../../../shared/components/ui/Countdown";
 
-type CountdownTimerProps = {
+type CapsuleCountdownProps = {
   targetDate: string;
 };
 
@@ -28,10 +29,10 @@ function CountdownRenderer({ days, hours, minutes, seconds, completed }: Countdo
   );
 }
 
-export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
+export default function CapsuleCountdown({ targetDate }: CapsuleCountdownProps) {
   return (
     <Countdown
-      date={new Date(targetDate)}
+      targetDate={targetDate}
       renderer={CountdownRenderer}
     />
   );

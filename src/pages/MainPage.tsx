@@ -57,7 +57,7 @@ export default function MainPage() {
                         if (isUrl) {
                             void navigate(capsuleInfo);
                         } else {
-                            void navigate(`/capsule?slug=${capsuleInfo}`);
+                            void navigate(`/capsules?slug=${capsuleInfo}`);
                         }
                         
                     }}

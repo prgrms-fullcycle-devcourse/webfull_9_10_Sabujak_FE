@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 const buttonVariantClassNameMap = {
   primary: "bg-[#000000] text-[#ffffff] p-4",
   secondary: "text-[#000000] p-4",
-  sm: "w-fit bg-[#ffb5b5] p-2.5 text-sm",
+  sm: "w-fit bg-[#000000] text-[#ffffff] p-2.5 text-sm",
 } as const;
 
 type ButtonProps = {

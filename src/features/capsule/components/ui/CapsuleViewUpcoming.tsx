@@ -4,7 +4,7 @@ import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
 import { WriteMessageContent } from "../../../message/components/ui/WriteMessageModal";
 import { useShare } from "../../hooks";
-import "./OpenViewBefore.css";
+import "./CapsuleViewUpcoming.css";
 import HeartJar from "../../../../shared/components/ui/HeartJar";
 import { useModalStore } from "../../../../shared/store/useModalStore";
 import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";

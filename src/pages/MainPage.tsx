@@ -3,6 +3,7 @@ import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, Field, Input } from "../shared/components/ui";
 import { useState } from "react";
 import MainPageBackground from "./MainPageBackground";
+import { buildCapsuleDetailPath } from "../shared/utils/routes";
 import "./MainPage.css";
 
 export default function MainPage() {
@@ -60,9 +61,9 @@ export default function MainPage() {
                         onClick={() => {
                             const isUrl = /^https?:\/\/.+/.test(capsuleInfo);
                             if (isUrl) {
-                                void navigate(capsuleInfo);
+                                window.location.assign(capsuleInfo);
                             } else {
-                                void navigate(`/capsules?slug=${capsuleInfo}`);
+                                void navigate(buildCapsuleDetailPath(capsuleInfo.trim()));
                             }
 
                         }}

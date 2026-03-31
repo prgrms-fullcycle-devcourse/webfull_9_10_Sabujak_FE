@@ -13,4 +13,4 @@
 ## 예시
 (2026.03.17 기준 route 네이밍 규칙 안정해져있음)
 
-- `CreateCapsulePage.tsx`: `/create-room` 경로와 연결되는 방 만들기 화면
+- `CreateCapsulePage.tsx`: `/create-capsule` 경로와 연결되는 캡슐 만들기 화면

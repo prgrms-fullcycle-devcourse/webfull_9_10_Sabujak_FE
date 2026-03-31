@@ -1,6 +1,7 @@
 import { defineConfig } from "orval";
 
 const openApiTarget =
+    process.env.ORVAL_OPENAPI_TARGET ??
     "https://webfull-9-10-sabujak-be.onrender.com/openapi.json";
 
 export default defineConfig({

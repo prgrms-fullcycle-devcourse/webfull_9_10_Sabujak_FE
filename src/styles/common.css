@@ -18,6 +18,10 @@ button{
   cursor: pointer;
 }
 
+button:disabled{
+background-color: #c8c8c8;
+}
+
 /*****************************
  버튼 아이콘
 ******************************/

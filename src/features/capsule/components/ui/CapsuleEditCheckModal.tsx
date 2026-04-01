@@ -18,15 +18,37 @@ export const CapsuleEditCheckModal = ({
   getOpenDate = new Date(),
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
-  const [fieldTrue, setFieldTrue] = useState<"success" | "error">("error");
+  const [fieldTrue, setFieldTrue] = useState<"success" | "error" | "">("");
   const [fieldMessage, setFieldMessage] = useState<
     "" | "비밀번호가 부족합니다."
-  >("비밀번호가 부족합니다.");
+  >("");
+  const [buttonEnable, setButtonEnable] = useState(true);
   const { openModal, replaceTopModal } = useModalStore();
   const handleEnterDown = (e: React.KeyboardEvent) => {
     if (e.nativeEvent.isComposing) return;
     if (e.key === "Enter") {
       void handleSubmit();
+    }
+  };
+
+  const PWOnchangeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputCheck = PasswordRule(e.target.value);
+    setPassword(inputCheck.value);
+
+    if (e.target.value.length === 0) {
+      setFieldTrue("");
+      setFieldMessage("");
+      setButtonEnable(false);
+    } else {
+      if (inputCheck.boolean) {
+        setFieldTrue("success");
+        setFieldMessage("");
+        setButtonEnable(false);
+      } else {
+        setFieldTrue("error");
+        setFieldMessage("비밀번호가 부족합니다.");
+        setButtonEnable(true);
+      }
     }
   };
 
@@ -68,7 +90,7 @@ export const CapsuleEditCheckModal = ({
 
   return (
     <div className="flex h-full flex-col items-center p-6">
-      <main className="w-full flex flex-1 flex-col items-center pt-12 ">
+      <main className="w-full flex flex-1 flex-col items-center pt-12">
         <div className="text-center">
           <h1 className="text-3xl font-bold leading-9 text-zinc-800">
             방장 권한 확인
@@ -92,12 +114,7 @@ export const CapsuleEditCheckModal = ({
               maxLength={4}
               value={password}
               onChange={(e) => {
-                const inputCheck = PasswordRule(e.target.value);
-                setPassword(inputCheck.value);
-                setFieldTrue(inputCheck.boolean ? "success" : "error");
-                setFieldMessage(
-                  inputCheck.boolean ? "" : "비밀번호가 부족합니다."
-                );
+                PWOnchangeCheck(e);
               }}
               onKeyDown={handleEnterDown}
             />
@@ -108,6 +125,7 @@ export const CapsuleEditCheckModal = ({
       <footer className="mt-auto flex w-full flex-col items-center">
         <Button
           className="w-full"
+          disabled={buttonEnable}
           onClick={() => {
             void handleSubmit();
           }}

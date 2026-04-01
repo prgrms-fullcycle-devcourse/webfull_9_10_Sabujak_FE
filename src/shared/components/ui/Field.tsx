@@ -5,7 +5,7 @@ type FieldChildProps = {
     status?: FieldMessageStatus;
 };
 
-type FieldMessageStatus = "success" | "error";
+type FieldMessageStatus = "success" | "error" | "";
 
 interface FieldProps {
     id?: string;

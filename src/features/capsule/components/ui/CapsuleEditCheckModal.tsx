@@ -5,6 +5,7 @@ import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { handlePasswordChange } from "../../../../shared/utils/PWCheck";
+import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 
 interface CapsuleEditCheckModalProps {
   slug: string;
@@ -19,14 +20,15 @@ export const CapsuleEditCheckModal = ({
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
+  const { startLoading, stopLoading } = useLoadingStore();
 
- const handleEnterDown = (e:React.KeyboardEvent) => {
-  if(e.nativeEvent.isComposing) return;
-  if(e.key === 'Enter') {
-    void handleSubmit()
-  }
- }
- 
+  const handleEnterDown = (e: React.KeyboardEvent) => {
+    if (e.nativeEvent.isComposing) return;
+    if (e.key === "Enter") {
+      void handleSubmit();
+    }
+  };
+
   const handleSubmit = async () => {
     if (password.length < 4) {
       openModal({
@@ -37,6 +39,7 @@ export const CapsuleEditCheckModal = ({
       return;
     }
 
+    startLoading();
     try {
       await postCapsulesSlugVerify(slug, {
         password,
@@ -60,6 +63,8 @@ export const CapsuleEditCheckModal = ({
         option: "oneButton",
       });
       return;
+    } finally {
+      stopLoading();
     }
   };
 
@@ -84,7 +89,9 @@ export const CapsuleEditCheckModal = ({
               inputMode="numeric"
               maxLength={4}
               value={password}
-              onChange={(e) => {setPassword(handlePasswordChange(e.target.value))}}
+              onChange={(e) => {
+                setPassword(handlePasswordChange(e.target.value));
+              }}
               onKeyDown={handleEnterDown}
             />
           </Field>

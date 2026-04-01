@@ -5,6 +5,7 @@ import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { PasswordRule } from "../../../../shared/utils/InputValidatedCheck";
+import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 
 interface CapsuleEditCheckModalProps {
   slug: string;
@@ -24,6 +25,8 @@ export const CapsuleEditCheckModal = ({
   >("");
   const [buttonEnable, setButtonEnable] = useState(true);
   const { openModal, replaceTopModal } = useModalStore();
+  const { startLoading, stopLoading } = useLoadingStore();
+
   const handleEnterDown = (e: React.KeyboardEvent) => {
     if (e.nativeEvent.isComposing) return;
     if (e.key === "Enter" && buttonEnable === false) {
@@ -62,6 +65,7 @@ export const CapsuleEditCheckModal = ({
       return;
     }
 
+    startLoading();
     try {
       await postCapsulesSlugVerify(slug, {
         password,
@@ -85,6 +89,8 @@ export const CapsuleEditCheckModal = ({
         option: "oneButton",
       });
       return;
+    } finally {
+      stopLoading();
     }
   };
 

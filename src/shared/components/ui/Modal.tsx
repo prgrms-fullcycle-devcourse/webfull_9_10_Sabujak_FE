@@ -12,7 +12,13 @@ interface ModalWrapperProps {
   onClose: () => void;
 }
 
-function ModalWrapper({ children, zIndex, isLast, lastModalRef, onClose }: ModalWrapperProps) {
+function ModalWrapper({
+  children,
+  zIndex,
+  isLast,
+  lastModalRef,
+  onClose,
+}: ModalWrapperProps) {
   return (
     <motion.div
       ref={isLast ? lastModalRef : null}
@@ -42,7 +48,7 @@ export default function Modal() {
     <AnimatePresence mode="popLayout">
       {modals.map((modal, index) => {
         const { id, title, content, option, buttonText, onConfirm } = modal;
-        const zIndex = 9999 + index;
+        const zIndex = 9999 + index * 2;
         const isLast = index === modals.length - 1;
 
         const handleClose = () => closeModal(id);
@@ -50,7 +56,13 @@ export default function Modal() {
         // 1. 메시지 작성형 모달 (writeMessage)
         if (option === "writeMessage") {
           return (
-            <ModalWrapper key={id} zIndex={zIndex} isLast={isLast} lastModalRef={lastModalRef} onClose={handleClose}>
+            <ModalWrapper
+              key={id}
+              zIndex={zIndex}
+              isLast={isLast}
+              lastModalRef={lastModalRef}
+              onClose={handleClose}
+            >
               <ModalLayout
                 title={title}
                 onClose={handleClose}
@@ -66,7 +78,13 @@ export default function Modal() {
           option === "capsuleEditModal"
         ) {
           return (
-            <ModalWrapper key={id} zIndex={zIndex} isLast={isLast} lastModalRef={lastModalRef} onClose={handleClose}>
+            <ModalWrapper
+              key={id}
+              zIndex={zIndex}
+              isLast={isLast}
+              lastModalRef={lastModalRef}
+              onClose={handleClose}
+            >
               <ModalLayout
                 title={title}
                 onClose={handleClose}
@@ -96,16 +114,22 @@ export default function Modal() {
         const secondaryButton =
           option === "twoButton"
             ? {
-              text: buttonText?.[1] || "아니요",
-              onClick: () => {
-                handleClose();
-                if (onConfirm?.[1]) onConfirm[1]();
-              },
-            }
+                text: buttonText?.[1] || "아니요",
+                onClick: () => {
+                  handleClose();
+                  if (onConfirm?.[1]) onConfirm[1]();
+                },
+              }
             : undefined;
 
         return (
-          <ModalWrapper key={id} zIndex={zIndex} isLast={isLast} lastModalRef={lastModalRef} onClose={handleClose}>
+          <ModalWrapper
+            key={id}
+            zIndex={zIndex}
+            isLast={isLast}
+            lastModalRef={lastModalRef}
+            onClose={handleClose}
+          >
             <ModalLayout
               key={id}
               title={title}

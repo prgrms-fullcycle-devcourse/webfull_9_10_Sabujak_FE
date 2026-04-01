@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
+import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 
 interface CapsuleEditModalProps {
   slug: string;
@@ -30,8 +31,10 @@ export const CapsuleEditModal = ({
   const [roomName, setRoomName] = useState<string>(getRoomName);
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
+  const { startLoading, stopLoading } = useLoadingStore();
 
   const CapsuleEdit = async () => {
+    startLoading();
     try {
       await patchCapsulesSlug(slug, {
         password,
@@ -54,10 +57,13 @@ export const CapsuleEditModal = ({
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
+    } finally {
+      stopLoading();
     }
   };
 
   const CapsuleDelete = async () => {
+    startLoading();
     try {
       await deleteCapsulesSlug(slug, {
         password,
@@ -79,6 +85,8 @@ export const CapsuleEditModal = ({
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
+    } finally {
+      stopLoading();
     }
   };
 

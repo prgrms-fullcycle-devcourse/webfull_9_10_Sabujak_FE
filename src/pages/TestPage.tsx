@@ -5,7 +5,6 @@ import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditM
 import { useModalStore } from '../shared/store/useModalStore';
 import Loading from "../shared/components/ui/Loading";
 import { useState } from "react";
-import Modal from '../shared/components/ui/Modal';
 
 export default function TestPage() {
   const { openModal } = useModalStore();
@@ -79,7 +78,6 @@ export default function TestPage() {
         </Button>
         {isLoading && <Loading />}
       </div>
-      <Modal />
     </>
   );
 }

@@ -98,7 +98,7 @@ export const CapsuleEditCheckModal = ({
         </div>
       </main>
 
-      <footer className="mt-auto flex w-full max-w-md flex-col items-center">
+      <footer className="mt-auto flex w-full flex-col items-center">
         <Button
           className="w-full"
           onClick={() => {

@@ -1,25 +1,35 @@
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import CapsuleViewUpcoming from "../features/capsule/components/ui/CapsuleViewUpcoming";
 import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewReleased";
 import UnavailableView from "../features/capsule/components/UnavailableView";
 import { useRoomDetail } from "../features/capsule/hooks";
+import { buildCapsuleDetailPath } from "../shared/utils/routes";
+
+export function LegacyCapsuleRedirectPage() {
+  const [searchParams] = useSearchParams();
+  const legacySlug = searchParams.get("slug");
+
+  if (!legacySlug) {
+    return <UnavailableView title="존재하지 않거나 접근할 수 없는 타임캡슐입니다." />;
+  }
+
+  // 기존 쿼리스트링 링크를 path 기반 상세 URL로 리다이렉트
+  return <Navigate to={buildCapsuleDetailPath(legacySlug)} replace />;
+}
 
 export default function CapsulePage() {
-  const searchParams = new URLSearchParams(window.location.search);
-  const slug = searchParams.get("slug") ?? "our-graduation-2025";
-
-  const { data, isLoading, isError } = useRoomDetail(slug);
-
+  const { slug } = useParams<{ slug: string }>();
+  const capsuleSlug = slug ?? "";
+  const { data, isLoading, isError } = useRoomDetail(capsuleSlug);
 
   if (isLoading) {
     return <div className="p-6 text-center">불러오는 중이에요...</div>;
   }
 
-  if (isError || !data) {
+  if (!capsuleSlug || isError || !data) {
     return <UnavailableView title="존재하지 않거나 접근할 수 없는 타임캡슐입니다." />;
   }
 
-  /* generated 타입은 isOpen만으로는 오픈 후 타입으로 좁혀지지 않아
-  messages 필드 유무로 오픈 전/후를 구분*/
   if (!("messages" in data)) {
     return <CapsuleViewUpcoming key={data.slug} room={data} />;
   }

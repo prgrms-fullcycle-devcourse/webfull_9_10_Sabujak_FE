@@ -89,7 +89,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   return (
     <div className="w-full p-6 flex flex-col justify-start items-start gap-6">
       {/* 닉네임 입력 */}
-      <div className="self-stretch h-16 relative">
+      <div className="self-stretch relative">
         <Field id="nickname" label="닉네임">
           <Input
             id="nickname"
@@ -103,7 +103,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
       </div>
 
       {/* 편지 내용 입력 */}
-      <div className="self-stretch h-64 relative">
+      <div className="self-stretch relative">
         <Field
           id="content"
           label="편지 내용"
@@ -120,13 +120,11 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
                 }
                 placeholder="따뜻한 마음을 전해보세요..."
               />
-              <span
-                className={
-                  content.length >= textMaxLength ? "text-red-500" : ""
-                }
+              <p
+                className={`absolute right-0 text-right text-sm text-gray-500 mt-1 ${content.length >= textMaxLength ? "text-red-500" : ""}`}
               >
                 {content.length}/1000
-              </span>
+              </p>
             </div>
           </div>
         </Field>

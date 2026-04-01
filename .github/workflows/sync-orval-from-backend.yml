@@ -1,0 +1,61 @@
+name: Sync Orval From Backend
+
+on:
+  repository_dispatch:
+    types:
+      - backend-openapi-updated
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-orval-from-backend
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: Generate API client and open PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ORVAL_OPENAPI_TARGET: https://raw.githubusercontent.com/prgrms-fullcycle-devcourse/webfull_9_10_Sabujak_BE/${{ github.event.client_payload.backend_sha }}/openapi.json
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Orval client
+        run: pnpm orval
+
+      - name: Build project
+        run: pnpm build
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: chore/sync-orval-from-backend
+          delete-branch: true
+          commit-message: "chore: sync generated api client from backend schema"
+          title: "chore: 백엔드 OpenAPI 변경 반영"
+          body: |
+            백엔드 OpenAPI 변경으로 생성된 프론트 API 클라이언트를 갱신합니다.
+
+            - backend_sha: `${{ github.event.client_payload.backend_sha }}`
+            - source_repo: `${{ github.event.client_payload.backend_repository }}`
+          add-paths: |
+            src/shared/api/generated/**

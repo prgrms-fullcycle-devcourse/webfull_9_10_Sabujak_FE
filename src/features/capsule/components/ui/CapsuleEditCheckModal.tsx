@@ -19,40 +19,29 @@ export const CapsuleEditCheckModal = ({
   getOpenDate = new Date(),
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
-  const [fieldTrue, setFieldTrue] = useState<"success" | "error" | "">("");
-  const [fieldMessage, setFieldMessage] = useState<
-    "" | "비밀번호가 부족합니다."
-  >("");
-  const [buttonEnable, setButtonEnable] = useState(true);
   const { openModal, replaceTopModal } = useModalStore();
   const { startLoading, stopLoading } = useLoadingStore();
 
+  const passwordCheck = PasswordRule(password);
+  const fieldTrue =
+    password.length === 0 ? "" : passwordCheck.boolean ? "success" : "error";
+  const fieldMessage =
+    password.length === 0
+      ? "숫자만 입력 가능합니다."
+      : passwordCheck.boolean
+        ? ""
+        : "비밀번호가 부족합니다.";
+  const isButtonDisabled = !passwordCheck.boolean;
+
   const handleEnterDown = (e: React.KeyboardEvent) => {
     if (e.nativeEvent.isComposing) return;
-    if (e.key === "Enter" && buttonEnable === false) {
+    if (e.key === "Enter" && !isButtonDisabled) {
       void handleSubmit();
     }
   };
 
-  const PWOnchangeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputCheck = PasswordRule(e.target.value);
-    setPassword(inputCheck.value);
-
-    if (e.target.value.length === 0) {
-      setFieldTrue("");
-      setFieldMessage("");
-      setButtonEnable(false);
-    } else {
-      if (inputCheck.boolean) {
-        setFieldTrue("success");
-        setFieldMessage("");
-        setButtonEnable(false);
-      } else {
-        setFieldTrue("error");
-        setFieldMessage("비밀번호가 부족합니다.");
-        setButtonEnable(true);
-      }
-    }
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(PasswordRule(e.target.value).value);
   };
 
   const handleSubmit = async () => {
@@ -119,9 +108,7 @@ export const CapsuleEditCheckModal = ({
               inputMode="numeric"
               maxLength={4}
               value={password}
-              onChange={(e) => {
-                PWOnchangeCheck(e);
-              }}
+              onChange={handlePasswordChange}
               onKeyDown={handleEnterDown}
             />
           </Field>
@@ -130,9 +117,9 @@ export const CapsuleEditCheckModal = ({
 
       <footer className="mt-auto flex w-full flex-col items-center">
         <Button
-        type='submit'
+          type="submit"
           className="w-full"
-          disabled={buttonEnable}
+          disabled={isButtonDisabled}
           onClick={() => {
             void handleSubmit();
           }}

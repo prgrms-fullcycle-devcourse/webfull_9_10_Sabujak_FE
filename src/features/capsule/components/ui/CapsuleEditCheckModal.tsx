@@ -4,7 +4,7 @@ import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
-import { handlePasswordChange } from "../../../../shared/utils/PWCheck";
+import { PasswordRule } from "../../../../shared/utils/InputValidatedCheck";
 
 interface CapsuleEditCheckModalProps {
   slug: string;
@@ -18,15 +18,18 @@ export const CapsuleEditCheckModal = ({
   getOpenDate = new Date(),
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
+  const [fieldTrue, setFieldTrue] = useState<"success" | "error">("error");
+  const [fieldMessage, setFieldMessage] = useState<
+    "" | "비밀번호가 부족합니다."
+  >("비밀번호가 부족합니다.");
   const { openModal, replaceTopModal } = useModalStore();
+  const handleEnterDown = (e: React.KeyboardEvent) => {
+    if (e.nativeEvent.isComposing) return;
+    if (e.key === "Enter") {
+      void handleSubmit();
+    }
+  };
 
- const handleEnterDown = (e:React.KeyboardEvent) => {
-  if(e.nativeEvent.isComposing) return;
-  if(e.key === 'Enter') {
-    void handleSubmit()
-  }
- }
- 
   const handleSubmit = async () => {
     if (password.length < 4) {
       openModal({
@@ -76,7 +79,11 @@ export const CapsuleEditCheckModal = ({
         </div>
 
         <div className="w-full pt-16">
-          <Field id="roomPassword">
+          <Field
+            id="roomPassword"
+            messageStatus={fieldTrue}
+            message={fieldMessage}
+          >
             <Input
               type="password"
               iconClassName="icon-lock"
@@ -84,7 +91,14 @@ export const CapsuleEditCheckModal = ({
               inputMode="numeric"
               maxLength={4}
               value={password}
-              onChange={(e) => {setPassword(handlePasswordChange(e.target.value))}}
+              onChange={(e) => {
+                const inputCheck = PasswordRule(e.target.value);
+                setPassword(inputCheck.value);
+                setFieldTrue(inputCheck.boolean ? "success" : "error");
+                setFieldMessage(
+                  inputCheck.boolean ? "" : "비밀번호가 부족합니다."
+                );
+              }}
               onKeyDown={handleEnterDown}
             />
           </Field>

@@ -52,7 +52,7 @@ export default function MainPage() {
                             placeholder="방 코드를 입력해 주세요"
                             value={capsuleInfo}
                             onChange={(e) => setCapsuleInfo(e.target.value)}
-                            className="h-[20px] rounded-[24px] !border-[#e6ddd2] !bg-white px-6"
+                            className="h-[20px] rounded-[24px] border-[#e6ddd2] !bg-white px-6"
                             inputClassName="text-center"
                         />
                     </Field>

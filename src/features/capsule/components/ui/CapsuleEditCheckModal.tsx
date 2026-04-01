@@ -26,7 +26,7 @@ export const CapsuleEditCheckModal = ({
   const { openModal, replaceTopModal } = useModalStore();
   const handleEnterDown = (e: React.KeyboardEvent) => {
     if (e.nativeEvent.isComposing) return;
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && buttonEnable === false) {
       void handleSubmit();
     }
   };
@@ -124,6 +124,7 @@ export const CapsuleEditCheckModal = ({
 
       <footer className="mt-auto flex w-full flex-col items-center">
         <Button
+        type='submit'
           className="w-full"
           disabled={buttonEnable}
           onClick={() => {

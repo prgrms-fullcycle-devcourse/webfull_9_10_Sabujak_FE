@@ -14,3 +14,13 @@
 (2026.03.17 기준 route 네이밍 규칙 안정해져있음)
 
 - `CreateCapsulePage.tsx`: `/create-capsule` 경로와 연결되는 캡슐 만들기 화면
+
+### `CreateCapsulePage.tsx`
+
+- 입력값 제어는 페이지 내부에서 별도 validation을 만들지 않고, 전역에서 사용하는 유틸(`TitleRule`, `SlugRule`, `PasswordRule`)을 그대로 사용합니다.
+- 서버 요청은 generated API와 TanStack Query mutation을 사용합니다.
+- slug 중복확인은 단순 조회가 아니라 reservation token을 발급받는 예약 흐름입니다.
+- 캡슐 생성 요청 시에는 중복확인 단계에서 받은 `reservationToken`을 함께 전달해야 합니다.
+- 사용자 안내는 공용 modal store를 사용합니다.
+- 생성 성공 시에는 modal의 확인 버튼을 누르면 상세 페이지로 이동합니다.
+- 서버 에러 메시지는 백엔드 응답의 `error.message`를 우선 사용합니다.

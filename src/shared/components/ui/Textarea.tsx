@@ -13,7 +13,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const wrapperClassName = `field-control ${statusClassName} ${
       className ?? ""
     }`.trim();
-    const controlClassName = `field-input w-full h-full bg-transparent resize-none outline-none ${TextareaClassName}`.trim();
+    const controlClassName =
+      `field-input w-full h-full bg-transparent resize-none outline-none ${TextareaClassName}`.trim();
 
     return (
       <div className={wrapperClassName}>

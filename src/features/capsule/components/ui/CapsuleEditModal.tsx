@@ -13,6 +13,7 @@ import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
 import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
+import { TitleRule } from "../../../../shared/utils/InputValidatedCheck";
 
 interface CapsuleEditModalProps {
   slug: string;
@@ -32,13 +33,22 @@ export const CapsuleEditModal = ({
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
   const { startLoading, stopLoading } = useLoadingStore();
+  const roomNameCheck = TitleRule(roomName);
+  const fieldTrue =
+    roomName.length === 0 ? "" : roomNameCheck.boolean ? "success" : "error";
+  const fieldMessage = `${roomName.length}/100`;
+  const isButtonDisabled = !roomNameCheck.boolean;
+
+  const handleRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRoomName(TitleRule(e.target.value).value);
+  };
 
   const CapsuleEdit = async () => {
     startLoading();
     try {
       await patchCapsulesSlug(slug, {
         password,
-        title: roomName,
+        title: roomName.trim(),
         openAt: openDate?.toISOString() ?? "",
       });
       openModal({
@@ -60,6 +70,22 @@ export const CapsuleEditModal = ({
     } finally {
       stopLoading();
     }
+  };
+
+  const CapsuleDeleteConfirm = () => {
+    openModal({
+      title: "작성 확인",
+      content: (
+        <p className="text-left">
+          삭제하시겠습니까?
+          <br />
+          삭제 후에는 복구가 불가능합니다.
+        </p>
+      ),
+      option: "twoButton",
+      buttonText: ["예", "아니요"],
+      onConfirm: [() => CapsuleDelete()],
+    });
   };
 
   const CapsuleDelete = async () => {
@@ -98,12 +124,17 @@ export const CapsuleEditModal = ({
         <main className="w-full px-6 pt-10 pb-20 flex flex-col gap-10">
           {/* 방 제목 섹션 */}
           <div className="flex flex-col gap-2">
-            <Field id="RoomName" label="방 제목">
+            <Field
+              id="RoomName"
+              label="방 제목"
+              message={fieldMessage}
+              messageStatus={fieldTrue}
+            >
               <Input
                 id="RoomName"
                 placeholder="방 제목을 입력해주세요"
                 value={roomName}
-                onChange={(e) => setRoomName(e.target.value)}
+                onChange={handleRoomNameChange}
               />
             </Field>
           </div>
@@ -129,6 +160,7 @@ export const CapsuleEditModal = ({
         <footer className="mt-auto flex w-full flex-col items-center gap-8 px-6 pb-12 pt-6">
           <Button
             className="w-full py-5 bg-black rounded-3xl text-white font-bold"
+            disabled={isButtonDisabled}
             onClick={() => {
               void CapsuleEdit();
             }}
@@ -138,7 +170,7 @@ export const CapsuleEditModal = ({
           <button
             className="text-neutral-400 text-xs font-medium underline"
             onClick={() => {
-              void CapsuleDelete();
+              void CapsuleDeleteConfirm();
             }}
           >
             방 삭제하기

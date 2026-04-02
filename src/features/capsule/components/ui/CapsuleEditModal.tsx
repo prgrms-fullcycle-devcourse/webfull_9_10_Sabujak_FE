@@ -134,7 +134,6 @@ export const CapsuleEditModal = ({
                 id="RoomName"
                 placeholder="방 제목을 입력해주세요"
                 value={roomName}
-                maxLength={100}
                 onChange={handleRoomNameChange}
               />
             </Field>

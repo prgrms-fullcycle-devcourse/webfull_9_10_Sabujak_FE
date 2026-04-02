@@ -106,7 +106,6 @@ export const CapsuleEditCheckModal = ({
               iconClassName="icon-lock"
               placeholder="비밀번호 4자리를 입력해 주세요"
               inputMode="numeric"
-              maxLength={4}
               value={password}
               onChange={handlePasswordChange}
               onKeyDown={handleEnterDown}

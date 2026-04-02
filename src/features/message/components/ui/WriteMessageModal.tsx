@@ -31,11 +31,11 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   const nicknameFieldTrue =
     nickname.length === 0 ? "" : nicknameCheck.boolean ? "success" : "error";
 
-  const nicknameFieldMessage = `${nickname.length}/20`;
-
-  const contentFieldTrue =
+    const contentFieldTrue =
     content.length === 0 ? "" : contentCheck.boolean ? "success" : "error";
-
+    
+    const nicknameFieldMessage = `${nickname.length}/20`;
+    
   const isButtonDisabled =
     !nickname.trim() ||
     !content.trim() ||
@@ -111,7 +111,6 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
           <Input
             id="nickname"
             value={nickname}
-            maxLength={20}
             onChange={handleNicknameChange}
             placeholder="닉네임을 입력해주세요"
           />

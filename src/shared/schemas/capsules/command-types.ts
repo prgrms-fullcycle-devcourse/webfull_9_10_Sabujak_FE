@@ -3,6 +3,7 @@ import { createCapsuleBodySchema } from "./create-capsule";
 import { createMessageBodySchema } from "./create-message";
 import { deleteCapsuleBodySchema } from "./delete-capsule";
 import { createSlugReservationBodySchema } from "./slug-reservation";
+import { capsuleSlugParamsSchema } from "./shared";
 import { updateCapsuleBodySchema } from "./update-capsule";
 import { verifyPasswordBodySchema } from "./verify-capsule-password";
 

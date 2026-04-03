@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import {
   HEART_BOX,
   HEART_HUE_RANGES,
@@ -225,6 +225,11 @@ export default function useHeartJarAnimation({
   total,
   heartShapeId,
 }: UseHeartJarAnimationParams) {
+  // Re-render와 무관하게 현재 하트 DOM/상태를 계속 유지한다.
+  const heartsRef = useRef<HeartItem[]>([]);
+  // 이미 시작한 requestAnimationFrame 루프를 재사용하기 위한 id다.
+  const animationFrameIdRef = useRef<number | null>(null);
+
   useEffect(() => {
     const heartLayer = heartLayerRef.current;
 
@@ -232,46 +237,59 @@ export default function useHeartJarAnimation({
       return;
     }
 
-    let hearts: HeartItem[] = [];
-    let animationFrameId: number | null = null;
-
     const animate = (now: number) => {
-      hearts.forEach(({ el, rule }) => updateHeart(el, rule, now));
-      animationFrameId = window.requestAnimationFrame(animate);
+      heartsRef.current.forEach(({ el, rule }) => updateHeart(el, rule, now));
+      animationFrameIdRef.current = window.requestAnimationFrame(animate);
     };
 
     const clearScene = () => {
-      if (animationFrameId !== null) {
-        window.cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
+      if (animationFrameIdRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameIdRef.current);
+        animationFrameIdRef.current = null;
       }
 
-      hearts = [];
+      heartsRef.current = [];
       heartLayer.innerHTML = "";
     };
 
-    const buildScene = (messageTotal: number) => {
-      clearScene();
+    heartLayer.innerHTML = "";
+    heartsRef.current = [];
 
-      const tokens = createHeartTokens(messageTotal);
-      if (!tokens.length) {
-        return;
-      }
-
-      tokens.forEach((rule) => {
-        const heart = createHeart(heartLayer, rule, heartShapeId);
-        hearts.push({ el: heart, rule });
-      });
-
-      if (animationFrameId === null) {
-        animationFrameId = window.requestAnimationFrame(animate);
-      }
-    };
-
-    buildScene(total);
+    // 초기 마운트 시 애니메이션 루프만 한 번 시작한다.
+    if (animationFrameIdRef.current === null) {
+      animationFrameIdRef.current = window.requestAnimationFrame(animate);
+    }
 
     return () => {
       clearScene();
     };
+  }, [heartLayerRef, heartShapeId]);
+
+  useEffect(() => {
+    const heartLayer = heartLayerRef.current;
+
+    if (!heartLayer) {
+      return;
+    }
+
+    const nextCount = clampHeartCount(total);
+    const currentCount = heartsRef.current.length;
+
+    // total이 늘어난 경우에만 부족한 개수만큼 새 하트를 추가한다.
+    if (nextCount > currentCount) {
+      const tokens = createHeartTokens(nextCount - currentCount);
+
+      tokens.forEach((rule) => {
+        const heart = createHeart(heartLayer, rule, heartShapeId);
+        heartsRef.current.push({ el: heart, rule });
+      });
+    }
+
+    if (nextCount < currentCount) {
+      const removedHearts = heartsRef.current.splice(nextCount);
+      removedHearts.forEach(({ el }) => {
+        el.remove();
+      });
+    }
   }, [heartLayerRef, total, heartShapeId]);
 }

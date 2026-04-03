@@ -4,8 +4,8 @@ import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
-import { PasswordRule } from "../../../../shared/utils/InputValidatedCheck";
 import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
+import { verifyPasswordBodySchema } from "../../../../shared/schemas";
 
 interface CapsuleEditCheckModalProps {
   slug: string;
@@ -22,16 +22,13 @@ export const CapsuleEditCheckModal = ({
   const { openModal, replaceTopModal } = useModalStore();
   const { startLoading, stopLoading } = useLoadingStore();
 
-  const passwordCheck = PasswordRule(password);
-  const fieldTrue =
-    password.length === 0 ? "" : passwordCheck.boolean ? "success" : "error";
-  const fieldMessage =
-    password.length === 0
-      ? "숫자만 입력 가능합니다."
-      : passwordCheck.boolean
-        ? ""
-        : "비밀번호가 부족합니다.";
-  const isButtonDisabled = !passwordCheck.boolean;
+  const verifyPassword = verifyPasswordBodySchema.safeParse({ password });
+  const passwordErrorMessage = !verifyPassword.success
+    ? verifyPassword.error.flatten().fieldErrors.password?.[0]
+    : "";
+  const fieldTrue = password.length === 0 ? "" : verifyPassword.success ? "" : "error";
+  const fieldMessage = passwordErrorMessage;
+  const isButtonDisabled = !verifyPassword.success;
 
   const handleEnterDown = (e: React.KeyboardEvent) => {
     if (e.nativeEvent.isComposing) return;
@@ -41,14 +38,14 @@ export const CapsuleEditCheckModal = ({
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(PasswordRule(e.target.value).value);
+    setPassword(e.target.value);
   };
 
   const handleSubmit = async () => {
-    if (password.length < 4) {
+    if (!verifyPassword.success) {
       openModal({
-        title: "비밀번호가 부족해요",
-        content: <p>비밀번호를 4자리 입력해 주세요.</p>,
+        title: "안내!",
+        content: <p>{passwordErrorMessage}</p>,
         option: "oneButton",
       });
       return;
@@ -107,6 +104,7 @@ export const CapsuleEditCheckModal = ({
               placeholder="비밀번호 4자리를 입력해 주세요"
               inputMode="numeric"
               value={password}
+              maxLength={4}
               onChange={handlePasswordChange}
               onKeyDown={handleEnterDown}
             />
@@ -118,7 +116,7 @@ export const CapsuleEditCheckModal = ({
         <Button
           type="submit"
           className="w-full"
-          disabled={isButtonDisabled}
+          // disabled={isButtonDisabled}
           onClick={() => {
             void handleSubmit();
           }}

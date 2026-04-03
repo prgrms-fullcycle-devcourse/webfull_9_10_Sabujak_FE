@@ -1,0 +1,11 @@
+{
+  "name": "sabujak-shared-schemas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}

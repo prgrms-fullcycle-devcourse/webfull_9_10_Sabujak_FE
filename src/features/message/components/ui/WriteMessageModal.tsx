@@ -150,6 +150,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
       {/* 입력 완료 버튼 */}
       <div className="self-stretch pt-2 pb-2">
         <Button
+          enterFlow={true}
           onClick={handleComplete}
           className="w-full"
           disabled={isButtonDisabled}

@@ -83,6 +83,7 @@ export default function MainPage() {
           </Field>
           <Button
             variant="secondary"
+            enterFlow={true}
             disabled={isButtonDisabled}
             onClick={() => {
               const slug = extractCapsuleSlug(capsuleInfo);

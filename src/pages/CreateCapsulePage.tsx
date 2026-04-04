@@ -175,6 +175,7 @@ export default function CreateCapsulePage() {
       bottomArea={
         <Button
           variant="primary"
+          enterFlow={true}
           onClick={() => void handleCreateCapsule()}
           disabled={isButtonDisabled}
         >
@@ -217,6 +218,7 @@ export default function CreateCapsulePage() {
               <Button
                 variant="sm"
                 onClick={() => void handleCheckSlug()}
+                enterFlow={true}
                 disabled={isCheckingSlug || !slugCheck.boolean}
               >
                 {isCheckingSlug ? "확인 중" : "중복 확인"}

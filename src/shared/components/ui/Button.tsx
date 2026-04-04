@@ -11,6 +11,7 @@ type ButtonProps = {
   children: ReactNode;
   className?: string;
   iconClassName?: string;
+  enterFlow?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button = ({
@@ -19,6 +20,7 @@ export const Button = ({
   children,
   className = "",
   iconClassName,
+  enterFlow = false,
   ...props
 }: ButtonProps) => {
   const baseClassName = "inline-flex items-center justify-center gap-2 rounded-lg";
@@ -27,7 +29,12 @@ export const Button = ({
   const buttonClassName = `${baseClassName} ${variantClassName} ${className}`.trim();
 
   return (
-    <button type={type} className={buttonClassName} {...props}>
+    <button
+      type={type}
+      className={buttonClassName}
+      data-enter-flow={enterFlow ? "true" : undefined}
+      {...props}
+    >
       {iconClassName && (
         <span
           className={`btn-icon ${iconClassName}`}

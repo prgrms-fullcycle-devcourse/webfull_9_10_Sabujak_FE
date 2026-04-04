@@ -1,20 +1,27 @@
-import { forwardRef, useRef } from "react";
+import { forwardRef, useRef, type KeyboardEventHandler } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "./Button";
+import { handleEnterDown } from "../../utils/EnterEvent";
 
 interface Props {
   id?: string;
   placeholder?: string;
   value?: string;
   onClick?: () => void;
+  onKeyDown?: KeyboardEventHandler<HTMLButtonElement>;
 }
 
 const CustomInput = forwardRef<HTMLButtonElement, Props>(
-  ({ id, placeholder, value, onClick }, ref) => {
+  ({ id, placeholder, value, onClick, onKeyDown }, ref) => {
     const hasValue = Boolean(value);
     const datePickerClassName = "field-control field-icon icon-calendar";
     const textClassName = hasValue ? "" : "placeholder";
+    const handleKeyDown: KeyboardEventHandler<HTMLButtonElement> = (e) => {
+      onKeyDown?.(e);
+      if (e.defaultPrevented) return;
+      handleEnterDown(e);
+    };
 
     return (
       <button
@@ -22,7 +29,9 @@ const CustomInput = forwardRef<HTMLButtonElement, Props>(
         id={id}
         ref={ref}
         onClick={onClick}
+        onKeyDown={handleKeyDown}
         className={datePickerClassName}
+        data-enter-flow="true"
       >
         <span className={textClassName}>{value || placeholder || "날짜 선택"}</span>
       </button>
@@ -37,9 +46,10 @@ interface DatePickerProps {
   readonly value: Date | null;
   readonly onChange: (date: Date | null) => void;
   readonly placeholder?: string;
+  readonly onKeyDown?: KeyboardEventHandler<HTMLButtonElement>;
 }
 
-export function DatePicker({ id, value, onChange, placeholder }: DatePickerProps) {
+export function DatePicker({ id, value, onChange, placeholder, onKeyDown }: DatePickerProps) {
   const datePickerRef = useRef<ReactDatePicker>(null);
   const now: Date = new Date();
   const minDate = new Date(
@@ -65,12 +75,15 @@ export function DatePicker({ id, value, onChange, placeholder }: DatePickerProps
       placeholderText={placeholder ?? "날짜 선택"}
       popperClassName="z-50"
       wrapperClassName="w-full"
-      customInput={<CustomInput id={id} placeholder={placeholder} />}
+      customInput={
+        <CustomInput id={id} placeholder={placeholder} onKeyDown={onKeyDown} />
+      }
       className="flex-1 bg-transparent border-none outline-none"
     >
       <div className="absolute bottom-1.5 right-2">
         <Button
           variant="sm"
+          enterFlow={false}
           onClick={() => {
             datePickerRef.current?.setOpen(false);
           }}

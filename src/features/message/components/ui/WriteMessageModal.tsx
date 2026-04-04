@@ -26,22 +26,24 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
     nickname,
     content,
   });
-  const verifyNicknameFieldMessage = !verifyWriteMessage.success
-    ? verifyWriteMessage.error.flatten().fieldErrors.nickname?.[0]
-    : "";
+  const { nickname: nicknameError = [], content: contentError = [] } =
+    !verifyWriteMessage.success
+      ? verifyWriteMessage.error.flatten().fieldErrors
+      : {};
 
-  const nicknameFieldTrue =
-    nickname.length === 0 ? "" : verifyWriteMessage.success ? "" : "error";
-  const contentFieldTrue =
-    content.length === 0 ? "" : verifyWriteMessage.success ? "" : "error";
+  const nicknameFieldState =
+    nickname.length === 0 ? "" : nicknameError.length <= 0 ? undefined : "error";
+  const contentFieldState =
+    content.length === 0 ? "" : contentError.length <= 0 ? undefined : "error";
 
-  const nicknameFieldMessage = verifyNicknameFieldMessage;
+  const nicknameFieldMessage =
+    nickname.length === 0
+      ? undefined
+      : nicknameError.length <= 0
+      ? undefined
+      : "error";
 
-  const isButtonDisabled =
-    !nickname.trim() ||
-    !content.trim() ||
-    !verifyWriteMessage.success ||
-    !verifyWriteMessage.success;
+  const isButtonDisabled = !verifyWriteMessage.success;
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
@@ -105,7 +107,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
           id="nickname"
           label="닉네임"
           message={nicknameFieldMessage}
-          messageStatus={nicknameFieldTrue}
+          messageStatus={nicknameFieldState}
         >
           <Input
             id="nickname"
@@ -124,7 +126,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
           label="편지 내용"
           helperText="한 번 남긴 마음은 수정이나 삭제가 불가능해요."
           message=""
-          messageStatus={contentFieldTrue}
+          messageStatus={contentFieldState}
         >
           <div onClick={() => document.getElementById("content")?.focus()}>
             <div className="releative">

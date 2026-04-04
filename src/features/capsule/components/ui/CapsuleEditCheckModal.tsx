@@ -26,8 +26,9 @@ export const CapsuleEditCheckModal = ({
   const passwordErrorMessage = !verifyPassword.success
     ? verifyPassword.error.flatten().fieldErrors.password?.[0]
     : "";
-  const fieldTrue = password.length === 0 ? "" : verifyPassword.success ? "" : "error";
-  const fieldMessage = passwordErrorMessage;
+  const fieldPasswordState = password.length === 0 ? "" : verifyPassword.success ? "" : "error";
+  const fieldPasswordMessage = passwordErrorMessage;
+
   const isButtonDisabled = !verifyPassword.success;
 
   const handleEnterDown = (e: React.KeyboardEvent) => {
@@ -95,8 +96,8 @@ export const CapsuleEditCheckModal = ({
         <div className="w-full pt-16">
           <Field
             id="roomPassword"
-            messageStatus={fieldTrue}
-            message={fieldMessage}
+            messageStatus={fieldPasswordState}
+            message={fieldPasswordMessage}
           >
             <Input
               type="password"
@@ -116,7 +117,7 @@ export const CapsuleEditCheckModal = ({
         <Button
           type="submit"
           className="w-full"
-          // disabled={isButtonDisabled}
+          disabled={isButtonDisabled}
           onClick={() => {
             void handleSubmit();
           }}

@@ -34,24 +34,45 @@ export const CapsuleEditModal = ({
   const { openModal, clearModals } = useModalStore();
   const { startLoading, stopLoading } = useLoadingStore();
 
-  const verifyRoomname = updateCapsuleBodySchema.safeParse({
+  const verifyCapsuleEdit = updateCapsuleBodySchema.safeParse({
     password: password,
     title: roomName,
     openAt: openDate?.toISOString(),
   });
-  const verifyRoomnameErrorMessage = !verifyRoomname.success
-    ? verifyRoomname.error.flatten().fieldErrors.title?.[0]
-    : "";
+  
+  const fieldErrors = !verifyCapsuleEdit.success ? verifyCapsuleEdit.error.flatten().fieldErrors : {}
 
-  const fieldTrue = verifyRoomname.success ? "" : "error";
-  const fieldMessage = verifyRoomnameErrorMessage;
-  const isButtonDisabled = !verifyRoomname.success;
+  const {
+    password : passwordError = [],
+    title : titleError = [],
+    // openAt : openDateError = [],
+  } = !verifyCapsuleEdit.success
+    ? verifyCapsuleEdit.error.flatten().fieldErrors : {};
+
+  const fieldTrue = verifyCapsuleEdit.success ? "" : "error";
+  const fieldMessage = titleError[0];
+  const isButtonDisabled = !verifyCapsuleEdit.success;
 
   const handleRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomName(e.target.value);
   };
 
   const CapsuleEdit = async () => {
+
+    if (!verifyCapsuleEdit.success) {
+      openModal({
+        title: "안내!",
+        content: (
+          <p style={{ whiteSpace: "pre-wrap" }}>
+            {" "}
+            {Object.values(fieldErrors).flat().join("\n")}
+          </p>
+        ),
+        option: "oneButton",
+      });
+      return;
+    }
+
     startLoading();
     try {
       await patchCapsulesSlug(slug, {
@@ -97,6 +118,16 @@ export const CapsuleEditModal = ({
   };
 
   const CapsuleDelete = async () => {
+    if (!verifyCapsuleEdit.success && passwordError.length > 0) {
+      openModal({
+        title: "안내!",
+        content: (<p>{passwordError}</p>
+        ),
+        option: "oneButton",
+      });
+      return;
+    }
+
     startLoading();
     try {
       await deleteCapsulesSlug(slug, {

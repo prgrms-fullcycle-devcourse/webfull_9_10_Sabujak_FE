@@ -1,24 +1,110 @@
+﻿/*eslint-disable*/
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCapsulesStats } from "../shared/api/generated/capsule/capsule";
+import type { CapsuleStatsResponse } from "../shared/api/generated/model/capsuleStatsResponse";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, Field, Input } from "../shared/components/ui";
-import { useState } from "react";
-import MainPageBackground from "./MainPageBackground";
+import { SlugRule } from "../shared/utils/InputValidatedCheck";
 import {
   buildCapsuleDetailPath,
   extractCapsuleSlug,
 } from "../shared/utils/routes";
+import MainPageBackground from "./MainPageBackground";
 import "./MainPage.css";
-import { SlugRule } from "../shared/utils/InputValidatedCheck";
+
+const INITIAL_STATS: CapsuleStatsResponse = {
+  totalCapsuleCount: 0,
+  totalMessageCount: 0,
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === "object" && value !== null;
+};
+
+const isCapsuleStatsResponse = (
+  value: unknown
+): value is CapsuleStatsResponse => {
+  return (
+    isRecord(value) &&
+    typeof value.totalCapsuleCount === "number" &&
+    typeof value.totalMessageCount === "number"
+  );
+};
 
 export default function MainPage() {
   const navigate = useNavigate();
   const [capsuleInfo, setCapsuleInfo] = useState("");
+  const [stats, setStats] = useState<CapsuleStatsResponse>(INITIAL_STATS);
   const slugCheck = SlugRule(capsuleInfo);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadInitialStats = async () => {
+      try {
+        const data = await getCapsulesStats();
+
+        if (!cancelled) {
+          setStats(data);
+        }
+      } catch (error) {
+        console.error("Failed to load capsule stats", error);
+      }
+    };
+
+    void loadInitialStats();
+
+    const apiBaseUrl = import.meta.env.VITE_API_URL ?? window.location.origin;
+    const eventSource = new EventSource(
+      new URL("/capsules/stats/stream", apiBaseUrl).toString()
+    );
+
+    const handleStatsMessage = (event: MessageEvent<string>) => {
+      if (cancelled) {
+        return;
+      }
+
+      try {
+        const parsed: unknown = JSON.parse(event.data);
+
+        if (!isCapsuleStatsResponse(parsed)) {
+          return;
+        }
+
+        setStats(parsed);
+      } catch (error) {
+        console.error("Failed to parse capsule stats SSE payload", error);
+      }
+    };
+
+    eventSource.onmessage = handleStatsMessage;
+    eventSource.addEventListener(
+      "capsuleStats",
+      handleStatsMessage as EventListener
+    );
+
+    eventSource.onerror = (error) => {
+      console.error("capsule stats SSE error", error);
+    };
+
+    return () => {
+      cancelled = true;
+      eventSource.removeEventListener(
+        "capsuleStats",
+        handleStatsMessage as EventListener
+      );
+      eventSource.close();
+    };
+  }, []);
+
+  const totalCapsuleCount = stats.totalCapsuleCount;
+  const totalMessageCount = stats.totalMessageCount;
 
   const slugCheckField =
     capsuleInfo.length === 0 ? "" : slugCheck.boolean ? "success" : "error";
 
-  const slugFieldMessage = `${capsuleInfo.length}/50`;
+  const slugFieldMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${totalMessageCount}개의 마음이 모였어요!!`;
 
   const isButtonDisabled = !capsuleInfo.trim() || !slugCheck.boolean;
 
@@ -77,7 +163,6 @@ export default function MainPage() {
               value={capsuleInfo}
               onChange={(e) => handleSlugChange(e)}
               className="h-[20px] rounded-[24px] !border-[#E5E5E5] !bg-white px-6"
-
               inputClassName="text-center"
             />
           </Field>

@@ -13,7 +13,7 @@ import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
 import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
-import { TitleRule } from "../../../../shared/utils/InputValidatedCheck";
+import { updateCapsuleBodySchema } from "../../../../shared/schemas";
 
 interface CapsuleEditModalProps {
   slug: string;
@@ -33,17 +33,46 @@ export const CapsuleEditModal = ({
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
   const { startLoading, stopLoading } = useLoadingStore();
-  const roomNameCheck = TitleRule(roomName);
-  const fieldTrue =
-    roomName.length === 0 ? "" : roomNameCheck.boolean ? "success" : "error";
-  const fieldMessage = `${roomName.length}/100`;
-  const isButtonDisabled = !roomNameCheck.boolean;
+
+  const verifyCapsuleEdit = updateCapsuleBodySchema.safeParse({
+    password: password,
+    title: roomName,
+    openAt: openDate?.toISOString(),
+  });
+  
+  const fieldErrors = !verifyCapsuleEdit.success ? verifyCapsuleEdit.error.flatten().fieldErrors : {}
+
+  const {
+    password : passwordError = [],
+    title : titleError = [],
+    // openAt : openDateError = [],
+  } = !verifyCapsuleEdit.success
+    ? verifyCapsuleEdit.error.flatten().fieldErrors : {};
+
+  const fieldTrue = verifyCapsuleEdit.success ? "" : "error";
+  const fieldMessage = titleError[0];
+  const isButtonDisabled = !verifyCapsuleEdit.success;
 
   const handleRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomName(TitleRule(e.target.value).value);
+    setRoomName(e.target.value);
   };
 
   const CapsuleEdit = async () => {
+
+    if (!verifyCapsuleEdit.success) {
+      openModal({
+        title: "안내!",
+        content: (
+          <p style={{ whiteSpace: "pre-wrap" }}>
+            {" "}
+            {Object.values(fieldErrors).flat().join("\n")}
+          </p>
+        ),
+        option: "oneButton",
+      });
+      return;
+    }
+
     startLoading();
     try {
       await patchCapsulesSlug(slug, {
@@ -89,6 +118,16 @@ export const CapsuleEditModal = ({
   };
 
   const CapsuleDelete = async () => {
+    if (!verifyCapsuleEdit.success && passwordError.length > 0) {
+      openModal({
+        title: "안내!",
+        content: (<p>{passwordError}</p>
+        ),
+        option: "oneButton",
+      });
+      return;
+    }
+
     startLoading();
     try {
       await deleteCapsulesSlug(slug, {
@@ -134,6 +173,7 @@ export const CapsuleEditModal = ({
                 id="RoomName"
                 placeholder="방 제목을 입력해주세요"
                 value={roomName}
+                maxLength={100}
                 onChange={handleRoomNameChange}
               />
             </Field>

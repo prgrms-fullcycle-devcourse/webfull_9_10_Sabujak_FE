@@ -4,6 +4,8 @@ import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewRe
 import { useRoomDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
 import { ErrorPage } from "../shared/components/feedback/ErrorPage";
+import { useLoadingStore } from "../shared/store/useLoadingStore";
+import { useEffect } from "react";
 
 export function LegacyCapsuleRedirectPage() {
   const [searchParams] = useSearchParams();
@@ -22,9 +24,13 @@ export default function CapsulePage() {
   const capsuleSlug = slug ?? "";
   const { data, isLoading, isError } = useRoomDetail(capsuleSlug);
 
-  if (isLoading) {
-    return <div className="p-6 text-center">불러오는 중이에요...</div>;
-  }
+  const { startLoading, stopLoading } = useLoadingStore();
+  useEffect(() => {
+    if (isLoading) {
+      startLoading();
+      return () => stopLoading();
+    };
+  }, [isLoading]);
 
   if (!capsuleSlug || isError || !data) {
     return <ErrorPage />

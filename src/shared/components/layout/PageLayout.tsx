@@ -55,7 +55,7 @@ export default function PageLayout({
                 </main>
 
                 {bottomArea ? (
-                    <div className="fixed-bottom" style={{ height: `${bottomAreaHeight}px` }}>
+                    <div className="fixed-bottom no-capture" style={{ height: `${bottomAreaHeight}px` }}>
                         <div className="fixed bottom-0 left-0 right-0 z-10 bg-[#ffffff]">
                             <div
                                 // 이 div를 ref로 잡아 실제 높이를 측정한다.

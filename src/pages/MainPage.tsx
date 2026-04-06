@@ -8,22 +8,28 @@ import {
   extractCapsuleSlug,
 } from "../shared/utils/routes";
 import "./MainPage.css";
-import { SlugRule } from "../shared/utils/InputValidatedCheck";
+import { slugSchema } from "../shared/schemas";
+import { useModalStore } from "../shared/store";
 
 export default function MainPage() {
   const navigate = useNavigate();
   const [capsuleInfo, setCapsuleInfo] = useState("");
-  const slugCheck = SlugRule(capsuleInfo);
+  const { openModal } = useModalStore();
+
+  const verifyCapsuleSlug = slugSchema.safeParse(capsuleInfo);
+  const slugError = !verifyCapsuleSlug.success
+    ? verifyCapsuleSlug.error.flatten().formErrors[0]
+    : "";
 
   const slugCheckField =
-    capsuleInfo.length === 0 ? "" : slugCheck.boolean ? "success" : "error";
+    capsuleInfo.length === 0 ? "" : verifyCapsuleSlug.success ? "" : "error";
 
-  const slugFieldMessage = `${capsuleInfo.length}/50`;
+  const slugFieldMessage = capsuleInfo.length === 0 ? "" : slugError;
 
-  const isButtonDisabled = !capsuleInfo.trim() || !slugCheck.boolean;
+  const isButtonDisabled = !verifyCapsuleSlug.success;
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCapsuleInfo(SlugRule(e.target.value).value);
+    setCapsuleInfo(e.target.value);
   };
 
   return (
@@ -77,7 +83,6 @@ export default function MainPage() {
               value={capsuleInfo}
               onChange={(e) => handleSlugChange(e)}
               className="h-[20px] rounded-[24px] !border-[#E5E5E5] !bg-white px-6"
-
               inputClassName="text-center"
             />
           </Field>
@@ -85,6 +90,16 @@ export default function MainPage() {
             variant="secondary"
             disabled={isButtonDisabled}
             onClick={() => {
+              if (!verifyCapsuleSlug.success) {
+                openModal(
+                  {
+                    title : '안내!',
+                    content : <p>{slugError}</p>,
+                    option : 'oneButton'
+                  }
+                );
+              }
+
               const slug = extractCapsuleSlug(capsuleInfo);
 
               if (!slug) {

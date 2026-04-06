@@ -1,9 +1,11 @@
+import { useRef } from "react";
 import type { CapsuleDetailResponseOneOfTwo } from "../../../../shared/api/generated/model";
 import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
 import { useShare } from "../../hooks";
 import { getColors } from "../../utils/color";
 import { formatYearMonth, formatYearMonthDay, getDiffDays } from "../../utils/date";
+import * as htmlToImage from "html-to-image";
 
 interface CapsuleViewReleasedProps {
   room: CapsuleDetailResponseOneOfTwo;
@@ -11,6 +13,7 @@ interface CapsuleViewReleasedProps {
 
 export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) {
   const { shareUrl, canShare } = useShare();
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleShare = async () => {
     await shareUrl({
@@ -20,10 +23,30 @@ export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) 
     });
   };
 
+  const handleCapture = async () => {
+    if (!ref.current) return;
+
+    try {
+      const dataUrl = await htmlToImage.toPng(ref.current, {
+        backgroundColor: "#FDFBF7",
+        filter: (node) => {
+          return !node.classList?.contains("no-capture");
+        }
+      });
+
+      const link = document.createElement("a");
+      link.download = "capture.png";
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const colors = getColors(room.messages.length);
   const expiresAt = new Date(room.expiresAt);
   return (
-    <>
+    <div ref={ref}>
       <PageLayout
         header={(
           <div className="flex flex-col px-6 py-4">
@@ -59,7 +82,7 @@ export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) 
         )}
         bottomArea={(
           <>
-            <Button variant="primary" iconClassName="btn-icon-download">
+            <Button variant="primary" iconClassName="btn-icon-download" onClick={() => void handleCapture()}>
               이미지로 저장하기
             </Button>
             <Button variant="secondary" onClick={() => void handleShare()}>
@@ -86,6 +109,6 @@ export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) 
           ))}
         </main>
       </PageLayout>
-    </>
+    </div>
   );
 }

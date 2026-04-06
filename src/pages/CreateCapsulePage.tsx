@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePostCapsules, usePostCapsulesSlugReservations} from "../shared/api/generated/capsule/capsule";
+import {
+  usePostCapsules,
+  usePostCapsulesSlugReservations,
+} from "../shared/api/generated/capsule/capsule";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, DatePicker, Field, Input } from "../shared/components/ui";
 import { useLoadingStore } from "../shared/store/useLoadingStore";
 import { useModalStore } from "../shared/store/useModalStore";
 import { getErrorMessage } from "../shared/utils/error";
-import { PasswordRule, SlugRule, TitleRule} from "../shared/utils/InputValidatedCheck";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
+import { createCapsuleBodySchema } from "../shared/schemas";
 
 type FieldMessageStatus = "success" | "error" | undefined;
 
@@ -20,43 +23,71 @@ export default function CreateCapsulePage() {
 
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
-  const [openDate, setOpenDate] = useState<Date | null>(null);
+  const [openDate, setOpenDate] = useState<Date | null>(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d;
+  });
   const [password, setPassword] = useState("");
 
   const [reservationToken, setReservationToken] = useState("");
   const [reservedSlug, setReservedSlug] = useState("");
   const [slugMessage, setSlugMessage] = useState("");
-  const [slugMessageStatus, setSlugMessageStatus] = useState<FieldMessageStatus>(undefined);
+  const [slugMessageStatus, setSlugMessageStatus] =
+    useState<FieldMessageStatus>(undefined);
 
   const [isCheckingSlug, setIsCheckingSlug] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
-  // 전역 validation 유틸을 사용해 각 입력값을 정제하고 유효 여부를 계산한다.
-  const titleCheck = TitleRule(title);
-  const slugCheck = SlugRule(slug);
-  const passwordCheck = PasswordRule(password);
+  const verifyCreateCapsule = createCapsuleBodySchema.safeParse({
+    slug,
+    title,
+    openAt: openDate?.toISOString(),
+    password,
+    reservationToken,
+  });
+
+  const fieldErrors = !verifyCreateCapsule.success
+    ? verifyCreateCapsule.error.flatten().fieldErrors
+    : {};
+
+  const {
+    slug: slugError = [],
+    title: titleError = [],
+    password: passwordError = [],
+    // openAt: openAtError = [],
+    // reservationToken: tokenError = [],
+  } = !verifyCreateCapsule.success
+    ? verifyCreateCapsule.error.flatten().fieldErrors
+    : {};
 
   const titleFieldStatus: FieldMessageStatus =
-    title.length === 0 ? undefined : titleCheck.boolean ? "success" : "error";
+    title.length === 0
+      ? undefined
+      : titleError.length === 0
+      ? undefined
+      : "error";
   const slugValidationStatus: FieldMessageStatus =
-    slug.length === 0 ? undefined : slugCheck.boolean ? "success" : "error";
+    slug.length === 0
+      ? undefined
+      : slugError.length === 0
+      ? undefined
+      : "error";
   const passwordFieldStatus: FieldMessageStatus =
-    password.length === 0 ? undefined : passwordCheck.boolean ? "success" : "error";
-
-  const titleFieldMessage = `${titleCheck.value.length}/100`;
-  const slugFieldMessage = slugMessage || (slug.length > 0 && !slugCheck.boolean ? "영문 소문자, 숫자, 하이픈(-)만 입력할 수 있어요." : `${slugCheck.value.length}/50`);
+    password.length === 0
+      ? undefined
+      : passwordError.length === 0
+      ? undefined
+      : "error";
   const slugFieldStatus = slugMessageStatus ?? slugValidationStatus;
-  const passwordFieldMessage = `${password.length}/4`;
 
-  const isButtonDisabled =
-    isCreating
-    || isCheckingSlug
-    || !titleCheck.boolean
-    || !slugCheck.boolean
-    || !passwordCheck.boolean
-    || !openDate
-    || !reservationToken
-    || reservedSlug !== slugCheck.value.trim();
+  const titleFieldMessage = titleError.length === 0 ? "" : titleError[0];
+  const slugFieldMessage =
+    slugMessage ||
+    (slug.length > 0 && slugError.length === 0 ? "" : slugError[0]);
+  const passwordFieldMessage = password.length === 0 ? "" : passwordError[0];
+
+  const isButtonDisabled = isCreating || !verifyCreateCapsule.success;
 
   // alert 대신 공용 modal store를 통해 안내 메시지를 띄운다.
   const openNoticeModal = (message: string, onConfirm?: () => void) => {
@@ -77,11 +108,11 @@ export default function CreateCapsulePage() {
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(TitleRule(e.target.value).value);
+    setTitle(e.target.value);
   };
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nextSlug = SlugRule(e.target.value).value;
+    const nextSlug = e.target.value;
     setSlug(nextSlug);
 
     if (reservedSlug && reservedSlug !== nextSlug.trim()) {
@@ -90,17 +121,11 @@ export default function CreateCapsulePage() {
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(PasswordRule(e.target.value).value);
+    setPassword(e.target.value);
   };
 
   const handleCheckSlug = async () => {
-    const trimmedSlug = slugCheck.value.trim();
-
-    if (!slugCheck.boolean) {
-      setSlugMessage("영문 소문자, 숫자, 하이픈(-)만 입력할 수 있어요.");
-      setSlugMessageStatus("error");
-      return;
-    }
+    const trimmedSlug = slug.trim();
 
     setIsCheckingSlug(true);
     startLoading();
@@ -129,17 +154,19 @@ export default function CreateCapsulePage() {
   };
 
   const handleCreateCapsule = async () => {
-    const trimmedTitle = titleCheck.value.trim();
-    const trimmedSlug = slugCheck.value.trim();
-
-    if (
-      !titleCheck.boolean
-      || !slugCheck.boolean
-      || !passwordCheck.boolean
-      || !openDate
-      || !reservationToken
-      || reservedSlug !== trimmedSlug
-    ) {
+    const trimmedTitle = title.trim();
+    const trimmedSlug = slug.trim();
+    if (!verifyCreateCapsule.success) {
+      openModal({
+        title: "안내!",
+        content: (
+          <p style={{ whiteSpace: "pre-wrap" }}>
+            {" "}
+            {Object.values(fieldErrors).flat().join("\n")}
+          </p>
+        ),
+        option: "oneButton",
+      });
       return;
     }
 
@@ -153,7 +180,7 @@ export default function CreateCapsulePage() {
           slug: trimmedSlug,
           title: trimmedTitle,
           password,
-          openAt: openDate.toISOString(),
+          openAt: openDate?.toISOString() ?? "",
           reservationToken,
         },
       });
@@ -175,7 +202,9 @@ export default function CreateCapsulePage() {
       bottomArea={
         <Button
           variant="primary"
-          onClick={() => void handleCreateCapsule()}
+          onClick={() => {
+            void handleCreateCapsule();
+          }}
           disabled={isButtonDisabled}
         >
           {isCreating ? "생성 중..." : "우리의 방 만들기"}
@@ -213,15 +242,15 @@ export default function CreateCapsulePage() {
           <Input
             placeholder="방 주소를 입력해 주세요"
             value={slug}
-            rightSlot={(
+            rightSlot={
               <Button
                 variant="sm"
                 onClick={() => void handleCheckSlug()}
-                disabled={isCheckingSlug || !slugCheck.boolean}
+                disabled={isCheckingSlug || !slug.trim()}
               >
                 {isCheckingSlug ? "확인 중" : "중복 확인"}
               </Button>
-            )}
+            }
             onChange={handleSlugChange}
           />
         </Field>

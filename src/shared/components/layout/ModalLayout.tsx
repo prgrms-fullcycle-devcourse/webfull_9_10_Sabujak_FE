@@ -32,10 +32,10 @@ export default function ModalLayout({
   const isFull = full === "full";
 
   const variants = {
-    initial: { x: '100%', opacity: 1 },
+    initial: { x: "100%", opacity: 1 },
     animate: { x: 0, opacity: 1 },
-    exit: { x: '100%', opacity: 1 }
-  }
+    exit: { x: "100%", opacity: 1 },
+  };
 
   const overlayClasses = isFull
     ? "fixed inset-0 overflow-hidden"
@@ -45,9 +45,7 @@ export default function ModalLayout({
     ? "w-full h-dvh flex flex-col bg-stone-50 overflow-hidden"
     : "w-96 bg-white rounded-[32px] shadow-2xl flex flex-col overflow-hidden";
 
-  const modalTitle = isFull
-    ? ""
-    : title;
+  const modalTitle = isFull ? "" : title;
 
   // 공통 레이아웃 (헤더 + 본문 + 버튼)
   const ModalContent = (
@@ -61,6 +59,7 @@ export default function ModalLayout({
           )}
           {showCloseButton && (
             <button
+              type="button"
               onClick={onClose}
               className="text-neutral-400 text-xl font-black leading-5 p-1 w-6 h-6 flex-shrink-0"
               aria-label="닫기"
@@ -100,25 +99,27 @@ export default function ModalLayout({
   );
 
   return (
-    <div className={overlayClasses} style={{ zIndex }}>
-      {isFull ? (
-        <motion.div
-          key="full-modal"
-          className={modalClasses}
-          variants={variants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{ type: "tween", duration: 0.3 }}
-          onClick={(e : React.MouseEvent) => e.stopPropagation()}
-        >
-          {ModalContent}
-        </motion.div>
-      ) : (
-        <div className={modalClasses} onClick={(e) => e.stopPropagation()}>
-          {ModalContent}
-        </div>
-      )}
-    </div>
+    <form onSubmit={(e) => e.preventDefault()}>
+      <div className={overlayClasses} style={{ zIndex }}>
+        {isFull ? (
+          <motion.div
+            key="full-modal"
+            className={modalClasses}
+            variants={variants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: "tween", duration: 0.3 }}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          >
+            {ModalContent}
+          </motion.div>
+        ) : (
+          <div className={modalClasses} onClick={(e) => e.stopPropagation()}>
+            {ModalContent}
+          </div>
+        )}
+      </div>
+    </form>
   );
 }

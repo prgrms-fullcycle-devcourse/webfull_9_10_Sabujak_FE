@@ -88,6 +88,7 @@ export default function MainPage() {
           </Field>
           <Button
             variant="secondary"
+            enterFlow={true}
             disabled={isButtonDisabled}
             onClick={() => {
               if (!verifyCapsuleSlug.success) {

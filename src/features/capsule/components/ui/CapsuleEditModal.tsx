@@ -199,6 +199,7 @@ export const CapsuleEditModal = ({
         {/* 4. Footer: 하단 배치 */}
         <footer className="mt-auto flex w-full flex-col items-center gap-8 px-6 pb-12 pt-6">
           <Button
+            enterFlow={true}
             className="w-full py-5 bg-black rounded-3xl text-white font-bold"
             disabled={isButtonDisabled}
             onClick={() => {
@@ -208,6 +209,7 @@ export const CapsuleEditModal = ({
             수정 완료
           </Button>
           <button
+            type="button"
             className="text-neutral-400 text-xs font-medium underline"
             onClick={() => {
               void CapsuleDeleteConfirm();

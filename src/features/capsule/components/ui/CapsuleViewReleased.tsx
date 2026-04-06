@@ -27,9 +27,6 @@ export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) 
       <PageLayout
         header={(
           <div className="flex flex-col px-6 py-4">
-            <div className="flex justify-end">
-              <button type="button" aria-label="메뉴" className="btn-menu h-10 w-10" />
-            </div>
             <div className="mt-2 text-center text-sm text-gray-400">
               {room.title}
             </div>

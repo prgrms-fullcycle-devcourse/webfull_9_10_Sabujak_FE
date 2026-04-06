@@ -1,9 +1,9 @@
 import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import CapsuleViewUpcoming from "../features/capsule/components/ui/CapsuleViewUpcoming";
 import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewReleased";
-import UnavailableView from "../features/capsule/components/UnavailableView";
 import { useRoomDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
+import { ErrorPage } from "../shared/components/feedback/ErrorPage";
 import { useLoadingStore } from "../shared/store/useLoadingStore";
 import { useEffect } from "react";
 
@@ -12,7 +12,7 @@ export function LegacyCapsuleRedirectPage() {
   const legacySlug = searchParams.get("slug");
 
   if (!legacySlug) {
-    return <UnavailableView title="존재하지 않거나 접근할 수 없는 타임캡슐입니다." />;
+    return <ErrorPage />
   }
 
   // 기존 쿼리스트링 링크를 path 기반 상세 URL로 리다이렉트
@@ -33,7 +33,7 @@ export default function CapsulePage() {
   }, [isLoading]);
 
   if (!capsuleSlug || isError || !data) {
-    return <UnavailableView title="존재하지 않거나 접근할 수 없는 타임캡슐입니다." />;
+    return <ErrorPage />
   }
 
   if (!("messages" in data)) {

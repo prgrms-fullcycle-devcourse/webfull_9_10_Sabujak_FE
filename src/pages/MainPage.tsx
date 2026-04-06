@@ -4,7 +4,6 @@ import { getCapsulesStats } from "../shared/api/generated/capsule/capsule";
 import type { CapsuleStatsResponse } from "../shared/api/generated/model/capsuleStatsResponse";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, Field, Input } from "../shared/components/ui";
-import { SlugRule } from "../shared/utils/InputValidatedCheck";
 import {
   buildCapsuleDetailPath,
   extractCapsuleSlug,
@@ -30,12 +29,19 @@ const isCapsuleStatsResponse = (
     typeof value.totalMessageCount === "number"
   );
 };
+import { slugSchema } from "../shared/schemas";
+import { useModalStore } from "../shared/store";
 
 export default function MainPage() {
   const navigate = useNavigate();
   const [capsuleInfo, setCapsuleInfo] = useState("");
   const [stats, setStats] = useState<CapsuleStatsResponse>(INITIAL_STATS);
-  const slugCheck = SlugRule(capsuleInfo);
+  const { openModal } = useModalStore();
+
+  const verifyCapsuleSlug = slugSchema.safeParse(capsuleInfo);
+  const slugError = !verifyCapsuleSlug.success
+    ? verifyCapsuleSlug.error.flatten().formErrors[0]
+    : "";
 
   useEffect(() => {
     let cancelled = false;
@@ -101,14 +107,14 @@ export default function MainPage() {
   const totalMessageCount = stats.totalMessageCount;
 
   const slugCheckField =
-    capsuleInfo.length === 0 ? "" : slugCheck.boolean ? "success" : "error";
+    capsuleInfo.length === 0 ? "" : verifyCapsuleSlug.success ? "" : "error";
 
   const slugFieldMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${totalMessageCount}개의 마음이 모였어요!!`;
 
-  const isButtonDisabled = !capsuleInfo.trim() || !slugCheck.boolean;
+  const isButtonDisabled = !verifyCapsuleSlug.success;
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCapsuleInfo(SlugRule(e.target.value).value);
+    setCapsuleInfo(e.target.value);
   };
 
   return (
@@ -169,6 +175,16 @@ export default function MainPage() {
             variant="secondary"
             disabled={isButtonDisabled}
             onClick={() => {
+              if (!verifyCapsuleSlug.success) {
+                openModal(
+                  {
+                    title : '안내!',
+                    content : <p>{slugError}</p>,
+                    option : 'oneButton'
+                  }
+                );
+              }
+
               const slug = extractCapsuleSlug(capsuleInfo);
 
               if (!slug) {

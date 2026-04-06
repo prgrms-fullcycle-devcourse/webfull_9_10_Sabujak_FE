@@ -9,10 +9,7 @@ import {
 import { postCapsulesSlugMessages } from "../../../../shared/api/generated/message/message";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
-import {
-  ContentRule,
-  nickNameRule,
-} from "../../../../shared/utils/InputValidatedCheck";
+import { createMessageBodySchema } from "../../../../shared/schemas";
 
 interface WriteMessageModalProps {
   slug: string;
@@ -25,31 +22,37 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   const { startLoading, stopLoading } = useLoadingStore();
   const textMaxLength = 1000;
 
-  const nicknameCheck = nickNameRule(nickname);
-  const contentCheck = ContentRule(content);
+  const verifyWriteMessage = createMessageBodySchema.safeParse({
+    nickname,
+    content,
+  });
+  const { nickname: nicknameError = [], content: contentError = [] } =
+    !verifyWriteMessage.success
+      ? verifyWriteMessage.error.flatten().fieldErrors
+      : {};
 
-  const nicknameFieldTrue =
-    nickname.length === 0 ? "" : nicknameCheck.boolean ? "success" : "error";
+  const nicknameFieldState =
+    nickname.length === 0 ? "" : nicknameError.length <= 0 ? undefined : "error";
+  const contentFieldState =
+    content.length === 0 ? "" : contentError.length <= 0 ? undefined : "error";
 
-    const contentFieldTrue =
-    content.length === 0 ? "" : contentCheck.boolean ? "success" : "error";
-    
-    const nicknameFieldMessage = `${nickname.length}/20`;
-    
-  const isButtonDisabled =
-    !nickname.trim() ||
-    !content.trim() ||
-    !nicknameCheck.boolean ||
-    !contentCheck.boolean;
+  const nicknameFieldMessage =
+    nickname.length === 0
+      ? undefined
+      : nicknameError.length <= 0
+      ? undefined
+      : "error";
+
+  const isButtonDisabled = !verifyWriteMessage.success;
 
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(nickNameRule(e.target.value).value);
+    setNickname(e.target.value);
   };
-  
+
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(ContentRule(e.target.value).value);
+    setContent(e.target.value);
   };
-  
+
   const MessageSend = async () => {
     startLoading();
     try {
@@ -81,7 +84,6 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   };
 
   const handleComplete = () => {
-
     openModal({
       title: "작성 확인",
       content: (
@@ -97,7 +99,6 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
     });
   };
 
-
   return (
     <div className="w-full p-6 flex flex-col justify-start items-start gap-6">
       {/* 닉네임 입력 */}
@@ -106,13 +107,14 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
           id="nickname"
           label="닉네임"
           message={nicknameFieldMessage}
-          messageStatus={nicknameFieldTrue}
+          messageStatus={nicknameFieldState}
         >
           <Input
             id="nickname"
             value={nickname}
             onChange={handleNicknameChange}
             placeholder="닉네임을 입력해주세요"
+            maxLength={20}
           />
         </Field>
       </div>
@@ -124,7 +126,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
           label="편지 내용"
           helperText="한 번 남긴 마음은 수정이나 삭제가 불가능해요."
           message=""
-          messageStatus={contentFieldTrue}
+          messageStatus={contentFieldState}
         >
           <div onClick={() => document.getElementById("content")?.focus()}>
             <div className="releative">

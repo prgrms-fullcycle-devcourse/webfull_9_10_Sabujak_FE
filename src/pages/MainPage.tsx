@@ -1,5 +1,4 @@
-﻿/*eslint-disable*/
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCapsulesStats } from "../shared/api/generated/capsule/capsule";
 import type { CapsuleStatsResponse } from "../shared/api/generated/model/capsuleStatsResponse";

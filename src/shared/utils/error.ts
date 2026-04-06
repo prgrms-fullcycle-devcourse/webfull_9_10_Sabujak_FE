@@ -7,6 +7,7 @@ const errorMessages = {
   SLUG_ALREADY_IN_US: "이미 사용 중인 slug 입니다.",
   SLUG_RESERVATION_MISMATCH: "slug 예약 토큰 검증에 실패했습니다.",
   DUPLICATE_NICKNAME: "중복된 닉네임입니다.",
+  MESSAGE_LIMIT_EXCEEDED: "메시지 작성 가능 개수를 초과했습니다.",
   CAPSULE_EXPIRED: "만료된 캡슐입니다.",
   CAPSULE_ALREADY_OPENED: "이미 공개된 캡슐입니다.",
   TOO_MANY_REQUESTS: "요청 횟수 제한을 초과했습니다.",

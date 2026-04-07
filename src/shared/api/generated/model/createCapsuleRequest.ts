@@ -23,4 +23,5 @@ export interface CreateCapsuleRequest {
   password: string;
   openAt: string;
   reservationToken: string;
+  reservationSessionToken?: string;
 }

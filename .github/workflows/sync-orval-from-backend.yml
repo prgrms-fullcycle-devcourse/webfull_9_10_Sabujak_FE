@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
+      BACKEND_SHA: ${{ github.event.client_payload.backend_sha }}
+      BACKEND_REPOSITORY: ${{ github.event.client_payload.backend_repository }}
       ORVAL_OPENAPI_TARGET: https://raw.githubusercontent.com/prgrms-fullcycle-devcourse/webfull_9_10_Sabujak_BE/${{ github.event.client_payload.backend_sha }}/openapi.json
 
     steps:
@@ -45,6 +47,279 @@ jobs:
       - name: Build project
         run: pnpm build
 
+      - name: Fetch backend OpenAPI snapshots
+        id: backend-openapi
+        shell: bash
+        run: |
+          tmp_dir="$RUNNER_TEMP/backend-openapi"
+          repo_dir="$tmp_dir/repo"
+
+          rm -rf "$tmp_dir"
+          mkdir -p "$repo_dir"
+
+          git init -q "$repo_dir"
+          git -C "$repo_dir" remote add origin "https://github.com/${BACKEND_REPOSITORY}.git"
+          git -C "$repo_dir" fetch --depth=2 origin "$BACKEND_SHA"
+
+          current_sha="$(git -C "$repo_dir" rev-parse FETCH_HEAD)"
+          previous_sha="$(git -C "$repo_dir" rev-list --parents -n 1 "$current_sha" | awk '{print $2}')"
+          current_openapi_path="$tmp_dir/current-openapi.json"
+          previous_openapi_path="$tmp_dir/previous-openapi.json"
+          has_previous=false
+
+          git -C "$repo_dir" show "$current_sha:openapi.json" > "$current_openapi_path"
+
+          if [ -n "$previous_sha" ] && git -C "$repo_dir" cat-file -e "$previous_sha:openapi.json" 2>/dev/null; then
+            git -C "$repo_dir" show "$previous_sha:openapi.json" > "$previous_openapi_path"
+            has_previous=true
+          fi
+
+          {
+            echo "current_sha=$current_sha"
+            echo "previous_sha=$previous_sha"
+            echo "current_openapi_path=$current_openapi_path"
+            echo "previous_openapi_path=$previous_openapi_path"
+            echo "has_previous=$has_previous"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build OpenAPI change summary
+        id: openapi-summary
+        shell: bash
+        env:
+          CURRENT_BACKEND_SHA: ${{ steps.backend-openapi.outputs.current_sha }}
+          PREVIOUS_BACKEND_SHA: ${{ steps.backend-openapi.outputs.previous_sha }}
+          CURRENT_OPENAPI_PATH: ${{ steps.backend-openapi.outputs.current_openapi_path }}
+          PREVIOUS_OPENAPI_PATH: ${{ steps.backend-openapi.outputs.previous_openapi_path }}
+          HAS_PREVIOUS_OPENAPI: ${{ steps.backend-openapi.outputs.has_previous }}
+        run: |
+          node <<'EOF'
+          const fs = require("node:fs");
+
+          const outputPath = process.env.GITHUB_OUTPUT;
+          const currentSha =
+            process.env.CURRENT_BACKEND_SHA ||
+            process.env.BACKEND_SHA ||
+            "unknown";
+          const previousSha = process.env.PREVIOUS_BACKEND_SHA || "";
+          const currentPath = process.env.CURRENT_OPENAPI_PATH;
+          const previousPath = process.env.PREVIOUS_OPENAPI_PATH;
+          const hasPrevious = process.env.HAS_PREVIOUS_OPENAPI === "true";
+          const httpMethods = [
+            "get",
+            "post",
+            "put",
+            "patch",
+            "delete",
+            "options",
+            "head",
+            "trace",
+          ];
+          const componentBuckets = [
+            "schemas",
+            "parameters",
+            "requestBodies",
+            "responses",
+            "headers",
+            "securitySchemes",
+          ];
+
+          function stableValue(value) {
+            if (Array.isArray(value)) {
+              return value.map(stableValue);
+            }
+
+            if (value && typeof value === "object") {
+              return Object.keys(value)
+                .sort()
+                .reduce((acc, key) => {
+                  acc[key] = stableValue(value[key]);
+                  return acc;
+                }, {});
+            }
+
+            return value;
+          }
+
+          function stableStringify(value) {
+            return JSON.stringify(stableValue(value));
+          }
+
+          function readJson(filePath) {
+            return JSON.parse(fs.readFileSync(filePath, "utf8"));
+          }
+
+          function collectOperations(document) {
+            const operations = new Map();
+
+            for (const [pathKey, pathItem] of Object.entries(document.paths || {})) {
+              for (const method of httpMethods) {
+                if (pathItem && pathItem[method]) {
+                  operations.set(
+                    `${method.toUpperCase()} ${pathKey}`,
+                    stableStringify(pathItem[method]),
+                  );
+                }
+              }
+            }
+
+            return operations;
+          }
+
+          function diffNamedEntries(previousEntries, currentEntries) {
+            const previousKeys = new Set(Object.keys(previousEntries));
+            const currentKeys = new Set(Object.keys(currentEntries));
+
+            const added = [...currentKeys]
+              .filter((key) => !previousKeys.has(key))
+              .sort();
+            const removed = [...previousKeys]
+              .filter((key) => !currentKeys.has(key))
+              .sort();
+            const changed = [...currentKeys]
+              .filter(
+                (key) =>
+                  previousKeys.has(key) &&
+                  stableStringify(previousEntries[key]) !==
+                    stableStringify(currentEntries[key]),
+              )
+              .sort();
+
+            return { added, removed, changed };
+          }
+
+          function formatList(title, items, { empty = "none", limit = 10 } = {}) {
+            if (!items.length) {
+              return [`- ${title}: ${empty}`];
+            }
+
+            const visibleItems = items.slice(0, limit);
+            const lines = [`- ${title} (${items.length})`];
+
+            for (const item of visibleItems) {
+              lines.push(`  - ${item}`);
+            }
+
+            if (items.length > limit) {
+              lines.push(`  - ...and ${items.length - limit} more`);
+            }
+
+            return lines;
+          }
+
+          const summaryLines = ["## OpenAPI change summary"];
+
+          if (!hasPrevious || !previousPath || !fs.existsSync(previousPath)) {
+            summaryLines.push(
+              `- compared backend refs: previous unavailable -> \`${currentSha}\``,
+            );
+            summaryLines.push(
+              "- 이전 backend commit의 openapi.json을 찾지 못해 실제 diff를 만들지 못했습니다.",
+            );
+          } else {
+            const previousDocument = readJson(previousPath);
+            const currentDocument = readJson(currentPath);
+            const previousOperations = collectOperations(previousDocument);
+            const currentOperations = collectOperations(currentDocument);
+
+            const addedOperations = [...currentOperations.keys()]
+              .filter((key) => !previousOperations.has(key))
+              .sort();
+            const removedOperations = [...previousOperations.keys()]
+              .filter((key) => !currentOperations.has(key))
+              .sort();
+            const changedOperations = [...currentOperations.keys()]
+              .filter(
+                (key) =>
+                  previousOperations.has(key) &&
+                  previousOperations.get(key) !== currentOperations.get(key),
+              )
+              .sort();
+
+            summaryLines.push(
+              `- compared backend refs: \`${previousSha}\` -> \`${currentSha}\``,
+            );
+            summaryLines.push(...formatList("added operations", addedOperations));
+            summaryLines.push(...formatList("removed operations", removedOperations));
+            summaryLines.push(...formatList("updated operations", changedOperations));
+
+            for (const bucket of componentBuckets) {
+              const diff = diffNamedEntries(
+                previousDocument.components?.[bucket] || {},
+                currentDocument.components?.[bucket] || {},
+              );
+              const bucketTitle =
+                bucket === "schemas"
+                  ? "schema components"
+                  : `${bucket} components`;
+
+              summaryLines.push(
+                ...formatList(`added ${bucketTitle}`, diff.added),
+              );
+              summaryLines.push(
+                ...formatList(`removed ${bucketTitle}`, diff.removed),
+              );
+              summaryLines.push(
+                ...formatList(`updated ${bucketTitle}`, diff.changed),
+              );
+            }
+          }
+
+          fs.appendFileSync(
+            outputPath,
+            `summary<<EOF\n${summaryLines.join("\n")}\nEOF\n`,
+          );
+          EOF
+
+      - name: Build generated client change summary
+        id: generated-summary
+        shell: bash
+        run: |
+          changed_files="$(git diff --name-only -- src/shared/api/generated | sort)"
+          changed_areas="$(printf '%s\n' "$changed_files" | awk -F/ '
+            /^src\/shared\/api\/generated\// {
+              if ($5 && !seen[$5]++) {
+                areas = areas (areas ? ", " : "") $5
+              }
+            }
+            END {
+              print areas
+            }
+          ')"
+          changed_count="$(printf '%s\n' "$changed_files" | sed '/^$/d' | wc -l | tr -d ' ')"
+
+          {
+            echo "summary<<EOF"
+            echo "## Generated client change summary"
+            echo "- affected generated areas: ${changed_areas:-none}"
+            echo "- changed files: ${changed_count}"
+            echo ""
+            echo "Changed files:"
+            if [ -n "$changed_files" ]; then
+              printf '%s\n' "$changed_files" | sed 's#^#- #'
+            else
+              echo "- none"
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Compose pull request body
+        shell: bash
+        env:
+          OPENAPI_SUMMARY: ${{ steps.openapi-summary.outputs.summary }}
+          GENERATED_SUMMARY: ${{ steps.generated-summary.outputs.summary }}
+          PREVIOUS_BACKEND_SHA: ${{ steps.backend-openapi.outputs.previous_sha }}
+        run: |
+          {
+            printf '%s\n\n' "백엔드 OpenAPI 변경으로 생성된 프론트 API 클라이언트를 갱신합니다."
+            printf '%s\n' "- backend_sha: \`$BACKEND_SHA\`"
+            if [ -n "$PREVIOUS_BACKEND_SHA" ]; then
+              printf '%s\n' "- previous_backend_sha: \`$PREVIOUS_BACKEND_SHA\`"
+            fi
+            printf '%s\n\n' "- source_repo: \`$BACKEND_REPOSITORY\`"
+            printf '%s\n\n' "$OPENAPI_SUMMARY"
+            printf '%s\n' "$GENERATED_SUMMARY"
+          } > "$RUNNER_TEMP/pr-body.md"
+
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
         with:
@@ -52,10 +327,6 @@ jobs:
           delete-branch: true
           commit-message: "chore: sync generated api client from backend schema"
           title: "chore: 백엔드 OpenAPI 변경 반영"
-          body: |
-            백엔드 OpenAPI 변경으로 생성된 프론트 API 클라이언트를 갱신합니다.
-
-            - backend_sha: `${{ github.event.client_payload.backend_sha }}`
-            - source_repo: `${{ github.event.client_payload.backend_repository }}`
+          body-path: ${{ runner.temp }}/pr-body.md
           add-paths: |
             src/shared/api/generated/**

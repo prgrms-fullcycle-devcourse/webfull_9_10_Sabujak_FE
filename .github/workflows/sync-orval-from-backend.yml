@@ -187,7 +187,7 @@ jobs:
             return { added, removed, changed };
           }
 
-          function formatList(title, items, { empty = "none", limit = 10 } = {}) {
+          function formatList(title, items, { empty = "없음", limit = 10 } = {}) {
             if (!items.length) {
               return [`- ${title}: ${empty}`];
             }
@@ -206,11 +206,11 @@ jobs:
             return lines;
           }
 
-          const summaryLines = ["## OpenAPI change summary"];
+          const summaryLines = ["## OpenAPI 변경 요약"];
 
           if (!hasPrevious || !previousPath || !fs.existsSync(previousPath)) {
             summaryLines.push(
-              `- compared backend refs: previous unavailable -> \`${currentSha}\``,
+              `- 비교한 백엔드 기준: 이전 커밋 없음 -> \`${currentSha}\``,
             );
             summaryLines.push(
               "- 이전 backend commit의 openapi.json을 찾지 못해 실제 diff를 만들지 못했습니다.",
@@ -236,11 +236,11 @@ jobs:
               .sort();
 
             summaryLines.push(
-              `- compared backend refs: \`${previousSha}\` -> \`${currentSha}\``,
+              `- 비교한 백엔드 기준: \`${previousSha}\` -> \`${currentSha}\``,
             );
-            summaryLines.push(...formatList("added operations", addedOperations));
-            summaryLines.push(...formatList("removed operations", removedOperations));
-            summaryLines.push(...formatList("updated operations", changedOperations));
+            summaryLines.push(...formatList("추가된 API", addedOperations));
+            summaryLines.push(...formatList("삭제된 API", removedOperations));
+            summaryLines.push(...formatList("수정된 API", changedOperations));
 
             for (const bucket of componentBuckets) {
               const diff = diffNamedEntries(
@@ -249,17 +249,17 @@ jobs:
               );
               const bucketTitle =
                 bucket === "schemas"
-                  ? "schema components"
-                  : `${bucket} components`;
+                  ? "스키마 컴포넌트"
+                  : `${bucket} 컴포넌트`;
 
               summaryLines.push(
-                ...formatList(`added ${bucketTitle}`, diff.added),
+                ...formatList(`추가된 ${bucketTitle}`, diff.added),
               );
               summaryLines.push(
-                ...formatList(`removed ${bucketTitle}`, diff.removed),
+                ...formatList(`삭제된 ${bucketTitle}`, diff.removed),
               );
               summaryLines.push(
-                ...formatList(`updated ${bucketTitle}`, diff.changed),
+                ...formatList(`수정된 ${bucketTitle}`, diff.changed),
               );
             }
           }
@@ -289,15 +289,15 @@ jobs:
 
           {
             echo "summary<<EOF"
-            echo "## Generated client change summary"
-            echo "- affected generated areas: ${changed_areas:-none}"
-            echo "- changed files: ${changed_count}"
+            echo "## 생성 클라이언트 변경 요약"
+            echo "- 영향 받은 생성 영역: ${changed_areas:-없음}"
+            echo "- 변경 파일 수: ${changed_count}"
             echo ""
-            echo "Changed files:"
+            echo "변경 파일:"
             if [ -n "$changed_files" ]; then
               printf '%s\n' "$changed_files" | sed 's#^#- #'
             else
-              echo "- none"
+              echo "- 없음"
             fi
             echo "EOF"
           } >> "$GITHUB_OUTPUT"

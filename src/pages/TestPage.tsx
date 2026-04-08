@@ -1,9 +1,9 @@
-import { Button } from '../shared/components/ui';
-import { WriteMessageContent } from '../features/message/components/ui/WriteMessageModal';
-import { CapsuleEditCheckModal } from '../features/capsule/components/ui/CapsuleEditCheckModal';
-import { CapsuleEditModal } from '../features/capsule/components/ui/CapsuleEditModal';
+import { Button } from "@/shared/components/ui";
+import { WriteMessageContent } from "@/features/message/components/ui/WriteMessageModal";
+import { CapsuleEditCheckModal } from "@/features/capsule/components/ui/CapsuleEditCheckModal";
+import { CapsuleEditModal } from "@/features/capsule/components/ui/CapsuleEditModal";
 import { useModalStore } from '../shared/store/useModalStore';
-import Loading from "../shared/components/ui/Loading";
+import Loading from "@/shared/components/ui/Loading";
 import { useState } from "react";
 
 export default function TestPage() {

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   usePostCapsules,
@@ -10,9 +11,65 @@ import { useLoadingStore } from "../shared/store/useLoadingStore";
 import { useModalStore } from "../shared/store/useModalStore";
 import { getErrorMessage } from "../shared/utils/error";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
+import type { ErrorResponse } from "../shared/schemas";
 import { createCapsuleBodySchema } from "../shared/schemas";
 
 type FieldMessageStatus = "success" | "error" | undefined;
+
+// slug 하나의 예약 정보 (localStorage에 저장됨)
+type SlugReservationEntry = {
+  reservationToken: string;
+  reservationSessionToken?: string;
+  reservedSlug: string;
+  reservedUntil: string; // 예약 만료 시각
+};
+
+type SlugReservationCache = Record<string, SlugReservationEntry>;
+
+const STORAGE_KEY = "create-capsule-slug-reservations";
+
+// 만료된 예약을 캐시에서 제거한다
+function pruneExpiredReservations(cache: SlugReservationCache): SlugReservationCache {
+  const now = Date.now();
+
+  return Object.fromEntries(
+    Object.entries(cache).filter(([, entry]) => {
+      const reservedUntil = Date.parse(entry.reservedUntil);
+
+      return Number.isFinite(reservedUntil) && reservedUntil > now;
+    }),
+  );
+}
+
+// 브라우저를 다시 열어도 최근 slug 예약을 복원할 수 있도록 localStorage를 읽는다.
+function readReservationCache(): SlugReservationCache {
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+
+    if (!stored) return {};
+
+    return pruneExpiredReservations(JSON.parse(stored) as SlugReservationCache);
+  } catch {
+    return {};
+  }
+}
+
+// 예약 캐시가 바뀔 때마다 localStorage에 동기화한다.
+function writeReservationCache(cache: SlugReservationCache) {
+  if (Object.keys(cache).length === 0) {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } else {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
+  }
+}
+
+function getErrorCode(error: unknown) {
+  if (axios.isAxiosError<ErrorResponse>(error)) {
+    return error.response?.data?.error?.code;
+  }
+
+  return undefined;
+}
 
 export default function CreateCapsulePage() {
   const navigate = useNavigate();
@@ -31,13 +88,24 @@ export default function CreateCapsulePage() {
   const [password, setPassword] = useState("");
 
   const [reservationToken, setReservationToken] = useState("");
+  const [reservationSessionToken, setReservationSessionToken] = useState("");
   const [reservedSlug, setReservedSlug] = useState("");
   const [slugMessage, setSlugMessage] = useState("");
   const [slugMessageStatus, setSlugMessageStatus] =
     useState<FieldMessageStatus>(undefined);
 
+  // 이전에 확인한 slug 예약들을 저장해두는 캐시
+  const [reservationCache, setReservationCache] = useState<SlugReservationCache>(() =>
+    readReservationCache(),
+  );
+
   const [isCheckingSlug, setIsCheckingSlug] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+
+  // 캐시가 바뀔 때마다 localStorage에 반영한다.
+  useEffect(() => {
+    writeReservationCache(reservationCache);
+  }, [reservationCache]);
 
   const verifyCreateCapsule = createCapsuleBodySchema.safeParse({
     slug,
@@ -45,7 +113,12 @@ export default function CreateCapsulePage() {
     openAt: openDate?.toISOString(),
     password,
     reservationToken,
+    reservationSessionToken,
   });
+
+  const currentReservation = reservedSlug
+    ? pruneExpiredReservations(reservationCache)[reservedSlug]
+    : undefined;
 
   const fieldErrors = !verifyCreateCapsule.success
     ? verifyCreateCapsule.error.flatten().fieldErrors
@@ -55,11 +128,7 @@ export default function CreateCapsulePage() {
     slug: slugError = [],
     title: titleError = [],
     password: passwordError = [],
-    // openAt: openAtError = [],
-    // reservationToken: tokenError = [],
-  } = !verifyCreateCapsule.success
-    ? verifyCreateCapsule.error.flatten().fieldErrors
-    : {};
+  } = fieldErrors;
 
   const titleFieldStatus: FieldMessageStatus =
     title.length === 0
@@ -83,11 +152,16 @@ export default function CreateCapsulePage() {
 
   const titleFieldMessage = titleError.length === 0 ? "" : titleError[0];
   const slugFieldMessage =
-    slugMessage ||
-    (slug.length > 0 && slugError.length === 0 ? "" : slugError[0]);
+    slugMessage || (slug.length > 0 && slugError.length === 0 ? "" : slugError[0]);
   const passwordFieldMessage = password.length === 0 ? "" : passwordError[0];
 
-  const isButtonDisabled = isCreating || !verifyCreateCapsule.success;
+  const isReservationValid =
+    !!currentReservation &&
+    currentReservation.reservationToken === reservationToken &&
+    currentReservation.reservedSlug === reservedSlug &&
+    reservedSlug === slug;
+  const isButtonDisabled =
+    isCreating || isCheckingSlug || !verifyCreateCapsule.success || !isReservationValid;
 
   // alert 대신 공용 modal store를 통해 안내 메시지를 띄운다.
   const openNoticeModal = (message: string, onConfirm?: () => void) => {
@@ -100,6 +174,7 @@ export default function CreateCapsulePage() {
     });
   };
 
+  // slug 예약 관련 상태를 모두 초기화한다.
   const resetSlugReservation = () => {
     setReservationToken("");
     setReservedSlug("");
@@ -107,17 +182,49 @@ export default function CreateCapsulePage() {
     setSlugMessageStatus(undefined);
   };
 
+  // 같은 세션에서 예약했던 slug들을 캐시에서 제거한다.
+  const clearSessionCache = (createdSlug: string) => {
+    setReservationCache((prev) => {
+      // 세션 토큰이 없으면 생성한 slug만 제거
+      if (!reservationSessionToken) {
+        const next = { ...prev };
+        delete next[createdSlug];
+        return next;
+      }
+
+      // 세션 토큰이 있으면 같은 세션의 모든 slug 제거
+      return Object.fromEntries(
+        Object.entries(prev).filter(
+          ([, entry]) => entry.reservationSessionToken !== reservationSessionToken,
+        ),
+      );
+    });
+  };
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nextSlug = e.target.value;
+    const nextSlug = e.target.value.replace(/\s+/g, "");
+    const nextCache = pruneExpiredReservations(reservationCache);
+    const nextReservation = nextSlug ? nextCache[nextSlug] : undefined;
+
+    setReservationCache(nextCache);
     setSlug(nextSlug);
 
-    if (reservedSlug && reservedSlug !== nextSlug.trim()) {
-      resetSlugReservation();
+    // 같은 slug를 다시 입력하면 새 요청 없이 기존 예약 정보를 즉시 복원한다.
+    if (nextReservation) {
+      setReservationToken(nextReservation.reservationToken);
+      setReservationSessionToken(nextReservation.reservationSessionToken ?? "");
+      setReservedSlug(nextReservation.reservedSlug);
+      setSlugMessage("사용 가능한 주소입니다.");
+      setSlugMessageStatus("success");
+      return;
     }
+
+    // 캐시에 없는 slug로 바뀌면 예약 상태를 초기화한다.
+    resetSlugReservation();
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,23 +233,53 @@ export default function CreateCapsulePage() {
 
   const handleCheckSlug = async () => {
     const trimmedSlug = slug.trim();
+    const nextCache = pruneExpiredReservations(reservationCache);
+    const cachedReservation = trimmedSlug ? nextCache[trimmedSlug] : undefined;
+
+    setReservationCache(nextCache);
+
+    if (!trimmedSlug || slugError.length > 0) {
+      return;
+    }
+
+    // 이미 확인한 slug라면 서버를 다시 호출하지 않고 캐시를 재사용한다.
+    if (cachedReservation) {
+      setSlug(cachedReservation.reservedSlug);
+      setReservationToken(cachedReservation.reservationToken);
+      setReservationSessionToken(cachedReservation.reservationSessionToken ?? "");
+      setReservedSlug(cachedReservation.reservedSlug);
+      setSlugMessage("사용 가능한 주소입니다.");
+      setSlugMessageStatus("success");
+      return;
+    }
 
     setIsCheckingSlug(true);
     startLoading();
 
     try {
-      // 중복 확인과 동시에 slug 예약 토큰을 발급받아 생성 요청에 사용한다.
+      // 같은 생성 흐름을 이어가기 위해 reservationSessionToken을 함께 보낸다.
       const response = await slugReservationMutation.mutateAsync({
         data: {
           slug: trimmedSlug,
+          reservationSessionToken: reservationSessionToken || undefined,
         },
       });
 
       setReservationToken(response.reservationToken);
+      setReservationSessionToken(response.reservationSessionToken);
       setReservedSlug(response.slug);
       setSlug(response.slug);
       setSlugMessage("사용 가능한 주소입니다.");
       setSlugMessageStatus("success");
+      setReservationCache((prev) => ({
+        ...pruneExpiredReservations(prev),
+        [response.slug]: {
+          reservationToken: response.reservationToken,
+          reservationSessionToken: response.reservationSessionToken,
+          reservedSlug: response.slug,
+          reservedUntil: response.reservedUntil,
+        },
+      }));
     } catch (error) {
       resetSlugReservation();
       setSlugMessage(getErrorMessage(error));
@@ -156,6 +293,7 @@ export default function CreateCapsulePage() {
   const handleCreateCapsule = async () => {
     const trimmedTitle = title.trim();
     const trimmedSlug = slug.trim();
+
     if (!verifyCreateCapsule.success) {
       openModal({
         title: "안내!",
@@ -167,6 +305,12 @@ export default function CreateCapsulePage() {
         ),
         option: "oneButton",
       });
+      return;
+    }
+
+    if (!isReservationValid) {
+      setSlugMessage("슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.");
+      setSlugMessageStatus("error");
       return;
     }
 
@@ -182,14 +326,30 @@ export default function CreateCapsulePage() {
           password,
           openAt: openDate?.toISOString() ?? "",
           reservationToken,
+          reservationSessionToken: reservationSessionToken || undefined,
         },
       });
+
+      // 방 생성 성공 → 같은 세션에서 선점했던 다른 slug들도 함께 제거한다.
+      clearSessionCache(trimmedSlug);
+      setReservationSessionToken("");
+      resetSlugReservation();
 
       // 생성 성공 후 확인 버튼을 누르면 상세 페이지로 이동한다.
       openNoticeModal("타임캡슐이 생성되었습니다.", () => {
         void navigate(buildCapsuleDetailPath(response.slug));
       });
     } catch (error) {
+      if (getErrorCode(error) === "SLUG_RESERVATION_MISMATCH") {
+        // 서버에서 예약이 깨졌다고 응답하면 캐시도 함께 비운다.
+        clearSessionCache(trimmedSlug);
+        setReservationSessionToken("");
+        resetSlugReservation();
+        setSlugMessage("슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.");
+        setSlugMessageStatus("error");
+        return;
+      }
+
       openNoticeModal(getErrorMessage(error));
     } finally {
       setIsCreating(false);
@@ -244,11 +404,12 @@ export default function CreateCapsulePage() {
             rightSlot={
               <Button
                 variant="sm"
+                className="text-center flex-none"
                 onClick={() => void handleCheckSlug()}
                 enterFlow={true}
-                disabled={isCheckingSlug || !slug.trim()}
+                disabled={isCheckingSlug || !slug.trim() || slugError.length > 0 || isReservationValid}
               >
-                {isCheckingSlug ? "확인 중" : "중복 확인"}
+                {isCheckingSlug ? "확인 중..." : isReservationValid ? "사용 가능" : "중복 확인"}
               </Button>
             }
             onChange={handleSlugChange}

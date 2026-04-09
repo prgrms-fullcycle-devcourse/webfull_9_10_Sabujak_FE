@@ -253,6 +253,17 @@ export default function CreateCapsulePage() {
       return;
     }
 
+    // 같은 세션에서 이미 3개 예약했으면 더 이상 확인하지 못하게 막는다.
+    const sessionReservationCount = Object.values(nextCache).filter(
+      (entry) => entry.reservationSessionToken === reservationSessionToken,
+    ).length;
+
+    if (sessionReservationCount >= 3) {
+      setSlugMessage("주소는 최대 3개까지만 확인할 수 있습니다.");
+      setSlugMessageStatus("error");
+      return;
+    }
+
     setIsCheckingSlug(true);
     startLoading();
 

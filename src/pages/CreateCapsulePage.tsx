@@ -235,6 +235,8 @@ export default function CreateCapsulePage() {
   };
 
   const handleCheckSlug = async () => {
+    if (isCheckingSlug) return;
+
     const trimmedSlug = slug.trim();
     const nextCache = pruneExpiredReservations(reservationCache);
     const cachedReservation = trimmedSlug ? nextCache[trimmedSlug] : undefined;
@@ -354,12 +356,18 @@ export default function CreateCapsulePage() {
         void navigate(buildCapsuleDetailPath(response.slug));
       });
     } catch (error) {
-      if (getErrorCode(error) === "SLUG_RESERVATION_MISMATCH") {
-        // 서버에서 예약이 깨졌다고 응답하면 캐시도 함께 비운다.
+      const errorCode = getErrorCode(error);
+
+      if (errorCode === "SLUG_RESERVATION_MISMATCH" || errorCode === "SLUG_ALREADY_IN_USE") {
+        // 예약이 깨졌거나 이미 사용 중인 slug면 캐시도 함께 비운다.
         clearSessionCache(trimmedSlug);
         setReservationSessionToken("");
         resetSlugReservation();
-        setSlugMessage("슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.");
+        setSlugMessage(
+          errorCode === "SLUG_ALREADY_IN_USE"
+            ? "이미 사용 중인 주소입니다. 다른 주소를 입력해 주세요."
+            : "슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.",
+        );
         setSlugMessageStatus("error");
         return;
       }

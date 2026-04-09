@@ -3,11 +3,13 @@ import { isoDateTimeStringSchema, slugSchema } from "./shared";
 
 export const createSlugReservationBodySchema = z.object({
   slug: slugSchema,
+  reservationSessionToken: z.string().optional(),
 });
 
 export const slugReservationResponseSchema = z.object({
   slug: slugSchema,
   reservationToken: z.string(),
+  reservationSessionToken: z.string(),
   reservedUntil: isoDateTimeStringSchema,
 });
 
@@ -17,3 +19,6 @@ export type CreateSlugReservationBody = z.infer<
 export type SlugReservationResponse = z.infer<
   typeof slugReservationResponseSchema
 >;
+
+
+// 

@@ -214,8 +214,18 @@ export default function CreateCapsulePage() {
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nextSlug = e.target.value.replace(/\s+/g, "");
     const nextCache = pruneExpiredReservations(reservationCache);
+    const nextReservation = nextSlug ? nextCache[nextSlug] : undefined;
     setReservationCache(nextCache);
     setSlug(nextSlug);
+
+    if (nextReservation) {
+      setReservationToken(nextReservation.reservationToken);
+      setReservationSessionToken(nextReservation.reservationSessionToken ?? "");
+      setReservedSlug(nextReservation.reservedSlug);
+      setSlugMessage("사용 가능한 주소입니다.");
+      setSlugMessageStatus("success");
+      return;
+    }
 
     // 캐시에 없는 slug로 바뀌면 예약 상태를 초기화한다.
     resetSlugReservation();

@@ -4,7 +4,7 @@ export const isoDateTimeStringSchema = z.string().datetime();
 
 export const slugSchema = z
   .string()
-  .trim()
+  // .trim()
   .min(1, "1자 이상 입력해주세요.")
   .max(50, "최대 50자까지 입력 가능합니다.")
   .regex(

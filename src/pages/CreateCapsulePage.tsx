@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
@@ -104,6 +104,8 @@ export default function CreateCapsulePage() {
 
   const [isCheckingSlug, setIsCheckingSlug] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const isCheckingSlugRef = useRef(false);
+  const isCreatingRef = useRef(false);
 
   // 캐시가 바뀔 때마다 localStorage에 반영한다.
   useEffect(() => {
@@ -180,6 +182,7 @@ export default function CreateCapsulePage() {
   // slug 예약 관련 상태를 모두 초기화한다.
   const resetSlugReservation = () => {
     setReservationToken("");
+    setReservationSessionToken("");
     setReservedSlug("");
     setSlugMessage("");
     setSlugMessageStatus(undefined);
@@ -211,20 +214,8 @@ export default function CreateCapsulePage() {
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nextSlug = e.target.value.replace(/\s+/g, "");
     const nextCache = pruneExpiredReservations(reservationCache);
-    const nextReservation = nextSlug ? nextCache[nextSlug] : undefined;
-
     setReservationCache(nextCache);
     setSlug(nextSlug);
-
-    // 같은 slug를 다시 입력하면 새 요청 없이 기존 예약 정보를 즉시 복원한다.
-    if (nextReservation) {
-      setReservationToken(nextReservation.reservationToken);
-      setReservationSessionToken(nextReservation.reservationSessionToken ?? "");
-      setReservedSlug(nextReservation.reservedSlug);
-      setSlugMessage("사용 가능한 주소입니다.");
-      setSlugMessageStatus("success");
-      return;
-    }
 
     // 캐시에 없는 slug로 바뀌면 예약 상태를 초기화한다.
     resetSlugReservation();
@@ -235,11 +226,11 @@ export default function CreateCapsulePage() {
   };
 
   const handleCheckSlug = async () => {
-    if (isCheckingSlug) return;
+    if (isCheckingSlugRef.current) return;
 
     const trimmedSlug = slug.trim();
     const nextCache = pruneExpiredReservations(reservationCache);
-    const cachedReservation = trimmedSlug ? nextCache[trimmedSlug] : undefined;
+    const nextReservationSessionToken = reservationSessionToken;
 
     setReservationCache(nextCache);
 
@@ -247,20 +238,9 @@ export default function CreateCapsulePage() {
       return;
     }
 
-    // 이미 확인한 slug라면 서버를 다시 호출하지 않고 캐시를 재사용한다.
-    if (cachedReservation) {
-      setSlug(cachedReservation.reservedSlug);
-      setReservationToken(cachedReservation.reservationToken);
-      setReservationSessionToken(cachedReservation.reservationSessionToken ?? "");
-      setReservedSlug(cachedReservation.reservedSlug);
-      setSlugMessage("사용 가능한 주소입니다.");
-      setSlugMessageStatus("success");
-      return;
-    }
-
     // 같은 세션에서 이미 3개 예약했으면 더 이상 확인하지 못하게 막는다.
     const sessionReservationCount = Object.values(nextCache).filter(
-      (entry) => entry.reservationSessionToken === reservationSessionToken,
+      (entry) => entry.reservationSessionToken === nextReservationSessionToken,
     ).length;
 
     if (sessionReservationCount >= MAX_SLUG_RESERVATIONS_PER_SESSION) {
@@ -269,6 +249,7 @@ export default function CreateCapsulePage() {
       return;
     }
 
+    isCheckingSlugRef.current = true;
     setIsCheckingSlug(true);
     startLoading();
 
@@ -277,7 +258,7 @@ export default function CreateCapsulePage() {
       const response = await slugReservationMutation.mutateAsync({
         data: {
           slug: trimmedSlug,
-          reservationSessionToken: reservationSessionToken || undefined,
+          reservationSessionToken: nextReservationSessionToken || undefined,
         },
       });
 
@@ -297,16 +278,27 @@ export default function CreateCapsulePage() {
         },
       }));
     } catch (error) {
+      if (getErrorCode(error) === "SLUG_ALREADY_IN_USE") {
+        setReservationCache((prev) => {
+          const next = { ...prev };
+          delete next[trimmedSlug];
+          return next;
+        });
+      }
+
       resetSlugReservation();
       setSlugMessage(getErrorMessage(error));
       setSlugMessageStatus("error");
     } finally {
+      isCheckingSlugRef.current = false;
       setIsCheckingSlug(false);
       stopLoading();
     }
   };
 
   const handleCreateCapsule = async () => {
+    if (isCreatingRef.current) return;
+
     const trimmedTitle = title.trim();
     const trimmedSlug = slug.trim();
 
@@ -330,6 +322,7 @@ export default function CreateCapsulePage() {
       return;
     }
 
+    isCreatingRef.current = true;
     setIsCreating(true);
     startLoading();
 
@@ -374,6 +367,7 @@ export default function CreateCapsulePage() {
 
       openNoticeModal(getErrorMessage(error));
     } finally {
+      isCreatingRef.current = false;
       setIsCreating(false);
       stopLoading();
     }

@@ -26,7 +26,10 @@ type SlugReservationEntry = {
 
 type SlugReservationCache = Record<string, SlugReservationEntry>;
 
+// slug 예약 캐시를 저장하는 localStorage 키
 const STORAGE_KEY = "create-capsule-slug-reservations";
+// 한 세션에서 중복 확인할 수 있는 slug 최대 개수
+const MAX_SLUG_RESERVATIONS_PER_SESSION = 3;
 
 // 만료된 예약을 캐시에서 제거한다
 function pruneExpiredReservations(cache: SlugReservationCache): SlugReservationCache {
@@ -258,7 +261,7 @@ export default function CreateCapsulePage() {
       (entry) => entry.reservationSessionToken === reservationSessionToken,
     ).length;
 
-    if (sessionReservationCount >= 3) {
+    if (sessionReservationCount >= MAX_SLUG_RESERVATIONS_PER_SESSION) {
       setSlugMessage("주소는 최대 3개까지만 확인할 수 있습니다.");
       setSlugMessageStatus("error");
       return;

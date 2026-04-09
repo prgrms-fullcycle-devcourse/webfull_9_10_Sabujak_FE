@@ -182,7 +182,6 @@ export default function CreateCapsulePage() {
   // slug 예약 관련 상태를 모두 초기화한다.
   const resetSlugReservation = () => {
     setReservationToken("");
-    setReservationSessionToken("");
     setReservedSlug("");
     setSlugMessage("");
     setSlugMessageStatus(undefined);

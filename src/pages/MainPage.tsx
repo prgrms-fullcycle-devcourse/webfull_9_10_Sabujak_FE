@@ -109,7 +109,9 @@ export default function MainPage() {
   const slugCheckField =
     capsuleInfo.length === 0 ? "" : verifyCapsuleSlug.success ? "" : "error";
 
-  const slugFieldMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${totalMessageCount}개의 마음이 모였어요!!`;
+  const slugFieldMessage = slugError;
+
+const totalCapsuleMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${totalMessageCount}개의 마음이 모였어요!!`
 
   const isButtonDisabled = !verifyCapsuleSlug.success;
 
@@ -162,6 +164,7 @@ export default function MainPage() {
             id="roomTitle"
             message={slugFieldMessage}
             messageStatus={slugCheckField}
+            helperText={totalCapsuleMessage}
           >
             <Input
               placeholder="방 코드를 입력해 주세요"

@@ -8,7 +8,7 @@ import {
   Field,
   DatePicker,
 } from "../../../../shared/components/ui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ interface CapsuleEditModalProps {
   password: string;
   getRoomName: string;
   getOpenDate: Date;
+  reloadCapsuleData?: () => Promise<void>;
 }
 
 export const CapsuleEditModal = ({
@@ -27,6 +28,7 @@ export const CapsuleEditModal = ({
   password,
   getRoomName,
   getOpenDate,
+  reloadCapsuleData,
 }: CapsuleEditModalProps) => {
   const [openDate, setOpenDate] = useState<Date | null>(getOpenDate);
   const [roomName, setRoomName] = useState<string>(getRoomName);
@@ -39,15 +41,18 @@ export const CapsuleEditModal = ({
     title: roomName,
     openAt: openDate?.toISOString(),
   });
-  
-  const fieldErrors = !verifyCapsuleEdit.success ? verifyCapsuleEdit.error.flatten().fieldErrors : {}
+
+  const fieldErrors = !verifyCapsuleEdit.success
+    ? verifyCapsuleEdit.error.flatten().fieldErrors
+    : {};
 
   const {
-    password : passwordError = [],
-    title : titleError = [],
+    password: passwordError = [],
+    title: titleError = [],
     // openAt : openDateError = [],
   } = !verifyCapsuleEdit.success
-    ? verifyCapsuleEdit.error.flatten().fieldErrors : {};
+    ? verifyCapsuleEdit.error.flatten().fieldErrors
+    : {};
 
   const fieldTrue = verifyCapsuleEdit.success ? "" : "error";
   const fieldMessage = titleError[0];
@@ -57,8 +62,11 @@ export const CapsuleEditModal = ({
     setRoomName(e.target.value);
   };
 
-  const CapsuleEdit = async () => {
+  useEffect(() => {
+    setRoomName(getRoomName);
+  }, [getRoomName]);
 
+  const CapsuleEdit = async () => {
     if (!verifyCapsuleEdit.success) {
       openModal({
         title: "안내!",
@@ -91,6 +99,7 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
+      await reloadCapsuleData?.();
       openModal({
         title: "수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
@@ -121,8 +130,7 @@ export const CapsuleEditModal = ({
     if (!verifyCapsuleEdit.success && passwordError.length > 0) {
       openModal({
         title: "안내!",
-        content: (<p>{passwordError}</p>
-        ),
+        content: <p>{passwordError}</p>,
         option: "oneButton",
       });
       return;
@@ -208,6 +216,7 @@ export const CapsuleEditModal = ({
             수정 완료
           </Button>
           <button
+            type="button"
             className="text-neutral-400 text-xs font-medium underline"
             onClick={() => {
               void CapsuleDeleteConfirm();

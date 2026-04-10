@@ -26,11 +26,14 @@ import type {
 
 import type {
   CapsuleDetailResponse,
+  CapsuleStatsResponse,
+  CapsuleStatsStreamResponse,
   CreateCapsuleRequest,
   CreateCapsuleResponse,
   CreateSlugReservationRequest,
   DeleteCapsuleRequest,
   ErrorResponse,
+  MessageCountStreamResponse,
   SlugReservationResponse,
   UpdateCapsuleRequest,
   UpdateCapsuleResponse,
@@ -177,6 +180,192 @@ export const usePostCapsules = <TError = ErrorType<ErrorResponse>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
+ * 랜딩페이지에서 사용하는 전체 타임캡슐 수와 전체 메시지 수를 조회합니다.
+ * @summary 랜딩페이지 전역 집계 조회❤️
+ */
+export const getCapsulesStats = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CapsuleStatsResponse>(
+      {url: `/capsules/stats`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetCapsulesStatsQueryKey = () => {
+    return [
+    `/capsules/stats`
+    ] as const;
+    }
+
+    
+export const getGetCapsulesStatsQueryOptions = <TData = Awaited<ReturnType<typeof getCapsulesStats>>, TError = ErrorType<ErrorResponse>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCapsulesStatsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCapsulesStats>>> = ({ signal }) => getCapsulesStats(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCapsulesStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getCapsulesStats>>>
+export type GetCapsulesStatsQueryError = ErrorType<ErrorResponse>
+
+
+export function useGetCapsulesStats<TData = Awaited<ReturnType<typeof getCapsulesStats>>, TError = ErrorType<ErrorResponse>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCapsulesStats>>,
+          TError,
+          Awaited<ReturnType<typeof getCapsulesStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCapsulesStats<TData = Awaited<ReturnType<typeof getCapsulesStats>>, TError = ErrorType<ErrorResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCapsulesStats>>,
+          TError,
+          Awaited<ReturnType<typeof getCapsulesStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCapsulesStats<TData = Awaited<ReturnType<typeof getCapsulesStats>>, TError = ErrorType<ErrorResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 랜딩페이지 전역 집계 조회❤️
+ */
+
+export function useGetCapsulesStats<TData = Awaited<ReturnType<typeof getCapsulesStats>>, TError = ErrorType<ErrorResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCapsulesStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
+ * 전체 타임캡슐 수와 전체 메시지 수를 SSE로 구독합니다. 연결 직후 현재 집계를 1회 전송하고 이후 변경 시마다 최신 집계를 push 합니다.
+ * @summary 랜딩페이지 전역 집계 SSE 구독❤️
+ */
+export const getCapsulesStatsStream = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CapsuleStatsStreamResponse>(
+      {url: `/capsules/stats/stream`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetCapsulesStatsStreamQueryKey = () => {
+    return [
+    `/capsules/stats/stream`
+    ] as const;
+    }
+
+    
+export const getGetCapsulesStatsStreamQueryOptions = <TData = Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError = ErrorType<ErrorResponse>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCapsulesStatsStreamQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCapsulesStatsStream>>> = ({ signal }) => getCapsulesStatsStream(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCapsulesStatsStreamQueryResult = NonNullable<Awaited<ReturnType<typeof getCapsulesStatsStream>>>
+export type GetCapsulesStatsStreamQueryError = ErrorType<ErrorResponse>
+
+
+export function useGetCapsulesStatsStream<TData = Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError = ErrorType<ErrorResponse>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCapsulesStatsStream>>,
+          TError,
+          Awaited<ReturnType<typeof getCapsulesStatsStream>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCapsulesStatsStream<TData = Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError = ErrorType<ErrorResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCapsulesStatsStream>>,
+          TError,
+          Awaited<ReturnType<typeof getCapsulesStatsStream>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCapsulesStatsStream<TData = Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError = ErrorType<ErrorResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 랜딩페이지 전역 집계 SSE 구독❤️
+ */
+
+export function useGetCapsulesStatsStream<TData = Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError = ErrorType<ErrorResponse>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesStatsStream>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCapsulesStatsStreamQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
  * 공개 전/후 상태에 따라 캡슐 기본 정보와 메시지 목록을 조회합니다.
  * @summary 캡슐 조회❤️
  */
@@ -270,7 +459,7 @@ export function useGetCapsulesSlug<TData = Awaited<ReturnType<typeof getCapsules
 
 
 /**
- * 관리자 비밀번호 검증 후 캡슐 제목과 공개 시각을 수정합니다. openAt은 현재 시각 이후여야 하며, 변경 시 expiresAt을 함께 재계산합니다.
+ * 관리자 비밀번호 검증 후 캡슐 제목과 공개 시각을 수정합니다. openAt은 현재 시각 이후여야 하며, 변경 시 expiresAt을 함께 재계산합니다. 동시 수정/삭제 충돌이 있더라도 서버 오류 대신 현재 상태를 다시 판정해 404/409/410으로 응답합니다.
  * @summary 캡슐 수정❤️
  */
 export const patchCapsulesSlug = (
@@ -335,7 +524,7 @@ export const usePatchCapsulesSlug = <TError = ErrorType<ErrorResponse>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
- * 관리자 비밀번호 검증 후 캡슐을 삭제합니다.
+ * 관리자 비밀번호 검증 후 캡슐을 삭제합니다. 다른 관리 요청이 먼저 삭제를 완료한 경우에도 서버 오류 대신 404로 응답합니다.
  * @summary 캡슐 삭제❤️
  */
 export const deleteCapsulesSlug = (
@@ -400,8 +589,101 @@ export const useDeleteCapsulesSlug = <TError = ErrorType<ErrorResponse>,
       return useMutation(mutationOptions, queryClient);
     }
     /**
+ * 특정 캡슐의 최신 messageCount를 SSE로 구독합니다. 연결 직후 현재 count를 1회 전송하고 이후 변경 시마다 같은 이벤트를 push합니다.
+ * @summary messageCount SSE 구독❤️
+ */
+export const getCapsulesSlugMessageCountStream = (
+    slug: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<MessageCountStreamResponse>(
+      {url: `/capsules/${slug}/message-count/stream`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetCapsulesSlugMessageCountStreamQueryKey = (slug?: string,) => {
+    return [
+    `/capsules/${slug}/message-count/stream`
+    ] as const;
+    }
+
+    
+export const getGetCapsulesSlugMessageCountStreamQueryOptions = <TData = Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError = ErrorType<ErrorResponse>>(slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCapsulesSlugMessageCountStreamQueryKey(slug);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>> = ({ signal }) => getCapsulesSlugMessageCountStream(slug, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(slug), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCapsulesSlugMessageCountStreamQueryResult = NonNullable<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>>
+export type GetCapsulesSlugMessageCountStreamQueryError = ErrorType<ErrorResponse>
+
+
+export function useGetCapsulesSlugMessageCountStream<TData = Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError = ErrorType<ErrorResponse>>(
+ slug: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>,
+          TError,
+          Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCapsulesSlugMessageCountStream<TData = Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError = ErrorType<ErrorResponse>>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>,
+          TError,
+          Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCapsulesSlugMessageCountStream<TData = Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError = ErrorType<ErrorResponse>>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary messageCount SSE 구독❤️
+ */
+
+export function useGetCapsulesSlugMessageCountStream<TData = Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError = ErrorType<ErrorResponse>>(
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCapsulesSlugMessageCountStream>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCapsulesSlugMessageCountStreamQueryOptions(slug,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+/**
  * 캡슐 관리자 비밀번호를 검증합니다.
- * @summary 관리자 비밀번호 확인
+ * @summary 관리자 비밀번호 확인❤️
  */
 export const postCapsulesSlugVerify = (
     slug: string,
@@ -450,7 +732,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type PostCapsulesSlugVerifyMutationError = ErrorType<ErrorResponse>
 
     /**
- * @summary 관리자 비밀번호 확인
+ * @summary 관리자 비밀번호 확인❤️
  */
 export const usePostCapsulesSlugVerify = <TError = ErrorType<ErrorResponse>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postCapsulesSlugVerify>>, TError,{slug: string;data: BodyType<VerifyCapsulePasswordRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}

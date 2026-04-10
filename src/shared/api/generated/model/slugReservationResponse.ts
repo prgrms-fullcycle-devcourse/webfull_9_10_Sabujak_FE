@@ -15,5 +15,6 @@ export interface SlugReservationResponse {
    */
   slug: string;
   reservationToken: string;
+  reservationSessionToken: string;
   reservedUntil: string;
 }

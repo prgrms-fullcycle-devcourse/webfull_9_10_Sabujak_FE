@@ -1,19 +1,41 @@
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getCapsulesStats } from "../shared/api/generated/capsule/capsule";
+import type { CapsuleStatsResponse } from "../shared/api/generated/model/capsuleStatsResponse";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, Field, Input } from "../shared/components/ui";
-import { useState } from "react";
-import MainPageBackground from "./MainPageBackground";
 import {
   buildCapsuleDetailPath,
   extractCapsuleSlug,
 } from "../shared/utils/routes";
+import MainPageBackground from "./MainPageBackground";
 import "./MainPage.css";
+
+const INITIAL_STATS: CapsuleStatsResponse = {
+  totalCapsuleCount: 0,
+  totalMessageCount: 0,
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === "object" && value !== null;
+};
+
+const isCapsuleStatsResponse = (
+  value: unknown
+): value is CapsuleStatsResponse => {
+  return (
+    isRecord(value) &&
+    typeof value.totalCapsuleCount === "number" &&
+    typeof value.totalMessageCount === "number"
+  );
+};
 import { slugSchema } from "../shared/schemas";
 import { useModalStore } from "../shared/store";
 
 export default function MainPage() {
   const navigate = useNavigate();
   const [capsuleInfo, setCapsuleInfo] = useState("");
+  const [stats, setStats] = useState<CapsuleStatsResponse>(INITIAL_STATS);
   const { openModal } = useModalStore();
 
   const verifyCapsuleSlug = slugSchema.safeParse(capsuleInfo);
@@ -21,10 +43,75 @@ export default function MainPage() {
     ? verifyCapsuleSlug.error.flatten().formErrors[0]
     : "";
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadInitialStats = async () => {
+      try {
+        const data = await getCapsulesStats();
+
+        if (!cancelled) {
+          setStats(data);
+        }
+      } catch (error) {
+        console.error("Failed to load capsule stats", error);
+      }
+    };
+
+    void loadInitialStats();
+
+    const apiBaseUrl = import.meta.env.VITE_API_URL ?? window.location.origin;
+    const eventSource = new EventSource(
+      new URL("/capsules/stats/stream", apiBaseUrl).toString()
+    );
+
+    const handleStatsMessage = (event: MessageEvent<string>) => {
+      if (cancelled) {
+        return;
+      }
+
+      try {
+        const parsed: unknown = JSON.parse(event.data);
+
+        if (!isCapsuleStatsResponse(parsed)) {
+          return;
+        }
+
+        setStats(parsed);
+      } catch (error) {
+        console.error("Failed to parse capsule stats SSE payload", error);
+      }
+    };
+
+    eventSource.onmessage = handleStatsMessage;
+    eventSource.addEventListener(
+      "capsuleStats",
+      handleStatsMessage as EventListener
+    );
+
+    eventSource.onerror = (error) => {
+      console.error("capsule stats SSE error", error);
+    };
+
+    return () => {
+      cancelled = true;
+      eventSource.removeEventListener(
+        "capsuleStats",
+        handleStatsMessage as EventListener
+      );
+      eventSource.close();
+    };
+  }, []);
+
+  const totalCapsuleCount = stats.totalCapsuleCount;
+  const totalMessageCount = stats.totalMessageCount;
+
   const slugCheckField =
     capsuleInfo.length === 0 ? "" : verifyCapsuleSlug.success ? "" : "error";
 
-  const slugFieldMessage = capsuleInfo.length === 0 ? "" : slugError;
+  const slugFieldMessage = slugError;
+
+const totalCapsuleMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${totalMessageCount}개의 마음이 모였어요!!`
 
   const isButtonDisabled = !verifyCapsuleSlug.success;
 
@@ -77,6 +164,7 @@ export default function MainPage() {
             id="roomTitle"
             message={slugFieldMessage}
             messageStatus={slugCheckField}
+            helperText={totalCapsuleMessage}
           >
             <Input
               placeholder="방 코드를 입력해 주세요"
@@ -88,6 +176,7 @@ export default function MainPage() {
           </Field>
           <Button
             variant="secondary"
+            enterFlow={true}
             disabled={isButtonDisabled}
             onClick={() => {
               if (!verifyCapsuleSlug.success) {

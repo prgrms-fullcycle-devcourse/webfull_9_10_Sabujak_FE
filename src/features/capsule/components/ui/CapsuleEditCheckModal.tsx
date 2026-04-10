@@ -33,13 +33,6 @@ export const CapsuleEditCheckModal = ({
 
   const isButtonDisabled = !verifyPassword.success;
 
-  const handleEnterDown = (e: React.KeyboardEvent) => {
-    if (e.nativeEvent.isComposing) return;
-    if (e.key === "Enter" && !isButtonDisabled) {
-      void handleSubmit();
-    }
-  };
-
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
@@ -110,7 +103,6 @@ export const CapsuleEditCheckModal = ({
               value={password}
               maxLength={4}
               onChange={handlePasswordChange}
-              onKeyDown={handleEnterDown}
             />
           </Field>
         </div>
@@ -119,6 +111,7 @@ export const CapsuleEditCheckModal = ({
       <footer className="mt-auto flex w-full flex-col items-center">
         <Button
           type="submit"
+          enterFlow={true}
           className="w-full"
           disabled={isButtonDisabled}
           onClick={() => {

@@ -202,9 +202,8 @@ export default function CreateCapsulePage() {
       bottomArea={
         <Button
           variant="primary"
-          onClick={() => {
-            void handleCreateCapsule();
-          }}
+          enterFlow={true}
+          onClick={() => void handleCreateCapsule()}
           disabled={isButtonDisabled}
         >
           {isCreating ? "생성 중..." : "우리의 방 만들기"}
@@ -246,6 +245,7 @@ export default function CreateCapsulePage() {
               <Button
                 variant="sm"
                 onClick={() => void handleCheckSlug()}
+                enterFlow={true}
                 disabled={isCheckingSlug || !slug.trim()}
               >
                 {isCheckingSlug ? "확인 중" : "중복 확인"}

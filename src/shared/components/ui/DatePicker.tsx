@@ -72,6 +72,7 @@ export function DatePicker({ id, value, onChange, placeholder, onKeyDown }: Date
       maxDate={maxDate}
       shouldCloseOnSelect={false}
       showTimeInput
+      customTimeInput={<CustomTimeInput />}
       placeholderText={placeholder ?? "날짜 선택"}
       popperClassName="z-50"
       wrapperClassName="w-full"
@@ -92,5 +93,24 @@ export function DatePicker({ id, value, onChange, placeholder, onKeyDown }: Date
         </Button>
       </div>
     </ReactDatePicker>
+  );
+}
+
+interface TimeInputProps {
+  value?: string;
+  onChange?: (time: string) => void;
+}
+
+function CustomTimeInput({ value, onChange }: TimeInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <input
+      ref={inputRef}
+      type="time"
+      value={value}
+      onChange={(e) => onChange?.(e.target.value)}
+      onClick={() => inputRef.current?.showPicker()}
+    />
   );
 }

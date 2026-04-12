@@ -13,6 +13,7 @@ export const createCapsuleBodySchema = z.object({
   password: passwordSchema,
   openAt: isoDateTimeStringSchema,
   reservationToken: z.string(),
+  reservationSessionToken: z.string().optional(),
 });
 
 export const createCapsuleResponseSchema = capsuleBaseResponseSchema;

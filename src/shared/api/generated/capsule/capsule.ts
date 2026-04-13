@@ -459,7 +459,7 @@ export function useGetCapsulesSlug<TData = Awaited<ReturnType<typeof getCapsules
 
 
 /**
- * 관리자 비밀번호 검증 후 캡슐 제목과 공개 시각을 수정합니다. openAt은 현재 시각 이후여야 하며, 변경 시 expiresAt을 함께 재계산합니다. 동시 수정/삭제 충돌이 있더라도 서버 오류 대신 현재 상태를 다시 판정해 404/409/410으로 응답합니다.
+ * 관리자 비밀번호 검증 후 캡슐 제목과 공개 시각을 수정합니다. openAt은 현재 시각 이후여야 하며, 변경 시 expiresAt을 함께 재계산합니다. 수정 충돌은 version 기반 optimistic locking으로 감지하며, 409 응답 후 최신값은 재조회로 갱신합니다.
  * @summary 캡슐 수정❤️
  */
 export const patchCapsulesSlug = (

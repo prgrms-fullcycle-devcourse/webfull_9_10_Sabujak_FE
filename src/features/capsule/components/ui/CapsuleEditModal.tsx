@@ -21,6 +21,7 @@ interface CapsuleEditModalProps {
   getRoomName: string;
   getOpenDate: Date;
   reloadCapsuleData?: () => Promise<void>;
+  version: number;
 }
 
 export const CapsuleEditModal = ({
@@ -29,6 +30,7 @@ export const CapsuleEditModal = ({
   getRoomName,
   getOpenDate,
   reloadCapsuleData,
+  version,
 }: CapsuleEditModalProps) => {
   const [openDate, setOpenDate] = useState<Date | null>(getOpenDate);
   const [roomName, setRoomName] = useState<string>(getRoomName);
@@ -40,6 +42,7 @@ export const CapsuleEditModal = ({
     password: password,
     title: roomName,
     openAt: openDate?.toISOString(),
+    version : version
   });
 
   const fieldErrors = !verifyCapsuleEdit.success
@@ -91,6 +94,7 @@ export const CapsuleEditModal = ({
         password,
         title: roomName.trim(),
         openAt: openDate?.toISOString() ?? "",
+        version
       });
       stopLoading();
       openModal({

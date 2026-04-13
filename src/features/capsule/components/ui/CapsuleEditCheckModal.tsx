@@ -12,6 +12,7 @@ interface CapsuleEditCheckModalProps {
   getRoomName?: string;
   getOpenDate?: Date;
   reloadCapsuleData?: () => Promise<void>;
+  version?: number;
 }
 
 export const CapsuleEditCheckModal = ({
@@ -19,6 +20,7 @@ export const CapsuleEditCheckModal = ({
   getRoomName = "",
   getOpenDate = new Date(),
   reloadCapsuleData,
+  version = 0,
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
@@ -28,7 +30,8 @@ export const CapsuleEditCheckModal = ({
   const passwordErrorMessage = !verifyPassword.success
     ? verifyPassword.error.flatten().fieldErrors.password?.[0]
     : "";
-  const fieldPasswordState = password.length === 0 ? "" : verifyPassword.success ? "" : "error";
+  const fieldPasswordState =
+    password.length === 0 ? "" : verifyPassword.success ? "" : "error";
   const fieldPasswordMessage = passwordErrorMessage;
 
   const isButtonDisabled = !verifyPassword.success;
@@ -62,6 +65,7 @@ export const CapsuleEditCheckModal = ({
             getRoomName={getRoomName}
             getOpenDate={getOpenDate}
             reloadCapsuleData={reloadCapsuleData}
+            version={version}
           />
         ),
         option: "capsuleEditModal",

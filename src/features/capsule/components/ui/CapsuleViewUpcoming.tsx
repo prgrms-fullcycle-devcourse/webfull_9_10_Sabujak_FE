@@ -78,6 +78,7 @@ export default function CapsuleViewUpcoming({
                     getRoomName={title}
                     getOpenDate={new Date(openAt)}
                     reloadCapsuleData={reloadCapsuleData}
+                    version={room.version}
                   />
                 ),
                 option: "capsuleEditCheckModal",

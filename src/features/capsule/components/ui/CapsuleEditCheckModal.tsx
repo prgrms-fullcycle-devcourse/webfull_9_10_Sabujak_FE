@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Button, Field, Input } from "../../../../shared/components/ui";
 import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
@@ -7,11 +7,17 @@ import { getErrorMessage } from "../../../../shared/utils/error";
 import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 import { verifyPasswordBodySchema } from "../../../../shared/schemas";
 
+type ReloadCapsuleDataResult = {
+  title: string;
+  openAt: string;
+  version: number;
+} | null;
+
 interface CapsuleEditCheckModalProps {
   slug: string;
   getRoomName?: string;
   getOpenDate?: Date;
-  reloadCapsuleData?: () => Promise<void>;
+  reloadCapsuleData?: () => Promise<ReloadCapsuleDataResult>;
   version?: number;
 }
 
@@ -65,7 +71,7 @@ export const CapsuleEditCheckModal = ({
             getRoomName={getRoomName}
             getOpenDate={getOpenDate}
             reloadCapsuleData={reloadCapsuleData}
-            version={version}
+            getVersion={version}
           />
         ),
         option: "capsuleEditModal",
@@ -73,11 +79,10 @@ export const CapsuleEditCheckModal = ({
     } catch (error) {
       stopLoading();
       openModal({
-        title: "비밀번호 체크에 실패했어요!",
+        title: "비밀번호 체크가 실패했어요",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
-      return;
     }
   };
 
@@ -89,7 +94,7 @@ export const CapsuleEditCheckModal = ({
             방장 권한 확인
           </h1>
           <p className="mt-4 text-base font-medium leading-6 text-neutral-400">
-            비밀번호 4자리를 입력해 주세요.
+            비밀번호 4자리를 입력해 주세요
           </p>
         </div>
 

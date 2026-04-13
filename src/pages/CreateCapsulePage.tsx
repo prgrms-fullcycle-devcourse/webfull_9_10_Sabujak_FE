@@ -270,7 +270,7 @@ export default function CreateCapsulePage() {
           reservationSessionToken: nextReservationSessionToken || undefined,
         },
       });
-
+      stopLoading();
       setReservationToken(response.reservationToken);
       setReservationSessionToken(response.reservationSessionToken);
       setReservedSlug(response.slug);
@@ -294,14 +294,14 @@ export default function CreateCapsulePage() {
           return next;
         });
       }
-
+      stopLoading();
+      
       resetSlugReservation();
       setSlugMessage(getErrorMessage(error));
       setSlugMessageStatus("error");
     } finally {
       isCheckingSlugRef.current = false;
       setIsCheckingSlug(false);
-      stopLoading();
     }
   };
 
@@ -352,14 +352,15 @@ export default function CreateCapsulePage() {
       clearSessionCache(trimmedSlug);
       setReservationSessionToken("");
       resetSlugReservation();
-
+      
+      stopLoading();
       // 생성 성공 후 확인 버튼을 누르면 상세 페이지로 이동한다.
       openNoticeModal("타임캡슐이 생성되었습니다.", () => {
         void navigate(buildCapsuleDetailPath(response.slug));
       });
     } catch (error) {
       const errorCode = getErrorCode(error);
-
+      
       if (errorCode === "SLUG_RESERVATION_MISMATCH" || errorCode === "SLUG_ALREADY_IN_USE") {
         // 예약이 깨졌거나 이미 사용 중인 slug면 캐시도 함께 비운다.
         clearSessionCache(trimmedSlug);
@@ -367,18 +368,18 @@ export default function CreateCapsulePage() {
         resetSlugReservation();
         setSlugMessage(
           errorCode === "SLUG_ALREADY_IN_USE"
-            ? "이미 사용 중인 주소입니다. 다른 주소를 입력해 주세요."
-            : "슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.",
+          ? "이미 사용 중인 주소입니다. 다른 주소를 입력해 주세요."
+          : "슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.",
         );
         setSlugMessageStatus("error");
         return;
       }
-
+      
+      stopLoading();
       openNoticeModal(getErrorMessage(error));
     } finally {
       isCreatingRef.current = false;
       setIsCreating(false);
-      stopLoading();
     }
   };
 

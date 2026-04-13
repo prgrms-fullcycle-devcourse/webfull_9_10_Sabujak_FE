@@ -8,7 +8,7 @@ import {
   Field,
   DatePicker,
 } from "../../../../shared/components/ui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ interface CapsuleEditModalProps {
   password: string;
   getRoomName: string;
   getOpenDate: Date;
+  reloadCapsuleData?: () => Promise<void>;
   version: number;
 }
 
@@ -28,6 +29,7 @@ export const CapsuleEditModal = ({
   password,
   getRoomName,
   getOpenDate,
+  reloadCapsuleData,
   version,
 }: CapsuleEditModalProps) => {
   const [openDate, setOpenDate] = useState<Date | null>(getOpenDate);
@@ -42,15 +44,18 @@ export const CapsuleEditModal = ({
     openAt: openDate?.toISOString(),
     version : version
   });
-  
-  const fieldErrors = !verifyCapsuleEdit.success ? verifyCapsuleEdit.error.flatten().fieldErrors : {}
+
+  const fieldErrors = !verifyCapsuleEdit.success
+    ? verifyCapsuleEdit.error.flatten().fieldErrors
+    : {};
 
   const {
-    password : passwordError = [],
-    title : titleError = [],
+    password: passwordError = [],
+    title: titleError = [],
     // openAt : openDateError = [],
   } = !verifyCapsuleEdit.success
-    ? verifyCapsuleEdit.error.flatten().fieldErrors : {};
+    ? verifyCapsuleEdit.error.flatten().fieldErrors
+    : {};
 
   const fieldTrue = verifyCapsuleEdit.success ? "" : "error";
   const fieldMessage = titleError[0];
@@ -60,8 +65,15 @@ export const CapsuleEditModal = ({
     setRoomName(e.target.value);
   };
 
-  const CapsuleEdit = async () => {
+  useEffect(() => {
+    setRoomName(getRoomName);
+  }, [getRoomName]);
 
+  useEffect(() => {
+    setOpenDate(getOpenDate);
+  }, [getOpenDate]);
+
+  const CapsuleEdit = async () => {
     if (!verifyCapsuleEdit.success) {
       openModal({
         title: "안내!",
@@ -84,24 +96,28 @@ export const CapsuleEditModal = ({
         openAt: openDate?.toISOString() ?? "",
         version
       });
+      stopLoading();
       openModal({
         title: "수정 성공!",
         content: <p>수정 완료되었습니다.</p>,
         option: "oneButton",
         onConfirm: [
           () => {
-            clearModals();
+            window.setTimeout(() => {
+              clearModals();
+            }, 1);
           },
         ],
       });
     } catch (error) {
+      stopLoading();
       openModal({
         title: "수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
     } finally {
-      stopLoading();
+      await reloadCapsuleData?.();
     }
   };
 
@@ -125,8 +141,7 @@ export const CapsuleEditModal = ({
     if (!verifyCapsuleEdit.success && passwordError.length > 0) {
       openModal({
         title: "안내!",
-        content: (<p>{passwordError}</p>
-        ),
+        content: <p>{passwordError}</p>,
         option: "oneButton",
       });
       return;
@@ -137,6 +152,7 @@ export const CapsuleEditModal = ({
       await deleteCapsulesSlug(slug, {
         password,
       });
+      stopLoading();
       openModal({
         title: "삭제 성공!",
         content: <p>삭제가 완료되었습니다.</p>,
@@ -149,13 +165,12 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
+      stopLoading();
       openModal({
         title: "삭제 실패",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
-    } finally {
-      stopLoading();
     }
   };
 

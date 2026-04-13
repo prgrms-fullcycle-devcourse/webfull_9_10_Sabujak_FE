@@ -60,6 +60,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
         nickname: nickname.trim(),
         content: content.trim(),
       });
+      stopLoading();
       openModal({
         title: "작성 완료",
         content: <p>편지가 배송되었습니다.</p>,
@@ -72,14 +73,13 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
         ],
       });
     } catch (error) {
+      stopLoading();
       openModal({
         title: "메세지 전송에 실패했어요!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
       return;
-    } finally {
-      stopLoading();
     }
   };
 

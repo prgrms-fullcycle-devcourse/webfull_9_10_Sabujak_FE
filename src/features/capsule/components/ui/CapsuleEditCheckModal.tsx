@@ -11,6 +11,7 @@ interface CapsuleEditCheckModalProps {
   slug: string;
   getRoomName?: string;
   getOpenDate?: Date;
+  reloadCapsuleData?: () => Promise<void>;
   version?: number;
 }
 
@@ -18,6 +19,7 @@ export const CapsuleEditCheckModal = ({
   slug,
   getRoomName = "",
   getOpenDate = new Date(),
+  reloadCapsuleData,
   version = 0,
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
@@ -53,6 +55,7 @@ export const CapsuleEditCheckModal = ({
       await postCapsulesSlugVerify(slug, {
         password,
       });
+      stopLoading();
       replaceTopModal({
         title: "캡슐 수정",
         content: (
@@ -61,20 +64,20 @@ export const CapsuleEditCheckModal = ({
             password={password}
             getRoomName={getRoomName}
             getOpenDate={getOpenDate}
+            reloadCapsuleData={reloadCapsuleData}
             version={version}
           />
         ),
         option: "capsuleEditModal",
       });
     } catch (error) {
+      stopLoading();
       openModal({
         title: "비밀번호 체크에 실패했어요!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
       return;
-    } finally {
-      stopLoading();
     }
   };
 

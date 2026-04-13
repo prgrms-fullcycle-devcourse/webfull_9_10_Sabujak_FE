@@ -3,7 +3,7 @@ import type { CapsuleDetailResponseOneOf } from "../../../../shared/api/generate
 import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
 import { WriteMessageContent } from "../../../message/components/ui/WriteMessageModal";
-import { useShare } from "../../hooks";
+import { useRoomDetail, useShare } from "../../hooks";
 import "./CapsuleViewUpcoming.css";
 import HeartJar from "../../../../shared/components/ui/HeartJar";
 import { useModalStore } from "../../../../shared/store/useModalStore";
@@ -20,7 +20,10 @@ export default function CapsuleViewUpcoming({
   room,
 }: CapsuleViewUpcomingProps) {
   const { shareUrl, canShare } = useShare();
+  const { refetch } = useRoomDetail(room.slug);
   const { openModal } = useModalStore();
+  const [title, setTitle] = useState(room.title);
+  const [openAt, setOpenAt] = useState(room.openAt);
   const [messageCount, setMessageCount] = useState<number | null>(null);
   // 상세 조회값을 기본으로 쓰고, SSE 이벤트가 오면 그 값을 우선 반영합니다.
   const displayMessageCount = messageCount ?? room.messageCount;
@@ -39,6 +42,16 @@ export default function CapsuleViewUpcoming({
     };
   }, [room.slug]);
 
+  const reloadCapsuleData = async () => {
+    const { data } = await refetch();
+    if (data?.title) {
+      setTitle(data.title);
+    }
+    if (data?.openAt) {
+      setOpenAt(data.openAt);
+    }
+  };
+
   const handleShare = async () => {
     await shareUrl({
       title: room.title,
@@ -51,7 +64,7 @@ export default function CapsuleViewUpcoming({
     <PageLayout
       header={
         <header className="flex items-center justify-between px-6 pt-4">
-          <h1 className="text-lg font-bold">{room.title}</h1>
+          <h1 className="text-lg font-bold">{title}</h1>
           <button
             type="button"
             aria-label="메뉴"
@@ -62,8 +75,9 @@ export default function CapsuleViewUpcoming({
                 content: (
                   <CapsuleEditCheckModal
                     slug={room.slug}
-                    getRoomName={room.title}
-                    getOpenDate={new Date(room.openAt)}
+                    getRoomName={title}
+                    getOpenDate={new Date(openAt)}
+                    reloadCapsuleData={reloadCapsuleData}
                     version={room.version}
                   />
                 ),
@@ -108,7 +122,7 @@ export default function CapsuleViewUpcoming({
             </p>
 
             <div className="mt-3">
-              <CapsuleCountdown targetDate={room.openAt} />
+              <CapsuleCountdown targetDate={openAt} />
             </div>
           </div>
         </div>

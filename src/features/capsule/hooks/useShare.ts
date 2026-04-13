@@ -9,13 +9,24 @@ export type ShareUrlParams = {
 };
 
 type KakaoShareOptions = {
-  objectType: "text";
-  text: string;
-  link: {
-    mobileWebUrl: string;
-    webUrl: string;
+  objectType: "feed";
+  content: {
+    title: string;
+    description: string;
+    imageUrl: string;
+    link: {
+      mobileWebUrl: string;
+      webUrl: string;
+    };
   };
-  buttonTitle: string;
+  buttons: Array<{
+    title: string;
+    link: {
+      mobileWebUrl: string;
+      webUrl: string;
+    };
+  }>;
+  installTalk?: boolean;
 };
 
 declare global {
@@ -155,13 +166,26 @@ export function useShare() {
             console.log("[share] using Kakao Share");
 
             window.Kakao?.Share.sendDefault({
-              objectType: "text",
-              text: [title, text].filter(Boolean).join("\n"),
-              link: {
-                mobileWebUrl: url,
-                webUrl: url,
+              objectType: "feed",
+              content: {
+                title,
+                description: text ?? "",
+                imageUrl: `${window.location.origin}/favicon.svg`,
+                link: {
+                  mobileWebUrl: url,
+                  webUrl: url,
+                },
               },
-              buttonTitle: "타임캡슐 보러가기",
+              buttons: [
+                {
+                  title: "타임캡슐 보러가기",
+                  link: {
+                    mobileWebUrl: url,
+                    webUrl: url,
+                  },
+                },
+              ],
+              installTalk: true,
             });
             return;
           }

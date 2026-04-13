@@ -50,6 +50,26 @@ function isKakaoAvailable() {
   return typeof window !== "undefined" && !!window.Kakao;
 }
 
+async function waitForKakaoSdk(timeoutMs = 3000) {
+  if (isKakaoAvailable()) {
+    return true;
+  }
+
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < timeoutMs) {
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, 100);
+    });
+
+    if (isKakaoAvailable()) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 function initKakao() {
   if (!isKakaoAvailable() || !import.meta.env.VITE_KAKAO_JS_KEY) {
     return false;
@@ -80,6 +100,35 @@ function fallbackCopyText(text: string) {
   return copied;
 }
 
+function isShareCancelled(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const errorName =
+    "name" in error && typeof error.name === "string" ? error.name.toLowerCase() : "";
+  const errorMessage =
+    "message" in error && typeof error.message === "string"
+      ? error.message.toLowerCase()
+      : "";
+
+  if (errorName === "aborterror") {
+    return true;
+  }
+
+  return (
+    errorName.includes("abort")
+    || errorName.includes("cancel")
+    || errorMessage.includes("abort")
+    || errorMessage.includes("cancel")
+    || errorMessage.includes("canceled")
+    || errorMessage.includes("cancelled")
+    || errorMessage.includes("share canceled")
+    || errorMessage.includes("share cancelled")
+    || errorMessage.includes("the user aborted")
+  );
+}
+
 export function useShare() {
   const canShare =
     isKakaoBrowser()
@@ -100,6 +149,8 @@ export function useShare() {
       // 카카오 브라우저에서는 Kakao Share를 먼저 시도하고, 실패하면 링크 복사로 안내한다.
       if (isKakaoBrowser()) {
         try {
+          await waitForKakaoSdk();
+
           if (initKakao()) {
             console.log("[share] using Kakao Share");
 
@@ -155,7 +206,7 @@ export function useShare() {
       console.warn("[share] clipboard API is not available");
       alert("링크 복사에 실패했어요. 다시 시도해주세요.");
     } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
+      if (isShareCancelled(error)) {
         return;
       }
 

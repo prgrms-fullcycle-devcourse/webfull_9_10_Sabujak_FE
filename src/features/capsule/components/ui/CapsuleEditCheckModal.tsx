@@ -11,12 +11,14 @@ interface CapsuleEditCheckModalProps {
   slug: string;
   getRoomName?: string;
   getOpenDate?: Date;
+  reloadCapsuleData?: () => Promise<void>;
 }
 
 export const CapsuleEditCheckModal = ({
   slug,
   getRoomName = "",
   getOpenDate = new Date(),
+  reloadCapsuleData,
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
@@ -59,6 +61,7 @@ export const CapsuleEditCheckModal = ({
             password={password}
             getRoomName={getRoomName}
             getOpenDate={getOpenDate}
+            reloadCapsuleData={reloadCapsuleData}
           />
         ),
         option: "capsuleEditModal",

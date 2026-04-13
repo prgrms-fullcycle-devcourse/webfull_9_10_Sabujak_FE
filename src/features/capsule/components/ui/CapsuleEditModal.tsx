@@ -20,6 +20,7 @@ interface CapsuleEditModalProps {
   password: string;
   getRoomName: string;
   getOpenDate: Date;
+  version: number;
 }
 
 export const CapsuleEditModal = ({
@@ -27,6 +28,7 @@ export const CapsuleEditModal = ({
   password,
   getRoomName,
   getOpenDate,
+  version,
 }: CapsuleEditModalProps) => {
   const [openDate, setOpenDate] = useState<Date | null>(getOpenDate);
   const [roomName, setRoomName] = useState<string>(getRoomName);
@@ -38,6 +40,7 @@ export const CapsuleEditModal = ({
     password: password,
     title: roomName,
     openAt: openDate?.toISOString(),
+    version : version
   });
   
   const fieldErrors = !verifyCapsuleEdit.success ? verifyCapsuleEdit.error.flatten().fieldErrors : {}
@@ -79,6 +82,7 @@ export const CapsuleEditModal = ({
         password,
         title: roomName.trim(),
         openAt: openDate?.toISOString() ?? "",
+        version
       });
       openModal({
         title: "수정 성공!",

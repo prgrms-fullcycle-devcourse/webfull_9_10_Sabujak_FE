@@ -9,24 +9,13 @@ export type ShareUrlParams = {
 };
 
 type KakaoShareOptions = {
-  objectType: "feed";
-  content: {
-    title: string;
-    description: string;
-    imageUrl: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
+  objectType: "text";
+  text: string;
+  link: {
+    mobileWebUrl: string;
+    webUrl: string;
   };
-  buttons: Array<{
-    title: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
-  }>;
-  installTalk?: boolean;
+  buttonTitle: string;
 };
 
 declare global {
@@ -157,7 +146,6 @@ export function useShare() {
       }
       // /TODO
 
-      // 카카오 브라우저에서는 Kakao Share를 먼저 시도하고, 실패하면 링크 복사로 안내한다.
       if (isKakaoBrowser()) {
         try {
           await waitForKakaoSdk();
@@ -166,26 +154,13 @@ export function useShare() {
             console.log("[share] using Kakao Share");
 
             window.Kakao?.Share.sendDefault({
-              objectType: "feed",
-              content: {
-                title,
-                description: text ?? "",
-                imageUrl: `${window.location.origin}/favicon.svg`,
-                link: {
-                  mobileWebUrl: url,
-                  webUrl: url,
-                },
+              objectType: "text",
+              text: [title, text].filter(Boolean).join("\n"),
+              link: {
+                mobileWebUrl: url,
+                webUrl: url,
               },
-              buttons: [
-                {
-                  title: "타임캡슐 보러가기",
-                  link: {
-                    mobileWebUrl: url,
-                    webUrl: url,
-                  },
-                },
-              ],
-              installTalk: true,
+              buttonTitle: "타임캡슐 보러가기",
             });
             return;
           }
@@ -214,7 +189,7 @@ export function useShare() {
 
         try {
           await navigator.clipboard.writeText(url);
-          alert("링크가 복사되었어요.");
+          alert("링크를 복사했어요.");
           return;
         } catch (clipboardError) {
           console.warn("[share] clipboard.writeText failed", clipboardError);
@@ -223,7 +198,7 @@ export function useShare() {
 
       if (fallbackCopyText(url)) {
         console.log("[share] using execCommand fallback");
-        alert("링크가 복사되었어요.");
+        alert("링크를 복사했어요.");
         return;
       }
 

@@ -8,12 +8,41 @@ export type ShareUrlParams = {
   url: string;
 };
 
+// 카카오 SDK 전역 타입 선언
+declare global {
+  interface Window {
+    Kakao: {
+      isInitialized: () => boolean;
+      init: (key: string) => void;
+      Share: {
+        sendDefault: (options: object) => void;
+      };
+    };
+  }
+}
+
 function isMobile() {
   if (typeof navigator === "undefined") {
     return false;
   }
 
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+}
+
+function isKakaoAvailable() {
+  return typeof window !== "undefined" && !!window.Kakao;
+}
+
+function initKakao() {
+  if (!isKakaoAvailable()) return false;
+  if (!window.Kakao.isInitialized()) {
+    window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY as string);
+  }
+  return window.Kakao.isInitialized();
+}
+
+function isKakaoBrowser() {
+  return /KAKAOTALK/i.test(navigator.userAgent);
 }
 
 function fallbackCopyText(text: string) {
@@ -47,6 +76,34 @@ export function useShare() {
         logShareDebug();
       }
       // /TODO
+
+      // 카카오 브라우저에서는 Web Share API가 동작하지 않으므로 카카오 링크를 사용한다.
+      if (isKakaoBrowser() && initKakao()) {
+        console.log("[share] using Kakao Share");
+
+        window.Kakao.Share.sendDefault({
+          objectType: "feed",
+          content: {
+            title,
+            description: text ?? "",
+            imageUrl: `${window.location.origin}/icons.svg`,
+            link: {
+              mobileWebUrl: url,
+              webUrl: url,
+            },
+          },
+          buttons: [
+            {
+              title: "타임캡슐 보러가기",
+              link: {
+                mobileWebUrl: url,
+                webUrl: url,
+              },
+            },
+          ],
+        });
+        return;
+      }
 
       if (canShare) {
         console.log("[share] using Web Share API");

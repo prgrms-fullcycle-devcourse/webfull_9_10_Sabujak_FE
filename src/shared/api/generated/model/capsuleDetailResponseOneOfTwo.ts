@@ -23,6 +23,8 @@ export type CapsuleDetailResponseOneOfTwo = {
   title: string;
   openAt: string;
   expiresAt: string;
+  /** 캡슐 수정 optimistic locking 버전 */
+  version: number;
   createdAt: string;
   updatedAt: string;
   isOpen: boolean;

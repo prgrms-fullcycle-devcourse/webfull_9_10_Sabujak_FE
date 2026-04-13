@@ -8,14 +8,23 @@ export type ShareUrlParams = {
   url: string;
 };
 
-// 카카오 SDK 전역 타입 선언
+type KakaoShareOptions = {
+  objectType: "text";
+  text: string;
+  link: {
+    mobileWebUrl: string;
+    webUrl: string;
+  };
+  buttonTitle: string;
+};
+
 declare global {
   interface Window {
-    Kakao: {
+    Kakao?: {
       isInitialized: () => boolean;
       init: (key: string) => void;
       Share: {
-        sendDefault: (options: object) => void;
+        sendDefault: (options: KakaoShareOptions) => void;
       };
     };
   }
@@ -29,20 +38,28 @@ function isMobile() {
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 }
 
+function isKakaoBrowser() {
+  if (typeof navigator === "undefined") {
+    return false;
+  }
+
+  return /KAKAOTALK/i.test(navigator.userAgent);
+}
+
 function isKakaoAvailable() {
   return typeof window !== "undefined" && !!window.Kakao;
 }
 
 function initKakao() {
-  if (!isKakaoAvailable()) return false;
-  if (!window.Kakao.isInitialized()) {
-    window.Kakao.init(import.meta.env.VITE_KAKAO_JS_KEY as string);
+  if (!isKakaoAvailable() || !import.meta.env.VITE_KAKAO_JS_KEY) {
+    return false;
   }
-  return window.Kakao.isInitialized();
-}
 
-function isKakaoBrowser() {
-  return /KAKAOTALK/i.test(navigator.userAgent);
+  if (!window.Kakao?.isInitialized()) {
+    window.Kakao?.init(import.meta.env.VITE_KAKAO_JS_KEY);
+  }
+
+  return !!window.Kakao?.isInitialized();
 }
 
 function fallbackCopyText(text: string) {
@@ -65,9 +82,12 @@ function fallbackCopyText(text: string) {
 
 export function useShare() {
   const canShare =
-    typeof navigator !== "undefined"
-    && typeof navigator.share === "function"
-    && isMobile();
+    isKakaoBrowser()
+    || (
+      typeof navigator !== "undefined"
+      && typeof navigator.share === "function"
+      && isMobile()
+    );
 
   const shareUrl = async ({ title, text, url }: ShareUrlParams) => {
     try {
@@ -77,35 +97,33 @@ export function useShare() {
       }
       // /TODO
 
-      // 카카오 브라우저에서는 Web Share API가 동작하지 않으므로 카카오 링크를 사용한다.
-      if (isKakaoBrowser() && initKakao()) {
-        console.log("[share] using Kakao Share");
+      // 카카오 브라우저에서는 Kakao Share를 먼저 시도하고, 실패하면 링크 복사로 안내한다.
+      if (isKakaoBrowser()) {
+        try {
+          if (initKakao()) {
+            console.log("[share] using Kakao Share");
 
-        window.Kakao.Share.sendDefault({
-          objectType: "feed",
-          content: {
-            title,
-            description: text ?? "",
-            imageUrl: `${window.location.origin}/icons.svg`,
-            link: {
-              mobileWebUrl: url,
-              webUrl: url,
-            },
-          },
-          buttons: [
-            {
-              title: "타임캡슐 보러가기",
+            window.Kakao?.Share.sendDefault({
+              objectType: "text",
+              text: [title, text].filter(Boolean).join("\n"),
               link: {
                 mobileWebUrl: url,
                 webUrl: url,
               },
-            },
-          ],
-        });
-        return;
+              buttonTitle: "타임캡슐 보러가기",
+            });
+            return;
+          }
+        } catch (error) {
+          console.warn("[share] Kakao Share failed, falling back to copy", error);
+        }
       }
 
-      if (canShare) {
+      if (
+        typeof navigator !== "undefined"
+        && typeof navigator.share === "function"
+        && isMobile()
+      ) {
         console.log("[share] using Web Share API");
 
         await navigator.share({
@@ -137,6 +155,10 @@ export function useShare() {
       console.warn("[share] clipboard API is not available");
       alert("링크 복사에 실패했어요. 다시 시도해주세요.");
     } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
       console.error("[share] failed", error);
       alert("공유에 실패했어요. 다시 시도해주세요.");
     }

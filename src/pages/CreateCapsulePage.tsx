@@ -7,7 +7,6 @@ import {
 } from "../shared/api/generated/capsule/capsule";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, DatePicker, Field, Input } from "../shared/components/ui";
-import { useLoadingStore } from "../shared/store/useLoadingStore";
 import { useModalStore } from "../shared/store/useModalStore";
 import { getErrorMessage } from "../shared/utils/error";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
@@ -76,7 +75,6 @@ function getErrorCode(error: unknown) {
 
 export default function CreateCapsulePage() {
   const navigate = useNavigate();
-  const { startLoading, stopLoading } = useLoadingStore();
   const { openModal } = useModalStore();
   const slugReservationMutation = usePostCapsulesSlugReservations();
   const createCapsuleMutation = usePostCapsules();
@@ -260,7 +258,6 @@ export default function CreateCapsulePage() {
 
     isCheckingSlugRef.current = true;
     setIsCheckingSlug(true);
-    startLoading();
 
     try {
       // 같은 생성 흐름을 이어가기 위해 reservationSessionToken을 함께 보낸다.
@@ -270,7 +267,6 @@ export default function CreateCapsulePage() {
           reservationSessionToken: nextReservationSessionToken || undefined,
         },
       });
-      stopLoading();
       setReservationToken(response.reservationToken);
       setReservationSessionToken(response.reservationSessionToken);
       setReservedSlug(response.slug);
@@ -294,7 +290,6 @@ export default function CreateCapsulePage() {
           return next;
         });
       }
-      stopLoading();
       
       resetSlugReservation();
       setSlugMessage(getErrorMessage(error));
@@ -333,7 +328,6 @@ export default function CreateCapsulePage() {
 
     isCreatingRef.current = true;
     setIsCreating(true);
-    startLoading();
 
     try {
       // 중복 확인에서 받은 reservationToken으로 실제 캡슐 생성 요청을 보낸다.
@@ -353,7 +347,6 @@ export default function CreateCapsulePage() {
       setReservationSessionToken("");
       resetSlugReservation();
       
-      stopLoading();
       // 생성 성공 후 확인 버튼을 누르면 상세 페이지로 이동한다.
       openNoticeModal("타임캡슐이 생성되었습니다.", () => {
         void navigate(buildCapsuleDetailPath(response.slug));
@@ -375,7 +368,6 @@ export default function CreateCapsulePage() {
         return;
       }
       
-      stopLoading();
       openNoticeModal(getErrorMessage(error));
     } finally {
       isCreatingRef.current = false;

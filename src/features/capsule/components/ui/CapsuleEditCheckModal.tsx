@@ -4,7 +4,6 @@ import { useModalStore } from "../../../../shared/store";
 import { CapsuleEditModal } from "./CapsuleEditModal";
 import { postCapsulesSlugVerify } from "../../../../shared/api/generated/capsule/capsule";
 import { getErrorMessage } from "../../../../shared/utils/error";
-import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 import { verifyPasswordBodySchema } from "../../../../shared/schemas";
 
 interface CapsuleEditCheckModalProps {
@@ -24,7 +23,6 @@ export const CapsuleEditCheckModal = ({
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
-  const { startLoading, stopLoading } = useLoadingStore();
 
   const verifyPassword = verifyPasswordBodySchema.safeParse({ password });
   const passwordErrorMessage = !verifyPassword.success
@@ -50,12 +48,10 @@ export const CapsuleEditCheckModal = ({
       return;
     }
 
-    startLoading();
     try {
       await postCapsulesSlugVerify(slug, {
         password,
       });
-      stopLoading();
       replaceTopModal({
         title: "캡슐 수정",
         content: (
@@ -71,7 +67,6 @@ export const CapsuleEditCheckModal = ({
         option: "capsuleEditModal",
       });
     } catch (error) {
-      stopLoading();
       openModal({
         title: "비밀번호 체크에 실패했어요!",
         content: <p>{getErrorMessage(error)}</p>,

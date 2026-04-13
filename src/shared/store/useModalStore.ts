@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { useDimStore } from "./useDimStore";
 
 export type ModalOption =
   | "writeMessage"
@@ -33,11 +32,6 @@ interface OpenModalProps {
   onConfirm?: Array<(data?: unknown) => void>;
 }
 
-const syncDimState = (modalCount: number) => {
-  const { setModalCount } = useDimStore.getState();
-  setModalCount(modalCount);
-};
-
 export const useModalStore = create<ModalState>((set) => ({
   modals: [],
 
@@ -55,15 +49,12 @@ export const useModalStore = create<ModalState>((set) => ({
         },
       ];
 
-      syncDimState(nextModals.length);
-
       return { modals: nextModals };
     }),
 
   closeModal: (id: string) => {
     set((state) => {
       const nextModals = state.modals.filter((modal) => modal.id !== id);
-      syncDimState(nextModals.length);
 
       return { modals: nextModals };
     });
@@ -88,13 +79,10 @@ export const useModalStore = create<ModalState>((set) => ({
         onConfirm: props.onConfirm,
       };
 
-      syncDimState(nextModals.length);
-
       return { modals: nextModals };
     }),
 
   clearModals: () => {
-    syncDimState(0);
     set({ modals: [] });
   },
 }));

@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
-import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 import { updateCapsuleBodySchema } from "../../../../shared/schemas";
 
 interface CapsuleEditModalProps {
@@ -36,7 +35,6 @@ export const CapsuleEditModal = ({
   const [roomName, setRoomName] = useState<string>(getRoomName);
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
-  const { startLoading, stopLoading } = useLoadingStore();
 
   const verifyCapsuleEdit = updateCapsuleBodySchema.safeParse({
     password: password,
@@ -88,7 +86,6 @@ export const CapsuleEditModal = ({
       return;
     }
 
-    startLoading();
     try {
       await patchCapsulesSlug(slug, {
         password,
@@ -96,7 +93,6 @@ export const CapsuleEditModal = ({
         openAt: openDate?.toISOString() ?? "",
         version
       });
-      stopLoading();
       openModal({
         title: "수정 성공!",
         content: <p>수정 완료되었습니다.</p>,
@@ -110,7 +106,6 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
-      stopLoading();
       openModal({
         title: "수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
@@ -147,12 +142,10 @@ export const CapsuleEditModal = ({
       return;
     }
 
-    startLoading();
     try {
       await deleteCapsulesSlug(slug, {
         password,
       });
-      stopLoading();
       openModal({
         title: "삭제 성공!",
         content: <p>삭제가 완료되었습니다.</p>,
@@ -165,7 +158,6 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
-      stopLoading();
       openModal({
         title: "삭제 실패",
         content: <p>{getErrorMessage(error)}</p>,

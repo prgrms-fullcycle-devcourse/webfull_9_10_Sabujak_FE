@@ -8,7 +8,6 @@ import {
 } from "../../../../shared/components/ui/index";
 import { postCapsulesSlugMessages } from "../../../../shared/api/generated/message/message";
 import { getErrorMessage } from "../../../../shared/utils/error";
-import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 import { createMessageBodySchema } from "../../../../shared/schemas";
 
 interface WriteMessageModalProps {
@@ -19,7 +18,6 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   const { openModal, clearModals } = useModalStore();
   const [nickname, setNickname] = useState("");
   const [content, setContent] = useState("");
-  const { startLoading, stopLoading } = useLoadingStore();
   const textMaxLength = 1000;
 
   const verifyWriteMessage = createMessageBodySchema.safeParse({
@@ -54,13 +52,11 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   };
 
   const MessageSend = async () => {
-    startLoading();
     try {
       await postCapsulesSlugMessages(slug, {
         nickname: nickname.trim(),
         content: content.trim(),
       });
-      stopLoading();
       openModal({
         title: "작성 완료",
         content: <p>편지가 배송되었습니다.</p>,
@@ -73,7 +69,6 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
         ],
       });
     } catch (error) {
-      stopLoading();
       openModal({
         title: "메세지 전송에 실패했어요!",
         content: <p>{getErrorMessage(error)}</p>,

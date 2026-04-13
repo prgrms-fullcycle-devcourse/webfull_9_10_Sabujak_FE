@@ -66,6 +66,10 @@ export const CapsuleEditModal = ({
     setRoomName(getRoomName);
   }, [getRoomName]);
 
+  useEffect(() => {
+    setOpenDate(getOpenDate);
+  }, [getOpenDate]);
+
   const CapsuleEdit = async () => {
     if (!verifyCapsuleEdit.success) {
       openModal({
@@ -109,11 +113,7 @@ export const CapsuleEditModal = ({
         option: "oneButton",
       });
     } finally {
-      const newData = await reloadCapsuleData?.();
-      if (newData) {
-        setRoomName(getRoomName);
-        setOpenDate(getOpenDate);
-      }
+      await reloadCapsuleData?.();
     }
   };
 

@@ -18,6 +18,9 @@ type KakaoShareOptions = {
   buttonTitle: string;
 };
 
+const KAKAO_JS_KEY =
+  import.meta.env.VITE_KAKAO_JS_KEY || "77aadabd1ac74f1b5321f572c20397a0";
+
 declare global {
   interface Window {
     Kakao?: {
@@ -71,12 +74,12 @@ async function waitForKakaoSdk(timeoutMs = 3000) {
 }
 
 function initKakao() {
-  if (!isKakaoAvailable() || !import.meta.env.VITE_KAKAO_JS_KEY) {
+  if (!isKakaoAvailable() || !KAKAO_JS_KEY) {
     return false;
   }
 
   if (!window.Kakao?.isInitialized()) {
-    window.Kakao?.init(import.meta.env.VITE_KAKAO_JS_KEY);
+    window.Kakao?.init(KAKAO_JS_KEY);
   }
 
   return !!window.Kakao?.isInitialized();

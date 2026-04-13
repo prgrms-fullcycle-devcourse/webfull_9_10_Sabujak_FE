@@ -44,9 +44,6 @@ jobs:
       - name: Generate Orval client
         run: pnpm orval
 
-      - name: Build project
-        run: pnpm build
-
       - name: Fetch backend OpenAPI snapshots
         id: backend-openapi
         shell: bash

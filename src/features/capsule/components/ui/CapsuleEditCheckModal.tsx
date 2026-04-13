@@ -50,6 +50,7 @@ export const CapsuleEditCheckModal = ({
       await postCapsulesSlugVerify(slug, {
         password,
       });
+      stopLoading();
       replaceTopModal({
         title: "캡슐 수정",
         content: (
@@ -63,14 +64,13 @@ export const CapsuleEditCheckModal = ({
         option: "capsuleEditModal",
       });
     } catch (error) {
+      stopLoading();
       openModal({
         title: "비밀번호 체크에 실패했어요!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
       return;
-    } finally {
-      stopLoading();
     }
   };
 

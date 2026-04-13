@@ -80,24 +80,32 @@ export const CapsuleEditModal = ({
         title: roomName.trim(),
         openAt: openDate?.toISOString() ?? "",
       });
+      stopLoading();
       openModal({
         title: "수정 성공!",
         content: <p>수정 완료되었습니다.</p>,
         option: "oneButton",
         onConfirm: [
           () => {
-            clearModals();
+            window.setTimeout(() => {
+              clearModals();
+            }, 1);
           },
         ],
       });
     } catch (error) {
+      stopLoading();
       openModal({
         title: "수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
     } finally {
-      stopLoading();
+      const newData = await reloadCapsuleData?.();
+      if (newData) {
+        setRoomName(getRoomName);
+        setOpenDate(getOpenDate);
+      }
     }
   };
 
@@ -133,6 +141,7 @@ export const CapsuleEditModal = ({
       await deleteCapsulesSlug(slug, {
         password,
       });
+      stopLoading();
       openModal({
         title: "삭제 성공!",
         content: <p>삭제가 완료되었습니다.</p>,
@@ -145,13 +154,12 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
+      stopLoading();
       openModal({
         title: "삭제 실패",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
-    } finally {
-      stopLoading();
     }
   };
 

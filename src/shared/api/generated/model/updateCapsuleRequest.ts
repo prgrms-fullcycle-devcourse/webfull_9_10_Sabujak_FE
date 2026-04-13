@@ -14,6 +14,12 @@ export interface UpdateCapsuleRequest {
    * @maxLength 100
    */
   title: string;
+  /**
+   * 조회 시점의 캡슐 수정 버전
+   * @minimum 0
+   * @exclusiveMinimum
+   */
+  version: number;
   /** 현재 시각 이후의 공개 예정 시각(ISO 8601) */
   openAt: string;
 }

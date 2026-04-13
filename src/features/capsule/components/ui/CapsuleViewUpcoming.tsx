@@ -64,6 +64,7 @@ export default function CapsuleViewUpcoming({
                     slug={room.slug}
                     getRoomName={room.title}
                     getOpenDate={new Date(room.openAt)}
+                    version={room.version}
                   />
                 ),
                 option: "capsuleEditCheckModal",

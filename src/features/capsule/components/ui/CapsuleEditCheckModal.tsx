@@ -11,12 +11,14 @@ interface CapsuleEditCheckModalProps {
   slug: string;
   getRoomName?: string;
   getOpenDate?: Date;
+  version?: number;
 }
 
 export const CapsuleEditCheckModal = ({
   slug,
   getRoomName = "",
   getOpenDate = new Date(),
+  version = 0,
 }: CapsuleEditCheckModalProps) => {
   const [password, setPassword] = useState("");
   const { openModal, replaceTopModal } = useModalStore();
@@ -26,7 +28,8 @@ export const CapsuleEditCheckModal = ({
   const passwordErrorMessage = !verifyPassword.success
     ? verifyPassword.error.flatten().fieldErrors.password?.[0]
     : "";
-  const fieldPasswordState = password.length === 0 ? "" : verifyPassword.success ? "" : "error";
+  const fieldPasswordState =
+    password.length === 0 ? "" : verifyPassword.success ? "" : "error";
   const fieldPasswordMessage = passwordErrorMessage;
 
   const isButtonDisabled = !verifyPassword.success;
@@ -58,6 +61,7 @@ export const CapsuleEditCheckModal = ({
             password={password}
             getRoomName={getRoomName}
             getOpenDate={getOpenDate}
+            version={version}
           />
         ),
         option: "capsuleEditModal",

@@ -109,7 +109,7 @@ export default function MainPage() {
   const slugCheckField =
     capsuleInfo.length === 0 ? "" : verifyCapsuleSlug.success ? "" : "error";
 
-  const slugFieldMessage = slugError;
+  const slugFieldMessage = capsuleInfo.length === 0 ? "" : slugError;
 
 const totalCapsuleMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${totalMessageCount}개의 마음이 모였어요!!`
 

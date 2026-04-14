@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { CapsuleDetailResponseOneOf } from "../../../../shared/api/generated/model";
 import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
@@ -6,6 +6,7 @@ import { WriteMessageContent } from "../../../message/components/ui/WriteMessage
 import { useShare } from "../../hooks";
 import "./CapsuleViewUpcoming.css";
 import HeartJar from "../../../../shared/components/ui/HeartJar";
+import logoImage from "../../../../assets/images/common/logo.png";
 import { useModalStore } from "../../../../shared/store/useModalStore";
 import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";
 import CapsuleCountdown from "./CapsuleCountdown";
@@ -83,28 +84,39 @@ export default function CapsuleViewUpcoming({
   return (
     <PageLayout
       header={
-        <header className="flex items-center justify-between px-6 pt-4">
-          <h1 className="text-lg font-bold">{title}</h1>
-          <button
-            type="button"
-            aria-label="메뉴"
-            className="btn-menu h-10 w-10"
-            onClick={() =>
-              openModal({
-                title: "어드민 체크",
-                content: (
-                  <CapsuleEditCheckModal
-                    slug={room.slug}
-                    getRoomName={title}
-                    getOpenDate={new Date(openAt)}
-                    reloadCapsuleData={reloadCapsuleData}
-                    version={version}
-                  />
-                ),
-                option: "capsuleEditCheckModal",
-              })
-            }
-          />
+        <header className="px-6 pt-5">
+
+          <div className="relative flex min-h-10 items-center justify-center">
+            <h1 className="flex justify-center">
+              <img
+                src={logoImage}
+                alt="SABUJAK"
+                aria-hidden="true"
+                className="h-10 w-auto object-contain"
+              />
+            </h1>
+
+            <button
+              type="button"
+              aria-label="메뉴"
+              className="btn-menu absolute right-0 h-10 w-10"
+              onClick={() =>
+                openModal({
+                  title: "어드민 체크",
+                  content: (
+                    <CapsuleEditCheckModal
+                      slug={room.slug}
+                      getRoomName={title}
+                      getOpenDate={new Date(openAt)}
+                      reloadCapsuleData={reloadCapsuleData}
+                      version={version}
+                    />
+                  ),
+                  option: "capsuleEditCheckModal",
+                })
+              }
+            />
+          </div>
         </header>
       }
       bottomArea={
@@ -132,6 +144,7 @@ export default function CapsuleViewUpcoming({
       }
       contentClassName="flex flex-col items-center text-center"
     >
+      <h2 className="text-lg font-bold">{title}</h2>
       <div className="room-before">
         <div className="dday-wrap">
           <HeartJar total={displayMessageCount} />

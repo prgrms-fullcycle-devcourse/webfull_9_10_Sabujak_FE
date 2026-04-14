@@ -44,8 +44,8 @@ export default function PageLayout({
     const contentClassNameText = `p-6 ${header ? "" : "pt-12"} ${bottomArea ? "pb-2" : "pb-10"} ${contentClassName}`.trim();
 
     return (
-        <div className="min-h-dvh" data-enter-scope="true">
-            <div className="flex min-h-dvh w-full min-w-2xs flex-col">
+        <div className="root-inner min-h-dvh min-w-2xs" data-enter-scope="true">
+            <div className="flex min-h-dvh w-full flex-col">
                 {header ? header : null}
 
                 <main className="flex-1">

@@ -30,7 +30,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           className={`${controlClassName}`}
           data-enter-flow="true"
           onKeyDown={handleKeyDown}
-          rows={8}
+          rows={6}
           {...props}
         />
       </div>

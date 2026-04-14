@@ -1,0 +1,48 @@
+.letter-content {}
+
+.letter-content .field-control {
+  background: transparent;
+  padding: 0;
+  height: auto;
+}
+
+.letter-content .field-control :is(input, textarea) {
+  font-weight: bold;
+  /* letter-spacing: 0.15rem; */
+}
+
+.letter-content .self-stretch.relative {
+  display: flex;
+  align-items: flex-end;
+
+
+}
+
+.letter-content .self-stretch.relative+.self-stretch.relative {
+  margin-top: 2rem;
+}
+
+.letter-content .self-stretch.relative:first-child {
+  background: repeating-linear-gradient(transparent 0 calc(1.79rem - 1.5px), #eecfd7 0 1.79rem);
+}
+
+.letter-content .self-stretch.relative textarea {
+  background: repeating-linear-gradient(transparent 0 calc(1.8rem - 1.5px), #eecfd7 0 1.8rem);
+
+}
+
+.letter-content .self-stretch.relative>.flex {
+  /* flex-direction: row; */
+  width: 100%;
+}
+
+.letter {
+
+  line-height: 2;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.letter textarea {
+  line-height: 1.8rem;
+}

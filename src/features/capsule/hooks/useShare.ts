@@ -1,7 +1,3 @@
-// TODO: 공유 기능 테스트가 끝나면 삭제
-import { logShareDebug } from "../utils/shareDebug";
-// /TODO
-
 export type ShareUrlParams = {
   title: string;
   text?: string;
@@ -9,25 +5,16 @@ export type ShareUrlParams = {
 };
 
 type KakaoShareOptions = {
-  objectType: "feed";
-  content: {
-    title: string;
-    description: string;
-    imageUrl: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
+  objectType: "text";
+  text: string;
+  link: {
+    mobileWebUrl: string;
+    webUrl: string;
   };
-  buttons: Array<{
-    title: string;
-    link: {
-      mobileWebUrl: string;
-      webUrl: string;
-    };
-  }>;
-  installTalk?: boolean;
+  buttonTitle: string;
 };
+
+const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY;
 
 declare global {
   interface Window {
@@ -82,12 +69,12 @@ async function waitForKakaoSdk(timeoutMs = 3000) {
 }
 
 function initKakao() {
-  if (!isKakaoAvailable() || !import.meta.env.VITE_KAKAO_JS_KEY) {
+  if (!isKakaoAvailable() || !KAKAO_JS_KEY) {
     return false;
   }
 
   if (!window.Kakao?.isInitialized()) {
-    window.Kakao?.init(import.meta.env.VITE_KAKAO_JS_KEY);
+    window.Kakao?.init(KAKAO_JS_KEY);
   }
 
   return !!window.Kakao?.isInitialized();
@@ -151,46 +138,24 @@ export function useShare() {
 
   const shareUrl = async ({ title, text, url }: ShareUrlParams) => {
     try {
-      // TODO: 공유 기능 테스트가 끝나면 삭제
-      if (import.meta.env.DEV) {
-        logShareDebug();
-      }
-      // /TODO
-
-      // 카카오 브라우저에서는 Kakao Share를 먼저 시도하고, 실패하면 링크 복사로 안내한다.
       if (isKakaoBrowser()) {
         try {
           await waitForKakaoSdk();
 
           if (initKakao()) {
-            console.log("[share] using Kakao Share");
-
             window.Kakao?.Share.sendDefault({
-              objectType: "feed",
-              content: {
-                title,
-                description: text ?? "",
-                imageUrl: `${window.location.origin}/favicon.svg`,
-                link: {
-                  mobileWebUrl: url,
-                  webUrl: url,
-                },
+              objectType: "text",
+              text: [title, text].filter(Boolean).join("\n"),
+              link: {
+                mobileWebUrl: url,
+                webUrl: url,
               },
-              buttons: [
-                {
-                  title: "타임캡슐 보러가기",
-                  link: {
-                    mobileWebUrl: url,
-                    webUrl: url,
-                  },
-                },
-              ],
-              installTalk: true,
+              buttonTitle: "타임캡슐 보러가기",
             });
             return;
           }
-        } catch (error) {
-          console.warn("[share] Kakao Share failed, falling back to copy", error);
+        } catch {
+          // Fall through to copy fallback when Kakao sharing fails.
         }
       }
 
@@ -199,8 +164,6 @@ export function useShare() {
         && typeof navigator.share === "function"
         && isMobile()
       ) {
-        console.log("[share] using Web Share API");
-
         await navigator.share({
           title,
           text,
@@ -210,31 +173,26 @@ export function useShare() {
       }
 
       if (navigator.clipboard?.writeText) {
-        console.log("[share] using clipboard fallback");
-
         try {
           await navigator.clipboard.writeText(url);
-          alert("링크가 복사되었어요.");
+          alert("링크를 복사했어요.");
           return;
-        } catch (clipboardError) {
-          console.warn("[share] clipboard.writeText failed", clipboardError);
+        } catch {
+          // Fall through to execCommand fallback.
         }
       }
 
       if (fallbackCopyText(url)) {
-        console.log("[share] using execCommand fallback");
-        alert("링크가 복사되었어요.");
+        alert("링크를 복사했어요.");
         return;
       }
 
-      console.warn("[share] clipboard API is not available");
       alert("링크 복사에 실패했어요. 다시 시도해주세요.");
     } catch (error) {
       if (isShareCancelled(error)) {
         return;
       }
 
-      console.error("[share] failed", error);
       alert("공유에 실패했어요. 다시 시도해주세요.");
     }
   };

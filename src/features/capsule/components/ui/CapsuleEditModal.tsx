@@ -8,19 +8,25 @@ import {
   Field,
   DatePicker,
 } from "../../../../shared/components/ui";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
 import { updateCapsuleBodySchema } from "../../../../shared/schemas";
+
+type ReloadCapsuleDataResult = {
+  title: string;
+  openAt: string;
+  version: number;
+} | null;
 
 interface CapsuleEditModalProps {
   slug: string;
   password: string;
   getRoomName: string;
   getOpenDate: Date;
-  reloadCapsuleData?: () => Promise<void>;
-  version: number;
+  reloadCapsuleData?: () => Promise<ReloadCapsuleDataResult>;
+  getVersion: number;
 }
 
 export const CapsuleEditModal = ({
@@ -29,20 +35,21 @@ export const CapsuleEditModal = ({
   getRoomName,
   getOpenDate,
   reloadCapsuleData,
-  version,
+  getVersion,
 }: CapsuleEditModalProps) => {
   const [openDate, setOpenDate] = useState<Date | null>(getOpenDate);
   const [roomName, setRoomName] = useState<string>(getRoomName);
+  const [version, setVersion] = useState<number>(getVersion);
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
   const { mutateAsync: editCapsule } = usePatchCapsulesSlug();
   const { mutateAsync: deleteCapsule } = useDeleteCapsulesSlug();
 
   const verifyCapsuleEdit = updateCapsuleBodySchema.safeParse({
-    password: password,
+    password,
     title: roomName,
     openAt: openDate?.toISOString(),
-    version : version
+    version,
   });
 
   const fieldErrors = !verifyCapsuleEdit.success
@@ -52,7 +59,6 @@ export const CapsuleEditModal = ({
   const {
     password: passwordError = [],
     title: titleError = [],
-    // openAt : openDateError = [],
   } = !verifyCapsuleEdit.success
     ? verifyCapsuleEdit.error.flatten().fieldErrors
     : {};
@@ -65,21 +71,12 @@ export const CapsuleEditModal = ({
     setRoomName(e.target.value);
   };
 
-  useEffect(() => {
-    setRoomName(getRoomName);
-  }, [getRoomName]);
-
-  useEffect(() => {
-    setOpenDate(getOpenDate);
-  }, [getOpenDate]);
-
   const CapsuleEdit = async () => {
     if (!verifyCapsuleEdit.success) {
       openModal({
         title: "안내!",
         content: (
           <p style={{ whiteSpace: "pre-wrap" }}>
-            {" "}
             {Object.values(fieldErrors).flat().join("\n")}
           </p>
         ),
@@ -117,13 +114,19 @@ export const CapsuleEditModal = ({
         option: "oneButton",
       });
     } finally {
-      await reloadCapsuleData?.();
+      const latest = await reloadCapsuleData?.();
+
+      if (latest) {
+        setRoomName(latest.title);
+        setOpenDate(new Date(latest.openAt));
+        setVersion(latest.version);
+      }
     }
   };
 
   const CapsuleDeleteConfirm = () => {
     openModal({
-      title: "작성 확인",
+      title: "정말 삭제할까요",
       content: (
         <p className="text-left">
           삭제하시겠습니까?
@@ -132,7 +135,7 @@ export const CapsuleEditModal = ({
         </p>
       ),
       option: "twoButton",
-      buttonText: ["예", "아니요"],
+      buttonText: ["네", "아니오"],
       onConfirm: [() => CapsuleDelete()],
     });
   };
@@ -174,11 +177,8 @@ export const CapsuleEditModal = ({
 
   return (
     <>
-      {/* 1. 전체를 감싸는 중앙 정렬 컨테이너 추가 */}
       <div className="flex h-full flex-col items-center bg-stone-50">
-        {/* 3. Main: absolute 제거, flex-1로 공간 확보 */}
-        <main className="w-full px-6 pt-10 pb-20 flex flex-col gap-10">
-          {/* 방 제목 섹션 */}
+        <main className="flex w-full flex-col gap-10 px-6 pt-10 pb-20">
           <div className="flex flex-col gap-2">
             <Field
               id="RoomName"
@@ -188,7 +188,7 @@ export const CapsuleEditModal = ({
             >
               <Input
                 id="RoomName"
-                placeholder="방 제목을 입력해주세요"
+                placeholder="방 제목을 입력해 주세요"
                 value={roomName}
                 maxLength={100}
                 onChange={handleRoomNameChange}
@@ -196,16 +196,15 @@ export const CapsuleEditModal = ({
             </Field>
           </div>
 
-          {/* 공개 날짜 섹션 */}
           <div className="flex flex-col gap-2">
             <Field
               id="OpenDate"
               label="공개 날짜 (D-Day)"
-              helperText="최대 1년 뒤의 날짜까지만 설정할 수 있습니다."
+              helperText="최대 1년 뒤의 날짜까지 설정할 수 있습니다."
             >
               <DatePicker
                 id="OpenDate"
-                placeholder="날짜를 선택해주세요"
+                placeholder="날짜를 선택해 주세요"
                 value={openDate}
                 onChange={(date) => setOpenDate(date)}
               ></DatePicker>
@@ -213,11 +212,10 @@ export const CapsuleEditModal = ({
           </div>
         </main>
 
-        {/* 4. Footer: 하단 배치 */}
-        <footer className="mt-auto flex w-full flex-col items-center gap-8 px-6 pb-12 pt-6">
+        <footer className="mt-auto flex w-full flex-col items-center gap-8 px-6 pt-6 pb-12">
           <Button
             enterFlow={true}
-            className="w-full py-5 bg-black rounded-3xl text-white font-bold"
+            className="w-full rounded-3xl bg-black py-5 font-bold text-white"
             disabled={isButtonDisabled}
             onClick={() => {
               void CapsuleEdit();

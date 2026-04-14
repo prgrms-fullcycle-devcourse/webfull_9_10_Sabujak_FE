@@ -1,13 +1,14 @@
 import { useGetCapsulesSlug } from "../../../shared/api/generated/capsule/capsule";
 import type { CapsuleDetailResponse } from "../../../shared/api/generated/model";
-import type { UseQueryResult } from "@tanstack/react-query";
+
+type GetCapsulesSlugResult = ReturnType<typeof useGetCapsulesSlug>;
 
 type UseRoomDetailResult = {
   data?: CapsuleDetailResponse;
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
-  refetch: UseQueryResult<CapsuleDetailResponse>["refetch"];
+  refetch: GetCapsulesSlugResult["refetch"]
 };
 
 export function useRoomDetail(slug: string): UseRoomDetailResult {

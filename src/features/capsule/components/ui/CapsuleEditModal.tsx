@@ -1,6 +1,6 @@
-﻿import {
-  deleteCapsulesSlug,
-  patchCapsulesSlug,
+import {
+  usePatchCapsulesSlug,
+  useDeleteCapsulesSlug,
 } from "../../../../shared/api/generated/capsule/capsule";
 import {
   Input,
@@ -12,7 +12,6 @@ import { useState } from "react";
 import { useModalStore } from "../../../../shared/store";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { useNavigate } from "react-router-dom";
-import { useLoadingStore } from "../../../../shared/store/useLoadingStore";
 import { updateCapsuleBodySchema } from "../../../../shared/schemas";
 
 type ReloadCapsuleDataResult = {
@@ -43,7 +42,8 @@ export const CapsuleEditModal = ({
   const [version, setVersion] = useState<number>(getVersion);
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
-  const { startLoading, stopLoading } = useLoadingStore();
+  const { mutateAsync: editCapsule } = usePatchCapsulesSlug();
+  const { mutateAsync: deleteCapsule } = useDeleteCapsulesSlug();
 
   const verifyCapsuleEdit = updateCapsuleBodySchema.safeParse({
     password,
@@ -85,15 +85,16 @@ export const CapsuleEditModal = ({
       return;
     }
 
-    startLoading();
     try {
-      await patchCapsulesSlug(slug, {
-        password,
-        title: roomName.trim(),
-        openAt: openDate?.toISOString() ?? "",
-        version,
+      await editCapsule({
+        slug,
+        data: {
+          password,
+          title: roomName.trim(),
+          openAt: openDate?.toISOString() ?? "",
+          version,
+        },
       });
-      stopLoading();
       openModal({
         title: "수정 성공!",
         content: <p>수정 완료되었습니다.</p>,
@@ -107,7 +108,6 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
-      stopLoading();
       openModal({
         title: "수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
@@ -150,12 +150,11 @@ export const CapsuleEditModal = ({
       return;
     }
 
-    startLoading();
     try {
-      await deleteCapsulesSlug(slug, {
-        password,
+      await deleteCapsule({
+        slug,
+        data: { password },
       });
-      stopLoading();
       openModal({
         title: "삭제 성공!",
         content: <p>삭제가 완료되었습니다.</p>,
@@ -168,7 +167,6 @@ export const CapsuleEditModal = ({
         ],
       });
     } catch (error) {
-      stopLoading();
       openModal({
         title: "삭제 실패",
         content: <p>{getErrorMessage(error)}</p>,

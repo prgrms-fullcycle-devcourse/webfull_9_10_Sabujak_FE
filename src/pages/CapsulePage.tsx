@@ -4,15 +4,13 @@ import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewRe
 import { useRoomDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
 import { ErrorPage } from "../shared/components/feedback/ErrorPage";
-import { useLoadingStore } from "../shared/store/useLoadingStore";
-import { useEffect } from "react";
 
 export function LegacyCapsuleRedirectPage() {
   const [searchParams] = useSearchParams();
   const legacySlug = searchParams.get("slug");
 
   if (!legacySlug) {
-    return <ErrorPage />
+    return <ErrorPage />;
   }
 
   // 기존 쿼리스트링 링크를 path 기반 상세 URL로 리다이렉트
@@ -22,18 +20,10 @@ export function LegacyCapsuleRedirectPage() {
 export default function CapsulePage() {
   const { slug } = useParams<{ slug: string }>();
   const capsuleSlug = slug ?? "";
-  const { data, isLoading, isError } = useRoomDetail(capsuleSlug);
-
-  const { startLoading, stopLoading } = useLoadingStore();
-  useEffect(() => {
-    if (isLoading) {
-      startLoading();
-      return () => stopLoading();
-    };
-  }, [isLoading]);
+  const { data, isError } = useRoomDetail(capsuleSlug);
 
   if (!capsuleSlug || isError || !data) {
-    return <ErrorPage />
+    return <ErrorPage />;
   }
 
   if (!("messages" in data)) {

@@ -11,8 +11,6 @@ interface DimState {
   modalCount: number;
   loadingCount: number;
   setModalCount: (modalCount: number) => void;
-  addLoading: () => void;
-  removeLoading: () => void;
 }
 
 export const useDimStore = create<DimState>((set) => ({
@@ -26,28 +24,6 @@ export const useDimStore = create<DimState>((set) => ({
 
       return {
         modalCount,
-        useDimCount,
-        zIndex: getDimZIndex(useDimCount),
-      };
-    }),
-  addLoading: () =>
-    set((state) => {
-      const loadingCount = state.loadingCount + 1;
-      const useDimCount = state.modalCount + loadingCount;
-
-      return {
-        loadingCount,
-        useDimCount,
-        zIndex: getDimZIndex(useDimCount),
-      };
-    }),
-  removeLoading: () =>
-    set((state) => {
-      const loadingCount = Math.max(0, state.loadingCount - 1);
-      const useDimCount = state.modalCount + loadingCount;
-
-      return {
-        loadingCount,
         useDimCount,
         zIndex: getDimZIndex(useDimCount),
       };

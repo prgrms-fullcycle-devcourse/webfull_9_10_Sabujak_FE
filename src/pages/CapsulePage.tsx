@@ -4,7 +4,6 @@ import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewRe
 import { useRoomDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
 import { ErrorPage } from "../shared/components/feedback/ErrorPage";
-import Loading from "@/shared/components/ui/Loading";
 
 export function LegacyCapsuleRedirectPage() {
   const [searchParams] = useSearchParams();

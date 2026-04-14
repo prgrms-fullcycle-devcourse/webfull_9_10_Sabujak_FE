@@ -1,7 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import HeartJar from "./HeartJar";
 import { useDimStore } from "../../store/useDimStore";
-import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 
 interface LoadingProps {
   image?: ReactNode | string;
@@ -14,22 +13,9 @@ const Loading = ({
 }: LoadingProps) => {
   const zIndex = useDimStore((state) => state.zIndex + 1);
 
-  const isFetching = useIsFetching();
-  const isMutating = useIsMutating();
-
-  const isLoading = isFetching > 0 || isMutating > 0;
-
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setVisible(isLoading);
-  }, [isLoading])
-
-  if (!visible) return null;
-
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-center backdrop-blur-sm bg-black/50"
+      className="fixed inset-0 flex flex-col items-center justify-center backdrop-blur-sm"
       style={{ zIndex }}
     >
       <div className="flex min-h-48 items-center justify-center">

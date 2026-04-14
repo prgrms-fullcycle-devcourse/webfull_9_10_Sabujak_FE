@@ -7,10 +7,12 @@ import TestPage from "./pages/TestPage";
 import Loading from "./shared/components/ui/Loading";
 import Modal from "./shared/components/ui/Modal";
 import NotFoundPage from "./pages/NotFoundPage";
+import { useLoadingStore } from "./shared/store/useLoadingStore";
 import { useDimStore } from "./shared/store/useDimStore";
 import { Dim } from "./shared/components/ui/Dim";
 
 export default function App() {
+  const isLoading = useLoadingStore((state) => state.isLoading);
   const dimCount = useDimStore((state) => state.useDimCount);
   return (
     <>
@@ -28,7 +30,7 @@ export default function App() {
       </Routes>
       {dimCount > 0 && <Dim />}
       <Modal />
-      <Loading />
+      {isLoading && <Loading />}
     </>
   );
 }

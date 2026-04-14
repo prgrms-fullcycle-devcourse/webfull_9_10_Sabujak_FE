@@ -4,6 +4,8 @@ import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewRe
 import { useRoomDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
 import { ErrorPage } from "../shared/components/feedback/ErrorPage";
+import { useLoadingStore } from "../shared/store/useLoadingStore";
+import { useEffect } from "react";
 
 export function LegacyCapsuleRedirectPage() {
   const [searchParams] = useSearchParams();
@@ -20,7 +22,15 @@ export function LegacyCapsuleRedirectPage() {
 export default function CapsulePage() {
   const { slug } = useParams<{ slug: string }>();
   const capsuleSlug = slug ?? "";
-  const { data, isError } = useRoomDetail(capsuleSlug);
+  const { data, isLoading, isError } = useRoomDetail(capsuleSlug);
+
+  const { startLoading, stopLoading } = useLoadingStore();
+  useEffect(() => {
+    if (isLoading) {
+      startLoading();
+      return () => stopLoading();
+    };
+  }, [isLoading]);
 
   if (!capsuleSlug || isError || !data) {
     return <ErrorPage />

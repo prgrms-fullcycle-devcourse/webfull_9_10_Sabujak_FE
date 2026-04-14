@@ -1,14 +1,14 @@
-main:has(.room-before) {
+main:has(.upcoming) {
     display: flex;
     width: 100%;
     justify-content: center;
 }
 
-main:has(.room-before)>div {
+main:has(.upcoming)>div {
     justify-content: center;
     width: 100%;
 }
 
-.room-before{
+.upcoming{
     width: 100%;
 }

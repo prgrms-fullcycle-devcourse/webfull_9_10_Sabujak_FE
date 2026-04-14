@@ -38,7 +38,7 @@ export const CapsuleEditCheckModal = ({
     : "";
   const fieldPasswordState =
     password.length === 0 ? "" : verifyPassword.success ? "" : "error";
-  const fieldPasswordMessage = passwordErrorMessage;
+  const fieldPasswordMessage = password.length === 0 ? "" : passwordErrorMessage;
 
   const isButtonDisabled = !verifyPassword.success;
 
@@ -107,7 +107,7 @@ export const CapsuleEditCheckModal = ({
             <Input
               type="password"
               iconClassName="icon-lock"
-              placeholder="비밀번호 4자리를 입력해 주세요"
+              placeholder="숫자 4자리를 입력해 주세요"
               inputMode="numeric"
               value={password}
               maxLength={4}

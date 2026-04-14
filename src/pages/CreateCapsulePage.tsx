@@ -7,7 +7,6 @@ import {
 } from "../shared/api/generated/capsule/capsule";
 import PageLayout from "../shared/components/layout/PageLayout";
 import { Button, DatePicker, Field, Input } from "../shared/components/ui";
-import { useLoadingStore } from "../shared/store/useLoadingStore";
 import { useModalStore } from "../shared/store/useModalStore";
 import { getErrorMessage } from "../shared/utils/error";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
@@ -76,7 +75,6 @@ function getErrorCode(error: unknown) {
 
 export default function CreateCapsulePage() {
   const navigate = useNavigate();
-  const { startLoading, stopLoading } = useLoadingStore();
   const { openModal } = useModalStore();
   const slugReservationMutation = usePostCapsulesSlugReservations();
   const createCapsuleMutation = usePostCapsules();
@@ -139,20 +137,20 @@ export default function CreateCapsulePage() {
     title.length === 0
       ? undefined
       : titleError.length === 0
-      ? undefined
-      : "error";
+        ? undefined
+        : "error";
   const slugValidationStatus: FieldMessageStatus =
     slug.length === 0
       ? undefined
       : slugError.length === 0
-      ? undefined
-      : "error";
+        ? undefined
+        : "error";
   const passwordFieldStatus: FieldMessageStatus =
     password.length === 0
       ? undefined
       : passwordError.length === 0
-      ? undefined
-      : "error";
+        ? undefined
+        : "error";
   const slugFieldStatus = slugMessageStatus ?? slugValidationStatus;
 
   const titleFieldMessage = titleError.length === 0 ? "" : titleError[0];
@@ -260,7 +258,6 @@ export default function CreateCapsulePage() {
 
     isCheckingSlugRef.current = true;
     setIsCheckingSlug(true);
-    startLoading();
 
     try {
       // 같은 생성 흐름을 이어가기 위해 reservationSessionToken을 함께 보낸다.
@@ -270,7 +267,6 @@ export default function CreateCapsulePage() {
           reservationSessionToken: nextReservationSessionToken || undefined,
         },
       });
-      stopLoading();
       setReservationToken(response.reservationToken);
       setReservationSessionToken(response.reservationSessionToken);
       setReservedSlug(response.slug);
@@ -294,8 +290,7 @@ export default function CreateCapsulePage() {
           return next;
         });
       }
-      stopLoading();
-      
+
       resetSlugReservation();
       setSlugMessage(getErrorMessage(error));
       setSlugMessageStatus("error");
@@ -333,7 +328,6 @@ export default function CreateCapsulePage() {
 
     isCreatingRef.current = true;
     setIsCreating(true);
-    startLoading();
 
     try {
       // 중복 확인에서 받은 reservationToken으로 실제 캡슐 생성 요청을 보낸다.
@@ -352,15 +346,14 @@ export default function CreateCapsulePage() {
       clearSessionCache(trimmedSlug);
       setReservationSessionToken("");
       resetSlugReservation();
-      
-      stopLoading();
+
       // 생성 성공 후 확인 버튼을 누르면 상세 페이지로 이동한다.
       openNoticeModal("타임캡슐이 생성되었습니다.", () => {
         void navigate(buildCapsuleDetailPath(response.slug));
       });
     } catch (error) {
       const errorCode = getErrorCode(error);
-      
+
       if (errorCode === "SLUG_RESERVATION_MISMATCH" || errorCode === "SLUG_ALREADY_IN_USE") {
         // 예약이 깨졌거나 이미 사용 중인 slug면 캐시도 함께 비운다.
         clearSessionCache(trimmedSlug);
@@ -368,14 +361,13 @@ export default function CreateCapsulePage() {
         resetSlugReservation();
         setSlugMessage(
           errorCode === "SLUG_ALREADY_IN_USE"
-          ? "이미 사용 중인 주소입니다. 다른 주소를 입력해 주세요."
-          : "슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.",
+            ? "이미 사용 중인 주소입니다. 다른 주소를 입력해 주세요."
+            : "슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.",
         );
         setSlugMessageStatus("error");
         return;
       }
-      
-      stopLoading();
+
       openNoticeModal(getErrorMessage(error));
     } finally {
       isCreatingRef.current = false;

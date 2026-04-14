@@ -1,7 +1,8 @@
 /* Tailwind v4에서 디자인 토큰을 정의하는 전용 문법 */
 @theme {
-  --font-sans: "Pretendard", "Noto Sans KR", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Nanum JarHagoIssEo", "Pretendard", "Noto Sans KR", system-ui, "Segoe UI", Roboto, sans-serif;
 }
+
 #root{
   /* background: linear-gradient(180deg, #f7f2e8 30%, #eef8ff 100%) */
   background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%)
@@ -67,6 +68,8 @@ input::placeholder, .placeholder {
   /* background: #ffffff; */
   padding: 0.75rem 1rem;
   text-align: left;
+  font-size: 1.125rem;
+  line-height: 1.5;
 }
 
 .field-control:has(textarea){
@@ -86,6 +89,8 @@ input::placeholder, .placeholder {
   border: 0;
   background: transparent;
   outline: none;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .is-success {
@@ -100,8 +105,8 @@ input::placeholder, .placeholder {
 }
 
 .field-message {
-  font-size: 0.875rem;
-  line-height: 1.4;
+  font-size: 1rem;
+  line-height: 1.5;
   word-break: keep-all;
 }
 
@@ -179,7 +184,10 @@ input::placeholder, .placeholder {
 }
 
 .btn-menu {
-  background: var(--ico-menu) right center no-repeat;
+  background: var(--ico-menu) right center / 1.3rem 1.3rem no-repeat;
+}
+.btn-prev {
+  background: var(--ico-prev) left center / 1.3rem 1.3rem no-repeat;
 }
 
 

@@ -155,9 +155,9 @@ export default function CreateCapsulePage() {
       : "error";
   const slugFieldStatus = slugMessageStatus ?? slugValidationStatus;
 
-  const titleFieldMessage = titleError.length === 0 ? "" : titleError[0];
+  const titleFieldMessage = title.length === 0 ? "" : titleError[0];
   const slugFieldMessage =
-    slugMessage || (slug.length > 0 && slugError.length === 0 ? "" : slugError[0]);
+    slugMessage || ( slug.length === 0 ? "" : slugError[0]);
   const passwordFieldMessage = password.length === 0 ? "" : passwordError[0];
 
   const isReservationValid =
@@ -453,14 +453,14 @@ export default function CreateCapsulePage() {
         <Field
           id="roomPassword"
           label="관리자 비밀번호"
-          helperText="숫자 4자리를 입력해 주세요."
+          // helperText="숫자 4자리를 입력해 주세요."
           message={passwordFieldMessage}
           messageStatus={passwordFieldStatus}
         >
           <Input
             type="password"
             iconClassName="icon-lock"
-            placeholder="비밀번호 4자리를 입력해 주세요"
+            placeholder="숫자 4자리를 입력해 주세요"
             inputMode="numeric"
             maxLength={4}
             value={password}

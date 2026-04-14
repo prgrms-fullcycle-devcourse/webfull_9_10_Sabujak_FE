@@ -8,6 +8,7 @@ import {
   buildCapsuleDetailPath,
   extractCapsuleSlug,
 } from "../shared/utils/routes";
+import logoImage from "../assets/images/common/logo.png";
 import MainPageBackground from "./MainPageBackground";
 import "./MainPage.css";
 
@@ -111,7 +112,13 @@ export default function MainPage() {
 
   const slugFieldMessage = capsuleInfo.length === 0 ? "" : slugError;
 
-const totalCapsuleMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${totalMessageCount}개의 마음이 모였어요!!`
+  const totalCapsuleMessage = (
+    <>
+      지금까지 <strong>{totalCapsuleCount}</strong>개의 타임캡슐에{" "}<br/>
+      <strong>{totalMessageCount}</strong>개의 마음이 모였어요!!
+    </>
+  );
+
 
   const isButtonDisabled = !verifyCapsuleSlug.success;
 
@@ -120,90 +127,114 @@ const totalCapsuleMessage = `지금까지 ${totalCapsuleCount}개의 방에 ${to
   };
 
   return (
-    <PageLayout
-      bottomArea={
-        <>
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-300" />
-            <span className="text-sm text-gray-500">또는</span>
-            <div className="flex-1 h-px bg-gray-300" />
-          </div>
-          <Button
-            variant="primary"
-            onClick={() => void navigate("/create-capsule")}
-            className="mt-6"
-          >
-            우리들만의 방 만들기
-          </Button>
-          {/* <p className="mt-2 text-center text-sm text-gray-600">
-                        로그인 없이 1분 만에 시작하기
-                    </p> */}
-        </>
-      }
-    >
+    <PageLayout contentClassName="main-page">
       <MainPageBackground />
-      <h3 className="main-page-brand mt-5 text-center text-sm font-semibold tracking-[0.24em] text-[#b1b1b1]">
-        SABUJAK
-      </h3>
-      <h1 className="typing-title mt-11 text-center text-4xl font-bold">
-        <span className="typing-line typing-line-delay-1">
-          시간이 흐른 뒤 열어보는
-        </span>
-        <span className="typing-line typing-line-delay-2">우리들의 진심</span>
-      </h1>
-      <section className="main-page-card mt-21 rounded-[36px] border border-[#e8dfd2] bg-[#FEFDFC] px-7 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
-        <p className="text-xl font-bold leading-tight text-[#4a4a4a]">
-          이미 참여중인 방이 있나요?
-        </p>
-        <p className="mt-2 text-base leading-6 text-[#a8a29e]">
-          전달받은 방 코드 또는 주소를 입력해 주세요.
-        </p>
+      <div className="main-content">
+        <h1 className="main-page-brand flex justify-center">
+          <img
+            src={logoImage}
+            alt="SABUJAK"
+            className="h-10 w-auto object-contain"
+          />
+        </h1>
 
-        <div className="mt-8 space-y-2">
-          <Field
-            id="roomTitle"
-            message={slugFieldMessage}
-            messageStatus={slugCheckField}
-            helperText={totalCapsuleMessage}
-          >
-            <Input
-              placeholder="방 코드를 입력해 주세요"
-              value={capsuleInfo}
-              onChange={(e) => handleSlugChange(e)}
-              className="h-[20px] rounded-[24px] !border-[#E5E5E5] !bg-white px-6"
-              inputClassName="text-center"
-            />
-          </Field>
-          <Button
-            variant="secondary"
-            enterFlow={true}
-            disabled={isButtonDisabled}
-            onClick={() => {
-              if (!verifyCapsuleSlug.success) {
-                openModal(
-                  {
-                    title : '안내!',
-                    content : <p>{slugError}</p>,
-                    option : 'oneButton'
-                  }
-                );
-              }
+        <h1 className="typing-title mt-2 text-center text-4xl font-bold">
+          <span className="typing-line typing-line-delay-1">
+            시간이 흐른 뒤 열어보는
+          </span>
+          <span className="typing-line typing-line-delay-2">우리들의 진심</span>
+        </h1>
 
-              const slug = extractCapsuleSlug(capsuleInfo);
+        <div className="main-page-card-area mt-6">
+          <div className="main-page-card-shell">
+            <section className="main-page-card rounded-[36px] border border-[#e8dfd2] bg-[#FEFDFC] px-7 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
+              <p className="text-xl font-bold leading-tight text-[#4a4a4a]">
+                마음을 전달할 타임캡슐이 있나요?
+              </p>
+              <p className="mt-2 text-base leading-5 text-[#a8a29e]">{totalCapsuleMessage}</p>
 
-              if (!slug) {
-                return;
-              }
+              {/* <p className="text-xs leading-6 text-[#a8a29e]">
+                전달받은 코드 또는 주소를 입력해 주세요.
+              </p> */}
 
-              // slug와 캡슐 상세 URL 입력을 모두 path 기반 내부 경로로 통일한다.
-              void navigate(buildCapsuleDetailPath(capsuleInfo));
-            }}
-            className="min-h-[20px] w-full rounded-[24px] border border-[#efd7c0] bg-[#FDE8D3] px-6 py-5 font-bold text-[#6b5646] shadow-[0_8px_18px_rgba(205,178,152,0.14)] transition-colors hover:bg-[#fae1ca]"
-          >
-            방 입장하기
-          </Button>
+              <div className="mt-6 space-y-2">
+                <Field
+                  id="roomTitle"
+                  message={slugFieldMessage}
+                  messageStatus={slugCheckField}
+                >
+                  <Input
+                    placeholder="타임캡슐 코드를 입력해 주세요"
+                    value={capsuleInfo}
+                    onChange={handleSlugChange}
+                    className="h-[20px] rounded-[24px] !border-[#E5E5E5] !bg-white px-6"
+                    inputClassName="text-center"
+                    rightSlot={
+                      <Button
+                        variant="sm"
+                        enterFlow={true}
+                        disabled={isButtonDisabled}
+                        onClick={() => {
+                          if (!verifyCapsuleSlug.success) {
+                            openModal({
+                              title: "안내!",
+                              content: <p>{slugError}</p>,
+                              option: "oneButton",
+                            });
+                          }
+
+                          const slug = extractCapsuleSlug(capsuleInfo);
+
+                          if (!slug) {
+                            return;
+                          }
+
+                          void navigate(buildCapsuleDetailPath(capsuleInfo));
+                        }}
+                      // className="mt-7 min-h-[20px] w-full rounded-[24px] border border-[#efd7c0] bg-[#FDE8D3] px-6 py-5 font-bold text-[#6b5646] shadow-[0_8px_18px_rgba(205,178,152,0.14)] transition-colors hover:bg-[#fae1ca]"
+                      >
+                        열기
+                      </Button>
+                    }
+                  />
+
+
+
+
+                </Field>
+
+
+
+                <div className="flex items-center gap-3">
+                  <div className="h-px flex-1 bg-gray-300" />
+                  <span className="text-sm text-gray-500">♥</span>
+                  <div className="h-px flex-1 bg-gray-300" />
+                </div>
+
+
+                <Button
+                  variant="primary"
+                  onClick={() => void navigate("/create-capsule")}
+                  className="btn-timecapsule min-h-[20px] w-full rounded-[24px] border border-[#efd7c0] bg-[#ffd4a8] px-6 py-5 font-bold text-[#6b5646]! shadow-[0_8px_18px_rgba(205,178,152,0.14)] transition-colors hover:bg-[#fae1ca]"
+                >
+                  타임캡슐 만들기
+                </Button>
+              </div>
+            </section>
+
+            <div className="main-page-card-hearts-back" aria-hidden="true">
+              <span className="main-page-card-heart main-page-card-heart-top-center main-page-card-heart-red main-page-card-heart-dots" />
+              <span className="main-page-card-heart main-page-card-heart-top-right main-page-card-heart-blue main-page-card-heart-lines" />
+              <span className="main-page-card-heart main-page-card-heart-bottom-right main-page-card-heart-orange" />
+            </div>
+            <div className="main-page-card-hearts-front" aria-hidden="true">
+              <span className="main-page-card-heart main-page-card-heart-top-left main-page-card-heart-yellow" />
+              <span className="main-page-card-heart main-page-card-heart-left-center main-page-card-heart-green main-page-card-heart-dots" />
+              <span className="main-page-card-heart main-page-card-heart-bottom-center main-page-card-heart-pink" />
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     </PageLayout>
   );
 }

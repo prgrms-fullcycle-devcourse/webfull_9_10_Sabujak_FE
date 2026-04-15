@@ -1,9 +1,9 @@
 .heart-jar {
   width: 7rem;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
+  /* justify-content: center;
+  align-items: center; */
+  /* margin: 0 auto; */
 }
 
 .heart-jar__svg {

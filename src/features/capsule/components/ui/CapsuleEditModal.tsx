@@ -1,4 +1,4 @@
-import {
+﻿import {
   usePatchCapsulesSlug,
   useDeleteCapsulesSlug,
 } from "../../../../shared/api/generated/capsule/capsule";
@@ -96,8 +96,8 @@ export const CapsuleEditModal = ({
         },
       });
       openModal({
-        title: "수정 성공!",
-        content: <p>수정 완료되었습니다.</p>,
+        title: "안내!",
+        content: <p>수정이 완료되었어요</p>,
         option: "oneButton",
         onConfirm: [
           () => {
@@ -109,7 +109,7 @@ export const CapsuleEditModal = ({
       });
     } catch (error) {
       openModal({
-        title: "수정 실패!",
+        title: "안내!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
@@ -126,12 +126,12 @@ export const CapsuleEditModal = ({
 
   const CapsuleDeleteConfirm = () => {
     openModal({
-      title: "정말 삭제할까요",
+      title: "확인",
       content: (
         <p className="text-left">
-          삭제하시겠습니까?
+          정말 삭제할까요?
           <br />
-          삭제 후에는 복구가 불가능합니다.
+          삭제 후에는 복구가 불가능해요.
         </p>
       ),
       option: "twoButton",
@@ -156,8 +156,8 @@ export const CapsuleEditModal = ({
         data: { password },
       });
       openModal({
-        title: "삭제 성공!",
-        content: <p>삭제가 완료되었습니다.</p>,
+        title: "안내!",
+        content: <p>삭제가 완료되었어요</p>,
         option: "oneButton",
         onConfirm: [
           () => {
@@ -182,13 +182,13 @@ export const CapsuleEditModal = ({
           <div className="flex flex-col gap-2">
             <Field
               id="RoomName"
-              label="방 제목"
+              label="타임캡슐 제목"
               message={fieldMessage}
               messageStatus={fieldTrue}
             >
               <Input
                 id="RoomName"
-                placeholder="방 제목을 입력해 주세요"
+                placeholder="타임캡슐 제목을 입력해 주세요"
                 value={roomName}
                 maxLength={100}
                 onChange={handleRoomNameChange}
@@ -200,7 +200,7 @@ export const CapsuleEditModal = ({
             <Field
               id="OpenDate"
               label="공개 날짜 (D-Day)"
-              helperText="최대 1년 뒤의 날짜까지 설정할 수 있습니다."
+              helperText="최대 1년 뒤의 날짜까지 설정할 수 있어요"
             >
               <DatePicker
                 id="OpenDate"
@@ -212,10 +212,10 @@ export const CapsuleEditModal = ({
           </div>
         </main>
 
-        <footer className="mt-auto flex w-full flex-col items-center gap-8 px-6 pt-6 pb-12">
+        <footer className="mt-auto flex w-full flex-col items-center px-6 pb-8">
           <Button
             enterFlow={true}
-            className="w-full rounded-3xl bg-black py-5 font-bold text-white"
+            className="w-full"
             disabled={isButtonDisabled}
             onClick={() => {
               void CapsuleEdit();
@@ -225,12 +225,12 @@ export const CapsuleEditModal = ({
           </Button>
           <button
             type="button"
-            className="text-neutral-400 text-xs font-medium underline"
+            className="self-center inline-flex items-center justify-center gap-2 rounded-lg p-1.5 text-black"
             onClick={() => {
               void CapsuleDeleteConfirm();
             }}
           >
-            방 삭제하기
+            타임캡슐 삭제하기
           </button>
         </footer>
       </div>

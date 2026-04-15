@@ -85,7 +85,7 @@ export const CapsuleEditCheckModal = ({
       <main className="w-full flex flex-1 flex-col items-center pt-12">
         <div className="text-center">
           <h1 className="text-3xl font-bold leading-9 text-zinc-800">
-            방장 권한 확인
+            타임캡슐 권한 확인
           </h1>
           <p className="mt-4 text-base font-medium leading-6 text-neutral-400">
             비밀번호 4자리를 입력해 주세요

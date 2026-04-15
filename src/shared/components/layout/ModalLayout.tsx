@@ -43,7 +43,7 @@ export default function ModalLayout({
 
   const modalClasses = isFull
     ? "w-full h-dvh flex flex-col bg-stone-50 overflow-hidden"
-    : "w-96 bg-white rounded-[32px] shadow-2xl flex flex-col overflow-hidden";
+    : "w-[85%] max-w-96 bg-white rounded-[32px] shadow-2xl flex flex-col overflow-hidden";
 
   const modalTitle = isFull ? "" : title;
 
@@ -61,13 +61,8 @@ export default function ModalLayout({
             <button
               type="button"
               onClick={onClose}
-              className="text-neutral-400 text-xl font-black leading-5 p-1 w-6 h-6 flex-shrink-0"
+              className="btn-close text-neutral-400 text-xl font-black leading-5 h-10 w-10 flex-shrink-0"
               aria-label="닫기"
-              style={{
-                backgroundImage: "var(--ico-close)",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-              }}
             ></button>
           )}
         </div>

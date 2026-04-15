@@ -1,3 +1,5 @@
+import { useModalStore } from "../../../shared/store/useModalStore";
+
 export type ShareUrlParams = {
   title: string;
   text?: string;
@@ -128,6 +130,8 @@ function isShareCancelled(error: unknown) {
 }
 
 export function useShare() {
+  const { openModal } = useModalStore();
+
   const canShare =
     isKakaoBrowser()
     || (
@@ -135,6 +139,14 @@ export function useShare() {
       && typeof navigator.share === "function"
       && isMobile()
     );
+
+  const openNoticeModal = (message: string) => {
+    openModal({
+      title: "안내!",
+      content: message,
+      option: "oneButton",
+    });
+  };
 
   const shareUrl = async ({ title, text, url }: ShareUrlParams) => {
     try {
@@ -175,7 +187,7 @@ export function useShare() {
       if (navigator.clipboard?.writeText) {
         try {
           await navigator.clipboard.writeText(url);
-          alert("링크를 복사했어요.");
+          openNoticeModal("링크를 복사했어요.");
           return;
         } catch {
           // Fall through to execCommand fallback.
@@ -183,17 +195,17 @@ export function useShare() {
       }
 
       if (fallbackCopyText(url)) {
-        alert("링크를 복사했어요.");
+        openNoticeModal("링크를 복사했어요.");
         return;
       }
 
-      alert("링크 복사에 실패했어요. 다시 시도해주세요.");
+      openNoticeModal("링크 복사에 실패했어요. 다시 시도해주세요.");
     } catch (error) {
       if (isShareCancelled(error)) {
         return;
       }
 
-      alert("공유에 실패했어요. 다시 시도해주세요.");
+      openNoticeModal("공유에 실패했어요. 다시 시도해주세요.");
     }
   };
 

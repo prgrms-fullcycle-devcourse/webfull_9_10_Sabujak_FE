@@ -11,4 +11,16 @@ main:has(.upcoming)>div {
 
 .upcoming{
     width: 100%;
+    height: 100%;
+}
+.dday-wrap{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 1.2rem;
+}
+.dday-wrap div:nth-child(2){
+    /* flex: 1; */
 }

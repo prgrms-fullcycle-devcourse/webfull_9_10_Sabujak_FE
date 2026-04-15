@@ -332,7 +332,7 @@ export default function ConfettiCanvas({
   return (
     <canvas
       ref={canvasRef}
-      className="confetti-canvas"
+      className="confetti-canvas no-capture"
       aria-hidden="true"
     />
   );

@@ -245,10 +245,8 @@ export default function CreateCapsulePage() {
       return;
     }
 
-    // 같은 세션에서 이미 3개 예약했으면 더 이상 확인하지 못하게 막는다.
-    const sessionReservationCount = Object.values(nextCache).filter(
-      (entry) => entry.reservationSessionToken === nextReservationSessionToken,
-    ).length;
+    // localStorage에 남아 있는 유효한 slug 예약이 3개 이상이면 중복 확인을 막는다.
+    const sessionReservationCount = Object.keys(nextCache).length;
 
     if (sessionReservationCount >= MAX_SLUG_RESERVATIONS_PER_SESSION) {
       setSlugMessage("주소는 최대 3개까지만 확인할 수 있어요.");

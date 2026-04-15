@@ -151,7 +151,7 @@ export default function MainPage() {
               <p className="text-xl font-bold leading-tight text-[#4a4a4a]">
                 마음을 전달할 타임캡슐이 있나요?
               </p>
-              <p className="mt-2 text-base leading-5 text-[#a8a29e]">{totalCapsuleMessage}</p>
+              <p className="mt-2 text-sm leading-5 text-[#a8a29e]">{totalCapsuleMessage}</p>
 
               {/* <p className="text-xs leading-6 text-[#a8a29e]">
                 전달받은 코드 또는 주소를 입력해 주세요.

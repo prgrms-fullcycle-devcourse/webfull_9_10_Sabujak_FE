@@ -56,8 +56,15 @@ export const connectCapsuleMessageCountStream = (
     handleMessageCount as EventListener,
   );
 
-  eventSource.onerror = (error) => {
-    console.error("messageCount SSE error", error);
+  // CONNECTING = 재연결 중
+  // CLOSED = SSE closed
+  eventSource.onerror = () => {
+    if (eventSource.readyState === EventSource.CONNECTING) {
+      return;
+    }
+    if (eventSource.readyState === EventSource.CLOSED) {
+      console.warn("messageCount SSE closed");
+    }
   };
 
   return () => {

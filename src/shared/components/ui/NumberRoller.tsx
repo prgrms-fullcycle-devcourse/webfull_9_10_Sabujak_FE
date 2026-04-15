@@ -85,9 +85,6 @@ export function NumberRoller({
   const digits = padded.split("");
   const keyRef = useRef<string[]>([]);
 
-  // 각 자리에 고유 key 부여 (자릿수 변경 시에도 유지)
-  // 오른쪽 정렬 기준으로 key 부여
-  const maxLen = Math.max(keyRef.current.length, digits.length);
   const newKeys: string[] = [];
   for (let i = 0; i < digits.length; i++) {
     const posFromRight = digits.length - 1 - i;

@@ -8,7 +8,7 @@ import {
   buildCapsuleDetailPath,
   extractCapsuleSlug,
 } from "../shared/utils/routes";
-import logoImage from "../assets/images/common/logo.png";
+import logoImage from "../../public/logo.png";
 import MainPageBackground from "./MainPageBackground";
 import "./MainPage.css";
 

@@ -7,7 +7,7 @@ import { WriteMessageContent } from "../../../message/components/ui/WriteMessage
 import { useShare } from "../../hooks";
 import "./CapsuleViewUpcoming.css";
 import HeartJar from "../../../../shared/components/ui/HeartJar";
-import logoImage from "../../../../assets/images/common/logo.png";
+import logoImage from "../../../../../public/logo.png";
 import { useModalStore } from "../../../../shared/store/useModalStore";
 import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";
 import CapsuleCountdown from "./CapsuleCountdown";

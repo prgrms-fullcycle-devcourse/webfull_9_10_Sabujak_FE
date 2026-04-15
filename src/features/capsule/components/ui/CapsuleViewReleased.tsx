@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { CapsuleDetailResponseOneOfTwo } from "../../../../shared/api/generated/model";
 import PageLayout from "../../../../shared/components/layout/PageLayout";
 import { Button } from "../../../../shared/components/ui";
-import logoImage from "../../../../assets/images/common/logo.png";
+import logoImage from "../../../../../public/logo.png";
 import { useShare } from "../../hooks";
 import { getColors } from "../../utils/color";
 import { formatYearMonth, formatYearMonthDay, getDiffDays } from "../../utils/date";

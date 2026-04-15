@@ -163,7 +163,7 @@ export default function CapsuleViewUpcoming({
         <h2 className="text-lg font-bold">{title}</h2>
 
       <section className="upcoming flex flex-col items-center justify-center text-center">
-        <div className="dday-wrap mt-4">
+        <div className="dday-wrap mt-8">
           <HeartJar total={displayMessageCount} />
 
           <div className="">

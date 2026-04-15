@@ -22,7 +22,11 @@ export default function CapsulePage() {
   const capsuleSlug = slug ?? "";
   const { data, isError } = useRoomDetail(capsuleSlug);
 
-  if (!capsuleSlug || isError || !data) {
+  if (!data) {
+    return;
+  }
+
+  if (!capsuleSlug || isError) {
     return <ErrorPage />;
   }
 

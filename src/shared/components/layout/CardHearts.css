@@ -1,0 +1,520 @@
+/* 페이지 배경 하트 데코레이션 컨테이너 */
+.card-hearts-back {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+.card-hearts-front {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+
+/* 페이지 전체 배경 컨테이너 — 콘텐츠 뒤에 위치 */
+.card-hearts-page {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+/* 하트 기본 — 회전된 사각형 + ::before/::after 원 2개로 만드는 3조각 하트 */
+.main-page-card-heart {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  transform: rotate(-45deg);
+  transform-origin: center;
+  border-radius: 10px;
+  pointer-events: none;
+  box-shadow: 0 14px 26px rgba(204, 168, 141, 0.16);
+  animation: main-page-card-heart-float 5.2s ease-in-out infinite;
+  opacity: 0.98;
+}
+
+.main-page-card-heart::before,
+.main-page-card-heart::after {
+  content: "";
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  border-radius: 9999px;
+  background: inherit;
+}
+
+.main-page-card-heart::before {
+  top: -27px;
+  left: 0;
+}
+
+.main-page-card-heart::after {
+  top: 0;
+  left: 27px;
+}
+
+/* 하트 색상 (그라디언트) */
+.main-page-card-heart-yellow {
+  background: linear-gradient(180deg, #f9e39c 0%, #f0c76d 100%);
+}
+
+.main-page-card-heart-green {
+  background: linear-gradient(180deg, #caecd6 0%, #9fd5b0 100%);
+}
+
+.main-page-card-heart-red {
+  background: linear-gradient(180deg, #ffb6b6 0%, #f68f98 100%);
+}
+
+.main-page-card-heart-pink {
+  background: linear-gradient(180deg, #ffd9e4 0%, #f8bccb 100%);
+}
+
+.main-page-card-heart-orange {
+  background: linear-gradient(180deg, #ffd8b4 0%, #f2b987 100%);
+}
+
+.main-page-card-heart-blue {
+  background: linear-gradient(180deg, #d9eeff 0%, #b6d8f8 100%);
+}
+
+
+
+
+
+/* 텍스처 */
+.main-page-card-heart-dots::after {
+  box-shadow:
+    -9px -3px 0 rgba(255, 255, 255, 0.35),
+    8px 10px 0 rgba(255, 255, 255, 0.28);
+}
+
+.main-page-card-heart-lines::before {
+  background:
+    linear-gradient(90deg,
+      rgba(255, 255, 255, 0.22) 0 20%,
+      transparent 20% 42%,
+      rgba(255, 255, 255, 0.22) 42% 62%,
+      transparent 62% 100%),
+    inherit;
+}
+
+/* 하트 위치 */
+.main-page-card-heart-top-left {
+  top: 6px;
+  left: -8px;
+  width: 46px;
+  height: 46px;
+  z-index: 2;
+  animation-delay: 0s;
+    --scale: 1.08;
+}
+
+.main-page-card-heart-top-left::before,
+.main-page-card-heart-top-left::after {
+  width: 46px;
+  height: 46px;
+}
+
+.main-page-card-heart-top-left::before {
+  top: -23px;
+}
+
+.main-page-card-heart-top-left::after {
+  left: 23px;
+}
+
+.main-page-card-heart-left-center {
+  top: 168px;
+  left: -34px;
+  width: 72px;
+  height: 72px;
+  z-index: 2;
+  animation-delay: 1s;
+   --scale: 1.06;
+}
+
+.main-page-card-heart-left-center::before,
+.main-page-card-heart-left-center::after {
+  width: 72px;
+  height: 72px;
+}
+
+.main-page-card-heart-left-center::before {
+  top: -36px;
+}
+
+.main-page-card-heart-left-center::after {
+  left: 36px;
+}
+
+.main-page-card-heart-top-center {
+  top: -18px;
+  left: 54%;
+  width: 52px;
+  height: 52px;
+  z-index: 0;
+  animation-delay: 1.8s;
+  --scale: 1.05;
+}
+
+.main-page-card-heart-top-center::before,
+.main-page-card-heart-top-center::after {
+  width: 52px;
+  height: 52px;
+}
+
+.main-page-card-heart-top-center::before {
+  top: -26px;
+}
+
+.main-page-card-heart-top-center::after {
+  left: 26px;
+}
+
+.main-page-card-heart-bottom-center {
+  bottom: -18px;
+  left: 42%;
+  width: 58px;
+  height: 58px;
+  z-index: 2;
+  animation-delay: 2.6s;
+   --scale: 1.08;
+}
+
+.main-page-card-heart-bottom-center::before,
+.main-page-card-heart-bottom-center::after {
+  width: 58px;
+  height: 58px;
+}
+
+.main-page-card-heart-bottom-center::before {
+  top: -29px;
+}
+
+.main-page-card-heart-bottom-center::after {
+  left: 29px;
+}
+
+.main-page-card-heart-bottom-right {
+  right: -20px;
+  bottom: 74px;
+  width: 62px;
+  height: 62px;
+  z-index: 2;
+  animation-delay: 3.1s;
+  --scale: 1.1;
+}
+
+.main-page-card-heart-bottom-right::before,
+.main-page-card-heart-bottom-right::after {
+  width: 62px;
+  height: 62px;
+}
+
+.main-page-card-heart-bottom-right::before {
+  top: -31px;
+}
+
+.main-page-card-heart-bottom-right::after {
+  left: 31px;
+}
+
+.main-page-card-heart-top-right {
+  top: 92px;
+  right: -28px;
+  width: 50px;
+  height: 50px;
+  z-index: 0;
+  animation-delay: 3.8s;
+  --scale: 1.05;
+}
+
+.main-page-card-heart-top-right::before,
+.main-page-card-heart-top-right::after {
+  width: 50px;
+  height: 50px;
+}
+
+.main-page-card-heart-top-right::before {
+  top: -25px;
+}
+
+.main-page-card-heart-top-right::after {
+  left: 25px;
+}
+
+/* 추가 색상 */
+.main-page-card-heart-purple {
+  background: linear-gradient(180deg, #e8d5f5 0%, #c9a8e8 100%);
+}
+
+.main-page-card-heart-coral {
+  background: linear-gradient(180deg, #ffccc0 0%, #f5a090 100%);
+}
+
+.main-page-card-heart-mint {
+  background: linear-gradient(180deg, #c8f0e8 0%, #8fd8c4 100%);
+}
+
+/* 페이지 전체 기준 위치 (다른 페이지용) — 메인페이지 수준 크기 */
+.page-heart-1 {
+  left: -56%;
+  top: 5%;
+  width: 54px;
+  height: 54px;
+  animation-delay: 0s;
+}
+
+.page-heart-1::before,
+.page-heart-1::after {
+  width: 54px;
+  height: 54px;
+}
+
+.page-heart-1::before {
+  top: -55px;
+}
+
+.page-heart-1::after {
+  left: 55px;
+}
+
+.page-heart-2 {
+  right: -47%;
+  top: 10%;
+  width: 130px;
+  height: 130px;
+  animation-delay: 0.6s;
+}
+
+.page-heart-2::before,
+.page-heart-2::after {
+  width: 130px;
+  height: 130px;
+}
+
+.page-heart-2::before {
+  top: -65px;
+}
+
+.page-heart-2::after {
+  left: 65px;
+}
+
+.page-heart-3 {
+  left: -5%;
+  top: 30%;
+  width: 100px;
+  height: 100px;
+  animation-delay: 1.2s;
+}
+
+.page-heart-3::before,
+.page-heart-3::after {
+  width: 100px;
+  height: 100px;
+}
+
+.page-heart-3::before {
+  top: -50px;
+}
+
+.page-heart-3::after {
+  left: 50px;
+}
+
+.page-heart-4 {
+  right: -66%;
+  top: 40%;
+  width: 120px;
+  height: 120px;
+  animation-delay: 1.8s;
+}
+
+.page-heart-4::before,
+.page-heart-4::after {
+  width: 120px;
+  height: 120px;
+}
+
+.page-heart-4::before {
+  top: -60px;
+}
+
+.page-heart-4::after {
+  left: 60px;
+}
+
+.page-heart-5 {
+  left: -27%;
+  top: 58%;
+  width: 140px;
+  height: 140px;
+  animation-delay: 2.4s;
+}
+
+.page-heart-5::before,
+.page-heart-5::after {
+  width: 140px;
+  height: 140px;
+}
+
+.page-heart-5::before {
+  top: -70px;
+}
+
+.page-heart-5::after {
+  left: 70px;
+}
+
+.page-heart-6 {
+  right: -45%;
+  top: 65%;
+  width: 110px;
+  height: 110px;
+  animation-delay: 3s;
+}
+
+.page-heart-6::before,
+.page-heart-6::after {
+  width: 110px;
+  height: 110px;
+}
+
+.page-heart-6::before {
+  top: -55px;
+}
+
+.page-heart-6::after {
+  left: 55px;
+}
+
+.page-heart-7 {
+  left: -4%;
+  bottom: 16%;
+  width: 120px;
+  height: 120px;
+  animation-delay: 3.5s;
+}
+
+.page-heart-7::before,
+.page-heart-7::after {
+  width: 120px;
+  height: 120px;
+}
+
+.page-heart-7::before {
+  top: -60px;
+}
+
+.page-heart-7::after {
+  left: 60px;
+}
+
+.page-heart-8 {
+  right: -6%;
+  bottom: 8%;
+  width: 130px;
+  height: 130px;
+  animation-delay: 4.1s;
+}
+
+.page-heart-8::before,
+.page-heart-8::after {
+  width: 130px;
+  height: 130px;
+}
+
+.page-heart-8::before {
+  top: -65px;
+}
+
+.page-heart-8::after {
+  left: 65px;
+}
+
+.page-heart-9 {
+  left: -64%;
+  top: 76%;
+  width: 100px;
+  height: 100px;
+  animation-delay: 0.3s;
+}
+
+.page-heart-9::before,
+.page-heart-9::after {
+  width: 100px;
+  height: 100px;
+}
+
+.page-heart-9::before {
+  top: -50px;
+}
+
+.page-heart-9::after {
+  left: 50px;
+}
+
+.page-heart-10 {
+  right: -8%;
+  top: 26%;
+  width: 115px;
+  height: 115px;
+  animation-delay: 2s;
+}
+
+.page-heart-10::before,
+.page-heart-10::after {
+  width: 115px;
+  height: 115px;
+}
+
+.page-heart-10::before {
+  top: -58px;
+}
+
+.page-heart-10::after {
+  left: 58px;
+}
+
+@keyframes main-page-card-heart-float {
+  0% {
+    transform: rotate(-45deg) scale(0);
+  }
+
+  1% {
+    transform: rotate(-45deg) scale(var(--scale, 1));
+  }
+
+  2%,
+  34%,
+  64%,
+  100% {
+    transform: rotate(-45deg) scale(var(--scale, 1)) translate(0, 0);
+  }
+
+  10%,
+  42%,
+  72% {
+    transform: rotate(-45deg) scale(var(--scale, 1)) translate(-1px, -1px);
+  }
+
+  18%,
+  50%,
+  80% {
+    transform: rotate(-45deg) scale(var(--scale, 1)) translate(-1px, 2px);
+  }
+
+  26%,
+  58%,
+  88% {
+    transform: rotate(-45deg) scale(var(--scale, 1)) translate(1px, 1px);
+  }
+}

@@ -42,7 +42,7 @@ export default function ModalLayout({
     : "fixed inset-0 flex items-center justify-center";
 
   const modalClasses = isFull
-    ? "w-full h-dvh flex flex-col bg-stone-50 overflow-hidden"
+    ? "modal-menu w-full h-dvh flex flex-col bg-stone-50 overflow-hidden"
     : "w-[85%] max-w-96 bg-white rounded-[32px] shadow-2xl flex flex-col overflow-hidden";
 
   const modalTitle = isFull ? "" : title;

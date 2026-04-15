@@ -87,16 +87,15 @@ export default function ConfettiCanvas({
 
     const setCanvasSize = () => {
       const dpr = window.devicePixelRatio || 1;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const rect = canvas.getBoundingClientRect();
+      const width = rect.width || window.innerWidth;
+      const height = rect.height || window.innerHeight;
 
       widthRef.current = width;
       heightRef.current = height;
 
       canvas.width = width * dpr;
       canvas.height = height * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
 
       context.setTransform(1, 0, 0, 1, 0, 0);
       context.scale(dpr, dpr);

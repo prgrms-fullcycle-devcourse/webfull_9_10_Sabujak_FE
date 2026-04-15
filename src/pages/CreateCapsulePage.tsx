@@ -12,6 +12,7 @@ import { getErrorMessage } from "../shared/utils/error";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
 import type { ErrorResponse } from "../shared/schemas";
 import { createCapsuleBodySchema } from "../shared/schemas";
+import logoImage from "../../public/logo.png";
 
 type FieldMessageStatus = "success" | "error" | undefined;
 
@@ -387,6 +388,31 @@ export default function CreateCapsulePage() {
 
   return (
     <PageLayout
+      header={
+        <header className="relative px-6 pt-2.5 pb-2.5">
+          <button
+            type="button"
+            aria-label="뒤로가기"
+            className="btn-prev absolute h-10 w-10 z-1"
+            onClick={() => void navigate(-1)}
+          />
+          <h1 className="flex justify-center">
+            <button
+              type="button"
+              className="flex justify-center"
+              aria-label="메인으로 이동"
+              onClick={() => void navigate("/")}
+            >
+              <img
+                src={logoImage}
+                alt="SABUJAK"
+                aria-hidden="true"
+                className="h-10 w-auto object-contain"
+              />
+            </button>
+          </h1>
+        </header>
+      }
       bottomArea={
         <Button
           variant="primary"

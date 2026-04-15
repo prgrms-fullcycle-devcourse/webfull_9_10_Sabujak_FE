@@ -135,7 +135,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
                   value={content}
                   maxLength={textMaxLength}
                   onChange={handleContentChange}
-                  placeholder="따뜻한 마음을 전해보세요..."
+                  placeholder="따뜻한 마음을 전해보세요"
                 />
                 <p
                   className={`absolute right-0 text-right text-sm text-gray-500 mt-1 ${content.length > textMaxLength ? "text-red-500" : ""

@@ -6,9 +6,11 @@ import { Button } from "../../../../shared/components/ui";
 import logoImage from "../../../../../public/logo.png";
 import { useShare } from "../../hooks";
 import { getColors } from "../../utils/color";
-import { formatYearMonth, formatYearMonthDay, getDiffDays } from "../../utils/date";
+import { formatYearMonth } from "../../utils/date";
 import * as htmlToImage from "html-to-image";
 import ConfettiCanvas from "../../../../shared/components/ui/ConfettiCanvas";
+import CapsuleViewReleasedCountdown from "./CapsuleViewReleasedCountdown";
+
 interface CapsuleViewReleasedProps {
   capsule: CapsuleDetailResponseOneOfTwo;
 }
@@ -110,19 +112,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
           </div>
           <div className="mt-6 flex justify-center">
             <div className="flex items-center gap-3 rounded-xl bg-[#F5EFE6] px-4 py-3 text-gray-800">
-              <div
-                className="h-4 w-4"
-                style={{
-                  backgroundImage: "var(--ico-hourglass)",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                  backgroundSize: "contain",
-                }}
-              />
-              <div className="text-[14px] leading-relaxed">
-                이 타임캡슐은 {getDiffDays(new Date(), expiresAt)}일 뒤인{" "}
-                {formatYearMonthDay(expiresAt)}에 영구히 사라집니다.
-              </div>
+              <CapsuleViewReleasedCountdown targetDate={expiresAt} height={20}/>
             </div>
           </div>
           <div className="mt-8 text-center text-[12px] text-gray-400">

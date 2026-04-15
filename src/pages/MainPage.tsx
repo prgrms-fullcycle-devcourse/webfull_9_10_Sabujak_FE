@@ -32,6 +32,7 @@ const isCapsuleStatsResponse = (
 };
 import { slugSchema } from "../shared/schemas";
 import { useModalStore } from "../shared/store";
+import { NumberRoller } from "@/shared/components/ui/NumberRoller";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -114,8 +115,8 @@ export default function MainPage() {
 
   const totalCapsuleMessage = (
     <>
-      지금까지 <strong>{totalCapsuleCount}</strong>개의 캡슐에{" "}<br/>
-      <strong>{totalMessageCount}</strong>개의 마음이 모였어요!!
+      지금까지 <strong><NumberRoller value={totalCapsuleCount} height={20}/></strong>개의 캡슐에{" "}<br/>
+      <strong><NumberRoller value={totalMessageCount} height={20}/></strong>개의 마음이 모였어요!!
     </>
   );
 

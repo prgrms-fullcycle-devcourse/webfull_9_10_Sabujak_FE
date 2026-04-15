@@ -13,6 +13,7 @@ import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";
 import CapsuleCountdown from "./CapsuleCountdown";
 import { connectCapsuleMessageCountStream } from "../../utils/messageCount";
 import { useGetCapsulesSlug } from "@/shared/api/generated/capsule/capsule";
+import { NumberRoller } from "@/shared/components/ui/NumberRoller";
 
 type ReloadCapsuleDataResult = {
   title: string;
@@ -178,7 +179,7 @@ export default function CapsuleViewUpcoming({
         </div>
 
         <div className="total-heart mt-14 w-full rounded-[24px] bg-[#F5F1E9] px-6 py-5 text-lg font-semibold text-[#3a3a3a]">
-          현재 <strong>{displayMessageCount}</strong>개의 따뜻한 마음이 모였어요
+          현재 <strong><NumberRoller value={displayMessageCount} height={30} /></strong>개의 따뜻한 마음이 모였어요
         </div>
       </section>
     </PageLayout>

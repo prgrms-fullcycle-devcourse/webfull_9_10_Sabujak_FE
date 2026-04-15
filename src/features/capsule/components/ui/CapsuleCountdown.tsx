@@ -1,13 +1,10 @@
 import type { CountdownRenderProps } from "react-countdown";
 import Countdown from "../../../../shared/components/ui/Countdown";
+import { NumberRoller } from "@/shared/components/ui/NumberRoller";
 
 type CapsuleCountdownProps = {
   targetDate: string;
 };
-
-function padTime(value: number) {
-  return String(value).padStart(2, "0");
-}
 
 function CountdownRenderer({ days, hours, minutes, seconds, completed }: CountdownRenderProps) {
   if (completed) {
@@ -21,9 +18,9 @@ function CountdownRenderer({ days, hours, minutes, seconds, completed }: Countdo
 
   return (
     <div>
-      <p className="text-[4rem] font-bold leading-none">D-{days}</p>
+      <p className="text-[4rem] font-bold leading-none">D-<NumberRoller value={days} height={60}/></p>
       <p className="mt-3 text-[2rem] font-bold leading-none">
-        {padTime(hours)}:{padTime(minutes)}:{padTime(seconds)}
+        <NumberRoller value={hours} padStart={2} height={40}/>:<NumberRoller value={minutes} padStart={2} height={40}/>:<NumberRoller value={seconds} padStart={2} height={40}/>
       </p>
     </div>
   );

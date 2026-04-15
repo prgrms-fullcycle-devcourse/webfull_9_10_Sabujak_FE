@@ -44,6 +44,17 @@
   margin-top: 0.5rem;
 }
 
+.letter .field-control {
+  position: relative;
+  width: calc(100% - 30px);
+}
+
+.letter .self-stretch.relative:first-child .field-control::after {
+  content: '야.';
+  position: absolute;
+  right: -25px;
+}
+
 .letter textarea {
   line-height: 1.8rem;
 }

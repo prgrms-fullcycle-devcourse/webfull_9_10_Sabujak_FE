@@ -23,7 +23,7 @@ type ReloadCapsuleDataResult = {
 interface CapsuleEditModalProps {
   slug: string;
   password: string;
-  getRoomName: string;
+  getCapsuleName: string;
   getOpenDate: Date;
   reloadCapsuleData?: () => Promise<ReloadCapsuleDataResult>;
   getVersion: number;
@@ -32,13 +32,13 @@ interface CapsuleEditModalProps {
 export const CapsuleEditModal = ({
   slug,
   password,
-  getRoomName,
+  getCapsuleName,
   getOpenDate,
   reloadCapsuleData,
   getVersion,
 }: CapsuleEditModalProps) => {
   const [openDate, setOpenDate] = useState<Date | null>(getOpenDate);
-  const [roomName, setRoomName] = useState<string>(getRoomName);
+  const [capsuleName, setCapsuleName] = useState<string>(getCapsuleName);
   const [version, setVersion] = useState<number>(getVersion);
   const navigate = useNavigate();
   const { openModal, clearModals } = useModalStore();
@@ -47,7 +47,7 @@ export const CapsuleEditModal = ({
 
   const verifyCapsuleEdit = updateCapsuleBodySchema.safeParse({
     password,
-    title: roomName,
+    title: capsuleName,
     openAt: openDate?.toISOString(),
     version,
   });
@@ -64,17 +64,17 @@ export const CapsuleEditModal = ({
     : {};
 
   const fieldTrue = verifyCapsuleEdit.success ? "" : "error";
-  const fieldMessage = titleError[0];
+  const fieldMessage =  titleError[0];
   const isButtonDisabled = !verifyCapsuleEdit.success;
 
-  const handleRoomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomName(e.target.value);
+  const handleCapsuleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCapsuleName(e.target.value);
   };
 
   const CapsuleEdit = async () => {
     if (!verifyCapsuleEdit.success) {
       openModal({
-        title: "안내!",
+        title: "캡슐 수정 실패!",
         content: (
           <p style={{ whiteSpace: "pre-wrap" }}>
             {Object.values(fieldErrors).flat().join("\n")}
@@ -90,13 +90,13 @@ export const CapsuleEditModal = ({
         slug,
         data: {
           password,
-          title: roomName.trim(),
+          title: capsuleName.trim(),
           openAt: openDate?.toISOString() ?? "",
           version,
         },
       });
       openModal({
-        title: "안내!",
+        title: "캡슐 수정 성공!",
         content: <p>수정이 완료되었어요</p>,
         option: "oneButton",
         onConfirm: [
@@ -109,7 +109,7 @@ export const CapsuleEditModal = ({
       });
     } catch (error) {
       openModal({
-        title: "안내!",
+        title: "캡슐 수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
@@ -117,7 +117,7 @@ export const CapsuleEditModal = ({
       const latest = await reloadCapsuleData?.();
 
       if (latest) {
-        setRoomName(latest.title);
+        setCapsuleName(latest.title);
         setOpenDate(new Date(latest.openAt));
         setVersion(latest.version);
       }
@@ -126,7 +126,7 @@ export const CapsuleEditModal = ({
 
   const CapsuleDeleteConfirm = () => {
     openModal({
-      title: "확인",
+      title: "지울거에요?",
       content: (
         <p className="text-left">
           정말 삭제할까요?
@@ -143,7 +143,7 @@ export const CapsuleEditModal = ({
   const CapsuleDelete = async () => {
     if (!verifyCapsuleEdit.success && passwordError.length > 0) {
       openModal({
-        title: "안내!",
+        title: "캡슐 삭제 실패!",
         content: <p>{passwordError}</p>,
         option: "oneButton",
       });
@@ -156,7 +156,7 @@ export const CapsuleEditModal = ({
         data: { password },
       });
       openModal({
-        title: "안내!",
+        title: "캡슐 삭제 성공!",
         content: <p>삭제가 완료되었어요</p>,
         option: "oneButton",
         onConfirm: [
@@ -168,7 +168,7 @@ export const CapsuleEditModal = ({
       });
     } catch (error) {
       openModal({
-        title: "삭제 실패",
+        title: "캡슐 삭제 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
@@ -181,17 +181,17 @@ export const CapsuleEditModal = ({
         <main className="flex w-full flex-col gap-10 px-6 pt-10 pb-20">
           <div className="flex flex-col gap-2">
             <Field
-              id="RoomName"
+              id="CapsuleName"
               label="타임캡슐 제목"
               message={fieldMessage}
               messageStatus={fieldTrue}
             >
               <Input
-                id="RoomName"
+                id="CapsuleName"
                 placeholder="타임캡슐 제목을 입력해 주세요"
-                value={roomName}
+                value={capsuleName}
                 maxLength={100}
-                onChange={handleRoomNameChange}
+                onChange={handleCapsuleNameChange}
               />
             </Field>
           </div>

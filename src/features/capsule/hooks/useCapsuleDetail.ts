@@ -3,7 +3,7 @@ import type { CapsuleDetailResponse } from "../../../shared/api/generated/model"
 
 type GetCapsulesSlugResult = ReturnType<typeof useGetCapsulesSlug>;
 
-type UseRoomDetailResult = {
+type UseCapsuleDetailResult = {
   data?: CapsuleDetailResponse;
   isLoading: boolean;
   isError: boolean;
@@ -11,7 +11,7 @@ type UseRoomDetailResult = {
   refetch: GetCapsulesSlugResult["refetch"]
 };
 
-export function useRoomDetail(slug: string): UseRoomDetailResult {
+export function useCapsuleDetail(slug: string): UseCapsuleDetailResult {
   const { data, isLoading, isError, error, refetch } = useGetCapsulesSlug(slug);
 
   return {

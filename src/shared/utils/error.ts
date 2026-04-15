@@ -12,6 +12,7 @@ const errorMessages = {
   CAPSULE_ALREADY_OPENED: "이미 누군가 연 타임캡슐이예요.",
   TOO_MANY_REQUESTS: "요청이 잠시 몰렸어요. 잠시 후 다시 해주세요.",
   INTERNAL_SERVER_ERROR: "고장난 타임캡슐이예요! 다시 시도해주세요.",
+  CAPSULE_UPDATE_CONFLICT : "다른 사용자가 먼저 수정했어요.\n최신 정보를 확인한 뒤 다시 저장해 주세요."
 } as const;
 
 type ErrorCode = keyof typeof errorMessages;

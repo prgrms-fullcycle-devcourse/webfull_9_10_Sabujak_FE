@@ -106,7 +106,9 @@ function isShareCancelled(error: unknown) {
   }
 
   const errorName =
-    "name" in error && typeof error.name === "string" ? error.name.toLowerCase() : "";
+    "name" in error && typeof error.name === "string"
+      ? error.name.toLowerCase()
+      : "";
   const errorMessage =
     "message" in error && typeof error.message === "string"
       ? error.message.toLowerCase()
@@ -117,15 +119,15 @@ function isShareCancelled(error: unknown) {
   }
 
   return (
-    errorName.includes("abort")
-    || errorName.includes("cancel")
-    || errorMessage.includes("abort")
-    || errorMessage.includes("cancel")
-    || errorMessage.includes("canceled")
-    || errorMessage.includes("cancelled")
-    || errorMessage.includes("share canceled")
-    || errorMessage.includes("share cancelled")
-    || errorMessage.includes("the user aborted")
+    errorName.includes("abort") ||
+    errorName.includes("cancel") ||
+    errorMessage.includes("abort") ||
+    errorMessage.includes("cancel") ||
+    errorMessage.includes("canceled") ||
+    errorMessage.includes("cancelled") ||
+    errorMessage.includes("share canceled") ||
+    errorMessage.includes("share cancelled") ||
+    errorMessage.includes("the user aborted")
   );
 }
 
@@ -133,16 +135,14 @@ export function useShare() {
   const { openModal } = useModalStore();
 
   const canShare =
-    isKakaoBrowser()
-    || (
-      typeof navigator !== "undefined"
-      && typeof navigator.share === "function"
-      && isMobile()
-    );
+    isKakaoBrowser() ||
+    (typeof navigator !== "undefined" &&
+      typeof navigator.share === "function" &&
+      isMobile());
 
-  const openNoticeModal = (message: string) => {
+  const openNoticeModal = (title: string, message: string) => {
     openModal({
-      title: "안내!",
+      title: title,
       content: message,
       option: "oneButton",
     });
@@ -172,9 +172,9 @@ export function useShare() {
       }
 
       if (
-        typeof navigator !== "undefined"
-        && typeof navigator.share === "function"
-        && isMobile()
+        typeof navigator !== "undefined" &&
+        typeof navigator.share === "function" &&
+        isMobile()
       ) {
         await navigator.share({
           title,
@@ -187,7 +187,7 @@ export function useShare() {
       if (navigator.clipboard?.writeText) {
         try {
           await navigator.clipboard.writeText(url);
-          openNoticeModal("링크를 복사했어요.");
+          openNoticeModal("링크 복사 성공!", "링크를 복사했어요.");
           return;
         } catch {
           // Fall through to execCommand fallback.
@@ -195,17 +195,17 @@ export function useShare() {
       }
 
       if (fallbackCopyText(url)) {
-        openNoticeModal("링크를 복사했어요.");
+        openNoticeModal("링크 복사 성공!", "링크를 복사했어요.");
         return;
       }
 
-      openNoticeModal("링크 복사에 실패했어요. 다시 시도해주세요.");
+      openNoticeModal("링크 복사 실패!", "링크 복사에 실패했어요.\n다시 시도해주세요.");
     } catch (error) {
       if (isShareCancelled(error)) {
         return;
       }
 
-      openNoticeModal("공유에 실패했어요. 다시 시도해주세요.");
+      openNoticeModal("링크 공유 실패!", "공유에 실패했어요.\n다시 시도해주세요.");
     }
   };
 

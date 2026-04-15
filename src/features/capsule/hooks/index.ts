@@ -1,3 +1,3 @@
 export { default as useHeartJarAnimation } from "./useHeartJarAnimation";
-export { useRoomDetail } from "./useRoomDetail";
+export { useCapsuleDetail } from "./useCapsuleDetail";
 export { useShare } from "./useShare";

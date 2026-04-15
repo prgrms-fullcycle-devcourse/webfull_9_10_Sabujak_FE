@@ -14,7 +14,7 @@ type ReloadCapsuleDataResult = {
 
 interface CapsuleEditCheckModalProps {
   slug: string;
-  getRoomName?: string;
+  getCapsuleName?: string;
   getOpenDate?: Date;
   reloadCapsuleData?: () => Promise<ReloadCapsuleDataResult>;
   version?: number;
@@ -22,7 +22,7 @@ interface CapsuleEditCheckModalProps {
 
 export const CapsuleEditCheckModal = ({
   slug,
-  getRoomName = "",
+  getCapsuleName = "",
   getOpenDate = new Date(),
   reloadCapsuleData,
   version = 0,
@@ -48,7 +48,7 @@ export const CapsuleEditCheckModal = ({
   const handleSubmit = async () => {
     if (!verifyPassword.success) {
       openModal({
-        title: "안내!",
+        title: "권한 확인 실패!",
         content: <p>{passwordErrorMessage}</p>,
         option: "oneButton",
       });
@@ -63,7 +63,7 @@ export const CapsuleEditCheckModal = ({
           <CapsuleEditModal
             slug={slug}
             password={password}
-            getRoomName={getRoomName}
+            getCapsuleName={getCapsuleName}
             getOpenDate={getOpenDate}
             reloadCapsuleData={reloadCapsuleData}
             getVersion={version}
@@ -73,7 +73,7 @@ export const CapsuleEditCheckModal = ({
       });
     } catch (error) {
       openModal({
-        title: "비밀번호 체크가 실패했어요",
+        title: "권한 확인 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
@@ -94,7 +94,7 @@ export const CapsuleEditCheckModal = ({
 
         <div className="w-full pt-16">
           <Field
-            id="roomPassword"
+            id="capsulePassword"
             messageStatus={fieldPasswordState}
             message={fieldPasswordMessage}
           >

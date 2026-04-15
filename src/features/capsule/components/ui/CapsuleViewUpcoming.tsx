@@ -7,7 +7,7 @@ import { WriteMessageContent } from "../../../message/components/ui/WriteMessage
 import { useShare } from "../../hooks";
 import "./CapsuleViewUpcoming.css";
 import HeartJar from "../../../../shared/components/ui/HeartJar";
-import logoImage from "../../../../assets/images/common/logo.png";
+import logoImage from "../../../../../public/logo.png";
 import { useModalStore } from "../../../../shared/store/useModalStore";
 import { CapsuleEditCheckModal } from "./CapsuleEditCheckModal";
 import CapsuleCountdown from "./CapsuleCountdown";
@@ -21,27 +21,27 @@ type ReloadCapsuleDataResult = {
 } | null;
 
 interface CapsuleViewUpcomingProps {
-  room: CapsuleDetailResponseOneOf;
+  capsule: CapsuleDetailResponseOneOf;
 }
 
 export default function CapsuleViewUpcoming({
-  room,
+  capsule,
 }: CapsuleViewUpcomingProps) {
   const navigate = useNavigate();
   const { shareUrl, canShare } = useShare();
-  const { refetch } = useGetCapsulesSlug(room.slug);
+  const { refetch } = useGetCapsulesSlug(capsule.slug);
   const { openModal } = useModalStore();
-  const [title, setTitle] = useState(room.title);
-  const [openAt, setOpenAt] = useState(room.openAt);
+  const [title, setTitle] = useState(capsule.title);
+  const [openAt, setOpenAt] = useState(capsule.openAt);
   const [version, setVersion] = useState(
-    "version" in room && typeof room.version === "number" ? room.version : 0
+    "version" in capsule && typeof capsule.version === "number" ? capsule.version : 0
   );
   const [messageCount, setMessageCount] = useState<number | null>(null);
-  const displayMessageCount = messageCount ?? room.messageCount;
+  const displayMessageCount = messageCount ?? capsule.messageCount;
 
   useEffect(() => {
     const cleanup = connectCapsuleMessageCountStream(
-      room.slug,
+      capsule.slug,
       (nextMessageCount) => {
         setMessageCount(nextMessageCount);
       }
@@ -50,7 +50,7 @@ export default function CapsuleViewUpcoming({
     return () => {
       cleanup();
     };
-  }, [room.slug]);
+  }, [capsule.slug]);
 
   const reloadCapsuleData = async (): Promise<ReloadCapsuleDataResult> => {
     const result = await refetch();
@@ -77,7 +77,7 @@ export default function CapsuleViewUpcoming({
 
   const handleShare = async () => {
     await shareUrl({
-      title: room.title,
+      title: capsule.title,
       text: "친구들에게 타임캡슐 주소를 공유해보세요.",
       url: window.location.href,
     });
@@ -121,8 +121,8 @@ export default function CapsuleViewUpcoming({
                   title: "어드민 체크",
                   content: (
                     <CapsuleEditCheckModal
-                      slug={room.slug}
-                      getRoomName={title}
+                      slug={capsule.slug}
+                      getCapsuleName={title}
                       getOpenDate={new Date(openAt)}
                       reloadCapsuleData={reloadCapsuleData}
                       version={version}
@@ -142,7 +142,7 @@ export default function CapsuleViewUpcoming({
             onClick={() =>
               openModal({
                 title: "메시지 쓰기",
-                content: <WriteMessageContent slug={room.slug} />,
+                content: <WriteMessageContent slug={capsule.slug} />,
                 option: "writeMessage",
               })
             }

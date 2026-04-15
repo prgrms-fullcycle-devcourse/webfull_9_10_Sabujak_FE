@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getCapsulesStats } from "../shared/api/generated/capsule/capsule";
 import type { CapsuleStatsResponse } from "../shared/api/generated/model/capsuleStatsResponse";
 import PageLayout from "../shared/components/layout/PageLayout";
+import CardHearts from "../shared/components/layout/CardHearts";
 import { Button, Field, Input } from "../shared/components/ui";
 import {
   buildCapsuleDetailPath,
@@ -128,7 +129,7 @@ export default function MainPage() {
   };
 
   return (
-    <PageLayout contentClassName="main-page">
+    <PageLayout contentClassName="main-page" hideHearts>
       <MainPageBackground />
       <div className="main-content">
         <h1 className="main-page-brand flex justify-center">
@@ -198,20 +199,13 @@ export default function MainPage() {
                       </Button>
                     }
                   />
-
-
-
-
                 </Field>
-
-
 
                 <div className="flex items-center gap-3">
                   <div className="h-px flex-1 bg-gray-300" />
                   <span className="text-sm text-gray-500">♥</span>
                   <div className="h-px flex-1 bg-gray-300" />
                 </div>
-
 
                 <Button
                   variant="primary"
@@ -223,16 +217,7 @@ export default function MainPage() {
               </div>
             </section>
 
-            <div className="main-page-card-hearts-back" aria-hidden="true">
-              <span className="main-page-card-heart main-page-card-heart-top-center main-page-card-heart-red main-page-card-heart-dots" />
-              <span className="main-page-card-heart main-page-card-heart-top-right main-page-card-heart-blue main-page-card-heart-lines" />
-              <span className="main-page-card-heart main-page-card-heart-bottom-right main-page-card-heart-orange" />
-            </div>
-            <div className="main-page-card-hearts-front" aria-hidden="true">
-              <span className="main-page-card-heart main-page-card-heart-top-left main-page-card-heart-yellow" />
-              <span className="main-page-card-heart main-page-card-heart-left-center main-page-card-heart-green main-page-card-heart-dots" />
-              <span className="main-page-card-heart main-page-card-heart-bottom-center main-page-card-heart-pink" />
-            </div>
+            <CardHearts showFront />
           </div>
         </div>
       </div>

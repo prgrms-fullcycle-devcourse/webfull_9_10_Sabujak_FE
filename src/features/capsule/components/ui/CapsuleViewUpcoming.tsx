@@ -87,7 +87,7 @@ export default function CapsuleViewUpcoming({
   return (
     <PageLayout
       header={
-        <header className="px-6 pt-5">
+        <header className="relative px-6 pt-2.5 pb-2.5">
 
           <button
             type="button"

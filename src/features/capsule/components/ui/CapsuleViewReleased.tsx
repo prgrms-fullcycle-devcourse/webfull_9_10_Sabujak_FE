@@ -53,7 +53,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
     <div ref={ref}>
       <PageLayout
         header={
-          <header className="relative px-6 pt-5">
+          <header className="relative px-6 pt-2.5 pb-2.5 no-capture">
             <button
               type="button"
               aria-label="뒤로가기"
@@ -99,17 +99,16 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
       >
         <ConfettiCanvas />
         <section className="w-full released">
-          <h2 className="mt-2 text-center text-[14px] text-gray-400">
-            {capsule.title}
-          </h2>
-          <div
+          <p className="mt-2 text-center text-[14px] text-gray-400 no-capture">
+            드디어 상자가 열렸어요!
+          </p>
+          <h2
             id="released-capsule-heading"
-            className="mt-3 text-center text-[24px] font-extrabold leading-snug text-gray-900"
+            className="mt-3 text-center text-[20px] font-extrabold leading-snug text-gray-900"
           >
-            드디어 상자가
-            <br />
-            열렸어요
-          </div>
+            {capsule.title}
+
+          </h2>
           <div className="mt-6 flex justify-center">
             <div className="flex items-center gap-3 rounded-xl bg-[#F5EFE6] px-4 py-3 text-gray-800">
               <CapsuleViewReleasedCountdown targetDate={expiresAt} height={20}/>
@@ -128,7 +127,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
                 <span className="text-left text-[12px] text-gray-500">
                   {msg.nickname}
                 </span>
-                <p className="flex flex-1 items-center justify-center break-keep whitespace-pre-line text-center text-[16px] font-semibold leading-relaxed text-gray-700">
+                <p className="flex flex-1 items-center justify-center break-all whitespace-pre-line text-center text-[16px] font-semibold leading-relaxed text-gray-700">
                   {msg.content}
                 </p>
               </div>

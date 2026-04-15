@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import CardHearts from "./CardHearts";
 
 type PageLayoutProps = {
     header?: ReactNode;
     children?: ReactNode;
     bottomArea?: ReactNode;
     contentClassName?: string;
+    hideHearts?: boolean;
 };
 
 export default function PageLayout({
@@ -12,6 +14,7 @@ export default function PageLayout({
     children,
     bottomArea,
     contentClassName = "",
+    hideHearts = false,
 }: PageLayoutProps) {
     // fixed 하단 영역의 실제 DOM을 잡기 위한 ref
     const bottomAreaRef = useRef<HTMLDivElement | null>(null);
@@ -44,8 +47,9 @@ export default function PageLayout({
     const contentClassNameText = `p-6 ${header ? "" : "pt-12"} ${bottomArea ? "pb-2" : "pb-10"} ${contentClassName}`.trim();
 
     return (
-        <div className="root-inner min-h-dvh min-w-2xs" data-enter-scope="true">
-            <div className="flex min-h-dvh w-full flex-col">
+        <div className="root-inner relative min-h-dvh min-w-2xs" data-enter-scope="true">
+            {!hideHearts && <CardHearts fullPage />}
+            <div className="relative z-1 flex min-h-dvh w-full flex-col">
                 {header ? header : null}
 
                 <main className="flex-1">

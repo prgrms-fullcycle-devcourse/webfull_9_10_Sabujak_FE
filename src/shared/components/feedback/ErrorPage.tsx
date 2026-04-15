@@ -33,7 +33,7 @@ export const ErrorPage: React.FC<ErrorPageProps> = ({
   };
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between p-6 font-sans text-[#333]">
+    <div className="min-h-screen flex flex-col items-center justify-between p-6 font-sans text-[#333] notfound">
 
       {/* 1. 상단 타이틀 및 정책 안내 */}
       <header className="w-full max-w-md mt-12 text-center">

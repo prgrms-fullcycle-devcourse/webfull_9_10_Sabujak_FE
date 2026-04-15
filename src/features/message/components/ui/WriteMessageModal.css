@@ -23,8 +23,8 @@
 }
 
 .letter-content .self-stretch.relative:first-child {
-  background: repeating-linear-gradient(transparent 0 calc(1.47rem - 1px), #eecfd7 0 1.47rem);
-  line-height: 1.47rem;
+  background: repeating-linear-gradient(transparent 0 calc(1.5rem - 1px), #eecfd7 0 1.5rem);
+  line-height: 1.5rem;
 }
 
 .letter-content .self-stretch.relative textarea {

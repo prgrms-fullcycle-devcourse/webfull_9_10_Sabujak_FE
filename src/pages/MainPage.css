@@ -421,14 +421,15 @@
   align-items: center;
   justify-content: center;
   height: 100dvh;
+  width: 100%;
+  box-sizing: border-box;
   padding-top: 40px !important;
 }
 
 
-
 /* 꾸밈하트 */
 .main-content {
-  width: stretch;
+  width: 100%;
 }
 
 .main-page-card-area {

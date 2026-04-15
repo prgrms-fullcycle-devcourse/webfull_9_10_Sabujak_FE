@@ -74,7 +74,7 @@ export const CapsuleEditModal = ({
   const CapsuleEdit = async () => {
     if (!verifyCapsuleEdit.success) {
       openModal({
-        title: "안내!",
+        title: "캡슐 수정 실패!",
         content: (
           <p style={{ whiteSpace: "pre-wrap" }}>
             {Object.values(fieldErrors).flat().join("\n")}
@@ -96,7 +96,7 @@ export const CapsuleEditModal = ({
         },
       });
       openModal({
-        title: "안내!",
+        title: "캡슐 수정 성공!",
         content: <p>수정이 완료되었어요</p>,
         option: "oneButton",
         onConfirm: [
@@ -109,7 +109,7 @@ export const CapsuleEditModal = ({
       });
     } catch (error) {
       openModal({
-        title: "안내!",
+        title: "캡슐 수정 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });
@@ -126,7 +126,7 @@ export const CapsuleEditModal = ({
 
   const CapsuleDeleteConfirm = () => {
     openModal({
-      title: "확인",
+      title: "지울거에요?",
       content: (
         <p className="text-left">
           정말 삭제할까요?
@@ -143,7 +143,7 @@ export const CapsuleEditModal = ({
   const CapsuleDelete = async () => {
     if (!verifyCapsuleEdit.success && passwordError.length > 0) {
       openModal({
-        title: "안내!",
+        title: "캡슐 삭제 실패!",
         content: <p>{passwordError}</p>,
         option: "oneButton",
       });
@@ -156,7 +156,7 @@ export const CapsuleEditModal = ({
         data: { password },
       });
       openModal({
-        title: "안내!",
+        title: "캡슐 삭제 성공!",
         content: <p>삭제가 완료되었어요</p>,
         option: "oneButton",
         onConfirm: [
@@ -168,7 +168,7 @@ export const CapsuleEditModal = ({
       });
     } catch (error) {
       openModal({
-        title: "삭제 실패",
+        title: "캡슐 삭제 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });

@@ -72,7 +72,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
       });
     } catch (error) {
       openModal({
-        title: "메세지 전송에 실패했어요!",
+        title: "메세지 전송 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });

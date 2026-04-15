@@ -48,7 +48,7 @@ export const CapsuleEditCheckModal = ({
   const handleSubmit = async () => {
     if (!verifyPassword.success) {
       openModal({
-        title: "안내!",
+        title: "권한 확인 실패!",
         content: <p>{passwordErrorMessage}</p>,
         option: "oneButton",
       });
@@ -73,7 +73,7 @@ export const CapsuleEditCheckModal = ({
       });
     } catch (error) {
       openModal({
-        title: "비밀번호 체크가 실패했어요",
+        title: "권한 확인 실패!",
         content: <p>{getErrorMessage(error)}</p>,
         option: "oneButton",
       });

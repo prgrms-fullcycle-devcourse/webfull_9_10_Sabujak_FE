@@ -114,7 +114,7 @@ export default function MainPage() {
 
   const totalCapsuleMessage = (
     <>
-      지금까지 <strong>{totalCapsuleCount}</strong>개의 타임캡슐에{" "}<br/>
+      지금까지 <strong>{totalCapsuleCount}</strong>개의 캡슐에{" "}<br/>
       <strong>{totalMessageCount}</strong>개의 마음이 모였어요!!
     </>
   );
@@ -177,7 +177,7 @@ export default function MainPage() {
                         onClick={() => {
                           if (!verifyCapsuleSlug.success) {
                             openModal({
-                              title: "안내!",
+                              title: "캡슐 검색 실패!!",
                               content: <p>{slugError}</p>,
                               option: "oneButton",
                             });

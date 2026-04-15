@@ -31,7 +31,9 @@ const STORAGE_KEY = "create-capsule-slug-reservations";
 const MAX_SLUG_RESERVATIONS_PER_SESSION = 3;
 
 // 만료된 예약을 캐시에서 제거한다
-function pruneExpiredReservations(cache: SlugReservationCache): SlugReservationCache {
+function pruneExpiredReservations(
+  cache: SlugReservationCache
+): SlugReservationCache {
   const now = Date.now();
 
   return Object.fromEntries(
@@ -39,7 +41,7 @@ function pruneExpiredReservations(cache: SlugReservationCache): SlugReservationC
       const reservedUntil = Date.parse(entry.reservedUntil);
 
       return Number.isFinite(reservedUntil) && reservedUntil > now;
-    }),
+    })
   );
 }
 
@@ -96,9 +98,8 @@ export default function CreateCapsulePage() {
     useState<FieldMessageStatus>(undefined);
 
   // 이전에 확인한 slug 예약들을 저장해두는 캐시
-  const [reservationCache, setReservationCache] = useState<SlugReservationCache>(() =>
-    readReservationCache(),
-  );
+  const [reservationCache, setReservationCache] =
+    useState<SlugReservationCache>(() => readReservationCache());
 
   const [isCheckingSlug, setIsCheckingSlug] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -137,25 +138,25 @@ export default function CreateCapsulePage() {
     title.length === 0
       ? undefined
       : titleError.length === 0
-        ? undefined
-        : "error";
+      ? undefined
+      : "error";
   const slugValidationStatus: FieldMessageStatus =
     slug.length === 0
       ? undefined
       : slugError.length === 0
-        ? undefined
-        : "error";
+      ? undefined
+      : "error";
   const passwordFieldStatus: FieldMessageStatus =
     password.length === 0
       ? undefined
       : passwordError.length === 0
-        ? undefined
-        : "error";
+      ? undefined
+      : "error";
   const slugFieldStatus = slugMessageStatus ?? slugValidationStatus;
 
   const titleFieldMessage = title.length === 0 ? "" : titleError[0];
   const slugFieldMessage =
-    slugMessage || ( slug.length === 0 ? "" : slugError[0]);
+    slugMessage || (slug.length === 0 ? "" : slugError[0]);
   const passwordFieldMessage = password.length === 0 ? "" : passwordError[0];
 
   const isReservationValid =
@@ -164,12 +165,19 @@ export default function CreateCapsulePage() {
     currentReservation.reservedSlug === reservedSlug &&
     reservedSlug === slug;
   const isButtonDisabled =
-    isCreating || isCheckingSlug || !verifyCreateCapsule.success || !isReservationValid;
+    isCreating ||
+    isCheckingSlug ||
+    !verifyCreateCapsule.success ||
+    !isReservationValid;
 
   // alert 대신 공용 modal store를 통해 안내 메시지를 띄운다.
-  const openNoticeModal = (message: string, onConfirm?: () => void) => {
+  const openNoticeModal = (
+    title: string,
+    message: string,
+    onConfirm?: () => void
+  ) => {
     openModal({
-      title: "안내",
+      title: title,
       content: <p>{message}</p>,
       option: "oneButton",
       buttonText: ["확인"],
@@ -198,8 +206,9 @@ export default function CreateCapsulePage() {
       // 세션 토큰이 있으면 같은 세션의 모든 slug 제거
       return Object.fromEntries(
         Object.entries(prev).filter(
-          ([, entry]) => entry.reservationSessionToken !== reservationSessionToken,
-        ),
+          ([, entry]) =>
+            entry.reservationSessionToken !== reservationSessionToken
+        )
       );
     });
   };
@@ -306,7 +315,7 @@ export default function CreateCapsulePage() {
 
     if (!verifyCreateCapsule.success) {
       openModal({
-        title: "안내!",
+        title: "캡슐 생성 실패!",
         content: (
           <p style={{ whiteSpace: "pre-wrap" }}>
             {" "}
@@ -346,13 +355,16 @@ export default function CreateCapsulePage() {
       resetSlugReservation();
 
       // 생성 성공 후 확인 버튼을 누르면 상세 페이지로 이동한다.
-      openNoticeModal("타임캡슐이 만들어졌어요", () => {
+      openNoticeModal("캡슐 생성 성공!", "타임캡슐이 만들어졌어요", () => {
         void navigate(buildCapsuleDetailPath(response.slug));
       });
     } catch (error) {
       const errorCode = getErrorCode(error);
 
-      if (errorCode === "SLUG_RESERVATION_MISMATCH" || errorCode === "SLUG_ALREADY_IN_USE") {
+      if (
+        errorCode === "SLUG_RESERVATION_MISMATCH" ||
+        errorCode === "SLUG_ALREADY_IN_USE"
+      ) {
         // 예약이 깨졌거나 이미 사용 중인 slug면 캐시도 함께 비운다.
         clearSessionCache(trimmedSlug);
         setReservationSessionToken("");
@@ -360,13 +372,13 @@ export default function CreateCapsulePage() {
         setSlugMessage(
           errorCode === "SLUG_ALREADY_IN_USE"
             ? "이미 사용 중인 주소예요. 다른 주소를 입력해 주세요."
-            : "주소 예약이 만료되었어요. 다시 중복 확인해 주세요.",
+            : "주소 예약이 만료되었어요. 다시 중복 확인해 주세요."
         );
         setSlugMessageStatus("error");
         return;
       }
 
-      openNoticeModal(getErrorMessage(error));
+      openNoticeModal("캡슐 생성 실패!", getErrorMessage(error));
     } finally {
       isCreatingRef.current = false;
       setIsCreating(false);
@@ -423,9 +435,18 @@ export default function CreateCapsulePage() {
                 className="text-center flex-none"
                 onClick={() => void handleCheckSlug()}
                 enterFlow={true}
-                disabled={isCheckingSlug || !slug.trim() || slugError.length > 0 || isReservationValid}
+                disabled={
+                  isCheckingSlug ||
+                  !slug.trim() ||
+                  slugError.length > 0 ||
+                  isReservationValid
+                }
               >
-                {isCheckingSlug ? "확인 중" : isReservationValid ? "사용가능" : "중복확인"}
+                {isCheckingSlug
+                  ? "확인 중"
+                  : isReservationValid
+                  ? "사용가능"
+                  : "중복확인"}
               </Button>
             }
             onChange={handleSlugChange}

@@ -159,7 +159,7 @@ export default function MainPage() {
 
               <div className="mt-6 space-y-2">
                 <Field
-                  id="roomTitle"
+                  id="capsuleTitle"
                   message={slugFieldMessage}
                   messageStatus={slugCheckField}
                 >

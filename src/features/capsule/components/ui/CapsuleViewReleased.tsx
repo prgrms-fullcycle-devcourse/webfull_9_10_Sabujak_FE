@@ -10,17 +10,17 @@ import { formatYearMonth, formatYearMonthDay, getDiffDays } from "../../utils/da
 import * as htmlToImage from "html-to-image";
 import ConfettiCanvas from "../../../../shared/components/ui/ConfettiCanvas";
 interface CapsuleViewReleasedProps {
-  room: CapsuleDetailResponseOneOfTwo;
+  capsule: CapsuleDetailResponseOneOfTwo;
 }
 
-export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) {
+export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProps) {
   const navigate = useNavigate();
   const { shareUrl, canShare } = useShare();
   const ref = useRef<HTMLDivElement>(null);
 
   const handleShare = async () => {
     await shareUrl({
-      title: room.title,
+      title: capsule.title,
       text: "친구들에게 타임캡슐 주소를 공유해보세요.",
       url: window.location.href,
     });
@@ -44,8 +44,8 @@ export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) 
     }
   };
 
-  const colors = getColors(room.messages.length);
-  const expiresAt = new Date(room.expiresAt);
+  const colors = getColors(capsule.messages.length);
+  const expiresAt = new Date(capsule.expiresAt);
 
   return (
     <div ref={ref}>
@@ -98,7 +98,7 @@ export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) 
         <ConfettiCanvas />
         <section className="w-full released">
           <h2 className="mt-2 text-center text-[14px] text-gray-400">
-            {room.title}
+            {capsule.title}
           </h2>
           <div
             id="released-capsule-heading"
@@ -130,7 +130,7 @@ export default function CapsuleViewReleased({ room }: CapsuleViewReleasedProps) 
           </div>
 
           <div className="mt-8 grid max-w-md grid-cols-2 gap-4">
-            {room.messages.map((msg, index) => (
+            {capsule.messages.map((msg, index) => (
               <div
                 key={msg.id}
                 className={`${colors[index]} flex aspect-square flex-col rounded-3xl p-6 transition-transform active:scale-95`}

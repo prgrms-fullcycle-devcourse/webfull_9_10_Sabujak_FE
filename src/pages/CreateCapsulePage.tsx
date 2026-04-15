@@ -397,7 +397,7 @@ export default function CreateCapsulePage() {
 
       <div className="mt-10 space-y-4">
         <Field
-          id="roomTitle"
+          id="capsuleTitle"
           label="타임캡슐 제목"
           message={titleFieldMessage}
           messageStatus={titleFieldStatus}
@@ -410,7 +410,7 @@ export default function CreateCapsulePage() {
         </Field>
 
         <Field
-          id="roomUrl"
+          id="capsuleUrl"
           label="타임캡슐 주소"
           helperText="영문 소문자, 숫자, 하이픈(-)만 입력 가능해요."
           message={slugFieldMessage}
@@ -443,7 +443,7 @@ export default function CreateCapsulePage() {
         </Field>
 
         <Field
-          id="roomPassword"
+          id="capsulePassword"
           label="관리자 비밀번호"
           // helperText="숫자 4자리를 입력해 주세요."
           message={passwordFieldMessage}

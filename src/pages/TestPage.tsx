@@ -60,7 +60,7 @@ export default function TestPage() {
 
         <Button onClick={() => openModal({
           title: '어드민',
-          content: <CapsuleEditModal slug='testslug1111' password='1112' getRoomName="우리의 소중한 기록" getOpenDate={new Date()} getVersion={123}  />,
+          content: <CapsuleEditModal slug='testslug1111' password='1112' getCapsuleName="우리의 소중한 기록" getOpenDate={new Date()} getVersion={123}  />,
           option: 'capsuleEditModal'
         })}>
           CapsuleEditModal

@@ -144,7 +144,7 @@ import { Field, Input } from "./ui";
 export default function Example() {
   return (
     <Field
-      id="roomUrl"
+      id="capsuleUrl"
       label="나만의 URL 주소"
       message="이미 사용 중인 주소예요."
       messageStatus="error"
@@ -169,7 +169,7 @@ export default function Example() {
 
 ```tsx
 <Field
-  id="roomPassword"
+  id="capsulePassword"
   label="관리자 비밀번호"
   helperText="비밀번호 4자리를 입력해주세요."
 >
@@ -261,7 +261,7 @@ export default function Example() {
       title: "어드민 체크",
       content: (
         <CapsuleEditCheckModal
-          getRoomName={roomTitle}
+          getCapsuleName={capsuleTitle}
           getOpenDate={new Date(openAt)}
         />
       ),

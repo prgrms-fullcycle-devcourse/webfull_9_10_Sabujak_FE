@@ -1,7 +1,7 @@
 import { Navigate, useParams, useSearchParams } from "react-router-dom";
 import CapsuleViewUpcoming from "../features/capsule/components/ui/CapsuleViewUpcoming";
 import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewReleased";
-import { useRoomDetail } from "../features/capsule/hooks";
+import { useCapsuleDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
 import { ErrorPage } from "../shared/components/feedback/ErrorPage";
 
@@ -20,15 +20,15 @@ export function LegacyCapsuleRedirectPage() {
 export default function CapsulePage() {
   const { slug } = useParams<{ slug: string }>();
   const capsuleSlug = slug ?? "";
-  const { data, isError } = useRoomDetail(capsuleSlug);
+  const { data, isError } = useCapsuleDetail(capsuleSlug);
 
   if (!capsuleSlug || isError || !data) {
     return <ErrorPage />;
   }
 
   if (!("messages" in data)) {
-    return <CapsuleViewUpcoming key={data.slug} room={data} />;
+    return <CapsuleViewUpcoming key={data.slug} capsule={data} />;
   }
 
-  return <CapsuleViewReleased key={data.slug} room={data} />;
+  return <CapsuleViewReleased key={data.slug} capsule={data} />;
 }

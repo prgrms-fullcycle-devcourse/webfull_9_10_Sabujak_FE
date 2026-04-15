@@ -78,7 +78,7 @@ export default function CapsuleViewUpcoming({
   const handleShare = async () => {
     await shareUrl({
       title: room.title,
-      text: "친구들에게 타임캡슐 링크를 공유해보세요.",
+      text: "친구들에게 타임캡슐 주소를 공유해보세요.",
       url: window.location.href,
     });
   };
@@ -154,18 +154,19 @@ export default function CapsuleViewUpcoming({
             iconClassName="btn-icon-share"
             onClick={() => void handleShare()}
           >
-            {canShare ? "친구들에게 링크 공유하기" : "링크 복사하기"}
+            {canShare ? "친구들에게 주소 공유하기" : "주소 복사하기"}
           </Button>
         </>
       }
-      contentClassName="flex flex-col items-center text-center"
+      contentClassName=""
     >
-      <section className="upcoming">
         <h2 className="text-lg font-bold">{title}</h2>
+
+      <section className="upcoming flex flex-col items-center justify-center text-center">
         <div className="dday-wrap mt-4">
           <HeartJar total={displayMessageCount} />
 
-          <div className="mt-10">
+          <div className="">
             <p className="text-sm font-semibold tracking-[0.24em] text-[#b1b1b1]">
               OPENING SOON
             </p>
@@ -176,7 +177,7 @@ export default function CapsuleViewUpcoming({
           </div>
         </div>
 
-        <div className="mt-14 w-full rounded-[24px] bg-[#F5F1E9] px-6 py-5 text-lg font-semibold text-[#3a3a3a]">
+        <div className="total-heart mt-14 w-full rounded-[24px] bg-[#F5F1E9] px-6 py-5 text-lg font-semibold text-[#3a3a3a]">
           현재 <strong>{displayMessageCount}</strong>개의 따뜻한 마음이 모였어요
         </div>
       </section>

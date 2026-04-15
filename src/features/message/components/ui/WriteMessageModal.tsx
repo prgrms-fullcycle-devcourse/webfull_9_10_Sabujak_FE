@@ -9,6 +9,7 @@ import {
 import { usePostCapsulesSlugMessages } from "../../../../shared/api/generated/message/message";
 import { getErrorMessage } from "../../../../shared/utils/error";
 import { createMessageBodySchema } from "../../../../shared/schemas";
+import "./WriteMessageModal.css";
 
 interface WriteMessageModalProps {
   slug: string;
@@ -39,8 +40,8 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
     nickname.length === 0
       ? undefined
       : nicknameError.length <= 0
-      ? undefined
-      : "error";
+        ? undefined
+        : "error";
 
   const isButtonDisabled = !verifyWriteMessage.success;
 
@@ -59,8 +60,8 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
         data: { nickname: nickname.trim(), content: content.trim() },
       });
       openModal({
-        title: "작성 완료",
-        content: <p>편지가 배송되었습니다.</p>,
+        title: "메세지 작성 완료",
+        content: <p>메세지가 배송되었어요</p>,
         option: "oneButton",
         buttonText: ["확인"],
         onConfirm: [
@@ -84,9 +85,9 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
       title: "작성 확인",
       content: (
         <p className="text-left">
-          작성 완료하셨습니까?
+          메세지를 다 작성했나요?
           <br />
-          전송 후에는 수정이 불가능합니다.
+          전송 후에는 수정이 안돼요.
         </p>
       ),
       option: "twoButton",
@@ -96,53 +97,56 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
   };
 
   return (
-    <div className="w-full p-6 flex flex-col justify-start items-start gap-6">
-      {/* 닉네임 입력 */}
-      <div className="self-stretch relative">
-        <Field
-          id="nickname"
-          label="닉네임"
-          message={nicknameFieldMessage}
-          messageStatus={nicknameFieldState}
-        >
-          <Input
+    <div className="letter-content w-full p-6 flex flex-col justify-start items-start gap-6">
+      <div className="letter">
+        {/* 닉네임 입력 */}
+        <div className="self-stretch relative">
+          <Field
             id="nickname"
-            value={nickname}
-            onChange={handleNicknameChange}
-            placeholder="닉네임을 입력해주세요"
-            maxLength={20}
-          />
-        </Field>
-      </div>
+            label="안녕? 나는,"
+            message={nicknameFieldMessage}
+            messageStatus={nicknameFieldState}
+          >
+            <Input
+              id="nickname"
+              value={nickname}
+              onChange={handleNicknameChange}
+              placeholder="당신의 이름을 적어주세요"
+              maxLength={20}
+            />
+          </Field>
+          <br />
+          <p>야.</p>
+        </div>
 
-      {/* 편지 내용 입력 */}
-      <div className="self-stretch relative">
-        <Field
-          id="content"
-          label="편지 내용"
-          helperText="한 번 남긴 마음은 수정이나 삭제가 불가능해요."
-          message=""
-          messageStatus={contentFieldState}
-        >
-          <div onClick={() => document.getElementById("content")?.focus()}>
-            <div className="releative">
-              <Textarea
-                id="content"
-                value={content}
-                maxLength={textMaxLength}
-                onChange={handleContentChange}
-                placeholder="따뜻한 마음을 전해보세요..."
-              />
-              <p
-                className={`absolute right-0 text-right text-sm text-gray-500 mt-1 ${
-                  content.length > textMaxLength ? "text-red-500" : ""
-                }`}
-              >
-                {content.length}/1000
-              </p>
+        {/* 편지 내용 입력 */}
+        <div className="self-stretch relative">
+          <Field
+            id="content"
+            // label="편지를 써주세요"
+            helperText="한 번 남긴 마음은 수정이나 삭제가 불가능해요."
+            message=""
+            messageStatus={contentFieldState}
+          >
+            <div onClick={() => document.getElementById("content")?.focus()}>
+              <div className="releative">
+                <Textarea
+                  id="content"
+                  value={content}
+                  maxLength={textMaxLength}
+                  onChange={handleContentChange}
+                  placeholder="따뜻한 마음을 전해보세요..."
+                />
+                <p
+                  className={`absolute right-0 text-right text-sm text-gray-500 mt-1 ${content.length > textMaxLength ? "text-red-500" : ""
+                    }`}
+                >
+                  {content.length}/1000
+                </p>
+              </div>
             </div>
-          </div>
-        </Field>
+          </Field>
+        </div>
       </div>
 
       {/* 입력 완료 버튼 */}

@@ -141,6 +141,19 @@
   font-display: swap;
 }
 
+/* 잘하고있어 */
+
+@font-face {
+  font-family: "Nanum JarHagoIssEo";
+  src:
+    url("../assets/fonts/JarHagoIssEo/JarHagoIssEo.woff2") format("woff2"),
+    url("../assets/fonts/JarHagoIssEo/JarHagoIssEo.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 /* password */
 @font-face {
   font-family: 'pass';

@@ -6,17 +6,17 @@ export const slugSchema = z
   .string()
   // .trim()
   .min(1, "1자 이상 입력해주세요.")
-  .max(50, "최대 50자까지 입력 가능합니다.")
+  .max(50, "최대 50자까지 입력 가능해요.")
   .regex(
     /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-    "소문자와 숫자,하이픈(-)만 사용 가능합니다."
+    "소문자와 숫자,하이픈(-)만 사용 가능해요."
   );
 
 export const titleSchema = z
   .string()
   .trim()
   .min(1, "1자 이상 입력해주세요")
-  .max(100, "최대 100자까지 입력 가능합니다.");
+  .max(100, "최대 100자까지 입력 가능해요.");
 
 export const passwordSchema = z
   .string()
@@ -27,13 +27,13 @@ export const nicknameSchema = z
   .string()
   .trim()
   .min(1, "1자 이상 입력해주세요.")
-  .max(20, "최대 20자까지 입력 가능합니다.");
+  .max(20, "최대 20자까지 입력 가능해요.");
 
 export const messageContentSchema = z
   .string()
   .trim()
-  .min(1, "메시지는 1자 이상 입력해야 합니다.")
-  .max(1000, "메시지는 최대 1000자까지 입력 가능합니다.");
+  .min(1, "메시지는 1자 이상 입력해야 해요.")
+  .max(1000, "메시지는 최대 1000자까지 입력 가능해요.");
 
 export const capsuleBaseResponseShape = {
   id: z.string(),

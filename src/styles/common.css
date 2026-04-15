@@ -1,12 +1,25 @@
 /* Tailwind v4에서 디자인 토큰을 정의하는 전용 문법 */
 @theme {
-  --font-sans: "Nanum JarHagoIssEo", "Pretendard", "Noto Sans KR", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Pretendard", "Noto Sans KR", system-ui, "Segoe UI", Roboto, sans-serif;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111;
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+  box-shadow: 0 0 0px 1000px #fff inset;
+  transition: background-color 9999s ease-out 0s;
+}
+#root .root-inner {
+  /* background: linear-gradient(180deg, #f7f2e8 30%, #eef8ff 100%) */
+  background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
+  overflow: hidden;
+  /* letter-spacing: 0.1rem; */
 }
 
-#root{
-  /* background: linear-gradient(180deg, #f7f2e8 30%, #eef8ff 100%) */
-  background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%)
-}
 @media (min-width: 768px) {}
 
 /*****************************
@@ -14,13 +27,13 @@
  버튼
 ******************************
 *****************************/
-button{
+button {
   word-break: keep-all;
   cursor: pointer;
 }
 
-button:disabled{
-background-color: #c8c8c8;
+button:disabled {
+  background-color: #c8c8c8;
 }
 
 /*****************************
@@ -51,7 +64,8 @@ background-color: #c8c8c8;
  인풋
 ******************************
 ******************************/
-input::placeholder, .placeholder {
+input::placeholder,
+.placeholder {
   color: #999999;
 }
 
@@ -68,11 +82,11 @@ input::placeholder, .placeholder {
   /* background: #ffffff; */
   padding: 0.75rem 1rem;
   text-align: left;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
-.field-control:has(textarea){
+.field-control:has(textarea) {
   height: inherit;
 }
 
@@ -80,7 +94,7 @@ input::placeholder, .placeholder {
   outline: none;
 }
 
-.field-control:has(.field-input + button){
+.field-control:has(.field-input + button) {
   padding-right: 0.3rem;
 }
 
@@ -100,12 +114,13 @@ input::placeholder, .placeholder {
 .is-warning {
   border: 1px solid #f97316;
 }
+
 .is-error {
   border: 1px solid #ef4444;
 }
 
 .field-message {
-  font-size: 1rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   word-break: keep-all;
 }
@@ -134,7 +149,7 @@ input::placeholder, .placeholder {
   padding-right: 2.75rem;
 }
 
-.field-icon:after{
+.field-icon:after {
   content: "";
   display: block;
   position: absolute;
@@ -154,9 +169,10 @@ input::placeholder, .placeholder {
 .field-icon.icon-calendar::after {
   --field-icon: var(--ico-calendar);
 }
+
 /* 자물쇠 */
-.field-icon.icon-lock::after{
-  --field-icon : var(--ico-lock);
+.field-icon.icon-lock::after {
+  --field-icon: var(--ico-lock);
 }
 
 
@@ -186,8 +202,13 @@ input::placeholder, .placeholder {
 .btn-menu {
   background: var(--ico-menu) right center / 1.3rem 1.3rem no-repeat;
 }
+
 .btn-prev {
   background: var(--ico-prev) left center / 1.3rem 1.3rem no-repeat;
+}
+
+.btn-close {
+  background: var(--ico-close) center center no-repeat;
 }
 
 
@@ -196,11 +217,11 @@ input::placeholder, .placeholder {
  컨텐츠
 ******************************
 ******************************/
-#root{
+#root {
   background-color: #FDFBF7;
 }
 
-.fixed-bottom > div{
+.fixed-bottom>div {
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eaedef 100%); */
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eef8ff 100%); */
   background: linear-gradient(180deg, #f7f2e800 0%, #fdfbf7 50%);

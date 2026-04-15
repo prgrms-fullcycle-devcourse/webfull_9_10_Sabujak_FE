@@ -251,7 +251,7 @@ export default function CreateCapsulePage() {
     ).length;
 
     if (sessionReservationCount >= MAX_SLUG_RESERVATIONS_PER_SESSION) {
-      setSlugMessage("주소는 최대 3개까지만 확인할 수 있습니다.");
+      setSlugMessage("주소는 최대 3개까지만 확인할 수 있어요.");
       setSlugMessageStatus("error");
       return;
     }
@@ -348,7 +348,7 @@ export default function CreateCapsulePage() {
       resetSlugReservation();
 
       // 생성 성공 후 확인 버튼을 누르면 상세 페이지로 이동한다.
-      openNoticeModal("타임캡슐이 생성되었습니다.", () => {
+      openNoticeModal("타임캡슐이 만들어졌어요", () => {
         void navigate(buildCapsuleDetailPath(response.slug));
       });
     } catch (error) {
@@ -361,8 +361,8 @@ export default function CreateCapsulePage() {
         resetSlugReservation();
         setSlugMessage(
           errorCode === "SLUG_ALREADY_IN_USE"
-            ? "이미 사용 중인 주소입니다. 다른 주소를 입력해 주세요."
-            : "슬러그 예약이 만료되었어요. 다시 중복 확인해 주세요.",
+            ? "이미 사용 중인 주소예요. 다른 주소를 입력해 주세요."
+            : "주소 예약이 만료되었어요. 다시 중복 확인해 주세요.",
         );
         setSlugMessageStatus("error");
         return;
@@ -384,7 +384,7 @@ export default function CreateCapsulePage() {
           onClick={() => void handleCreateCapsule()}
           disabled={isButtonDisabled}
         >
-          {isCreating ? "생성 중..." : "우리의 방 만들기"}
+          {isCreating ? "생성 중..." : "타임캡슐 만들기"}
         </Button>
       }
     >
@@ -398,12 +398,12 @@ export default function CreateCapsulePage() {
       <div className="mt-10 space-y-4">
         <Field
           id="roomTitle"
-          label="방 제목"
+          label="타임캡슐 제목"
           message={titleFieldMessage}
           messageStatus={titleFieldStatus}
         >
           <Input
-            placeholder="방 제목을 입력해 주세요"
+            placeholder="타임캡슐 제목을 입력해 주세요"
             value={title}
             onChange={handleTitleChange}
           />
@@ -411,13 +411,13 @@ export default function CreateCapsulePage() {
 
         <Field
           id="roomUrl"
-          label="방 URL 주소"
+          label="타임캡슐 주소"
           helperText="영문 소문자, 숫자, 하이픈(-)만 입력 가능해요."
           message={slugFieldMessage}
           messageStatus={slugFieldStatus}
         >
           <Input
-            placeholder="방 주소를 입력해 주세요"
+            placeholder="타임캡슐 주소를 입력해 주세요"
             value={slug}
             rightSlot={
               <Button
@@ -427,7 +427,7 @@ export default function CreateCapsulePage() {
                 enterFlow={true}
                 disabled={isCheckingSlug || !slug.trim() || slugError.length > 0 || isReservationValid}
               >
-                {isCheckingSlug ? "확인 중..." : isReservationValid ? "사용 가능" : "중복 확인"}
+                {isCheckingSlug ? "확인 중" : isReservationValid ? "사용가능" : "중복확인"}
               </Button>
             }
             onChange={handleSlugChange}
@@ -437,7 +437,7 @@ export default function CreateCapsulePage() {
         <Field
           id="openDate"
           label="공개 날짜"
-          helperText="오늘로부터 최대 1년 뒤까지만 설정할 수 있습니다."
+          helperText="오늘로부터 최대 1년 뒤까지만 설정할 수 있어요."
         >
           <DatePicker value={openDate} onChange={setOpenDate} />
         </Field>

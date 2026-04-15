@@ -27,7 +27,7 @@ const Loading = ({
 
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-center backdrop-blur-sm"
+      className="fixed inset-0 flex flex-col items-center justify-center backdrop-blur-sm bg-gray-900/10"
       style={{ zIndex }}
     >
       <div className="flex min-h-48 items-center justify-center">

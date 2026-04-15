@@ -261,9 +261,10 @@ header{
   body {
     overflow: hidden;
   }
-
+  #root, .modal-menu{
+    max-width: 480px;
+  }
   #root {
-    width: 480px;
     margin: auto;
     position: relative;
     transform: translate(0, 0);
@@ -279,8 +280,8 @@ header{
 
   #root .root-inner>div {}
 
+
   .modal-menu {
-    max-width: 420px;
     margin: 0 auto;
   }
 }

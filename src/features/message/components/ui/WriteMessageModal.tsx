@@ -115,8 +115,6 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
               maxLength={20}
             />
           </Field>
-          <br />
-          <p>야.</p>
         </div>
 
         {/* 편지 내용 입력 */}

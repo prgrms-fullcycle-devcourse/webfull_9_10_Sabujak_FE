@@ -69,7 +69,7 @@ export default function ModalLayout({
       )}
 
       {/* 본문 */}
-      <div className="flex-1 h-0 overflow-y-auto text-center whitespace-pre-line">{children}</div>
+      <div className="flex-1 h-0 overflow-y-auto whitespace-pre-line">{children}</div>
 
       {/* 버튼 영역 */}
       {(primaryButton || secondaryButton) && (

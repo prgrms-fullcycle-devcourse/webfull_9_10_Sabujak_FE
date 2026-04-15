@@ -41,7 +41,7 @@ export const WriteMessageContent = ({ slug }: WriteMessageModalProps) => {
       ? undefined
       : nicknameError.length <= 0
         ? undefined
-        : "error";
+        : nicknameError[0];
 
   const isButtonDisabled = !verifyWriteMessage.success;
 

@@ -118,7 +118,7 @@ export default function CapsuleViewReleased({
         <ConfettiCanvas />
         <section className="w-full released">
           <p className="mt-2 text-center text-[14px] text-gray-400 no-capture">
-            드디어 상자가 열렸어요!
+            드디어 캡슐이 열렸어요!
           </p>
           <h2
             id="released-capsule-heading"

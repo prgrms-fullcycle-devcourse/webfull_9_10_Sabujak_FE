@@ -132,7 +132,7 @@ export default function MainPage() {
     <PageLayout contentClassName="main-page" hideHearts>
       <MainPageBackground />
       <div className="main-content">
-        <h1 className="main-page-brand flex justify-center">
+        <h1 className="main-page-brand flex justify-center sticky top-0 z-[1] bg-[#fdfaf5]">
           <img
             src={logoImage}
             alt="SABUJAK"

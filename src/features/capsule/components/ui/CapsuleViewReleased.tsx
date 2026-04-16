@@ -53,7 +53,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
     <div ref={ref}>
       <PageLayout
         header={
-          <header className="relative px-6 pt-2.5 pb-2.5 no-capture">
+          <header className="relative px-6 pt-2.5 pb-2.5 sticky top-0 z-[1] bg-[#fdfaf5] no-capture">
             <button
               type="button"
               aria-label="뒤로가기"

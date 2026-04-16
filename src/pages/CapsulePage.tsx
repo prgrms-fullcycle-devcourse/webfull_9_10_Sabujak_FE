@@ -3,14 +3,14 @@ import CapsuleViewUpcoming from "../features/capsule/components/ui/CapsuleViewUp
 import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewReleased";
 import { useCapsuleDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
-import NotFoundPage from "./NotFoundPage";
+import { ErrorPage } from "../shared/components/feedback/ErrorPage";
 
 export function LegacyCapsuleRedirectPage() {
   const [searchParams] = useSearchParams();
   const legacySlug = searchParams.get("slug");
 
   if (!legacySlug) {
-    return <NotFoundPage />;
+    return <ErrorPage />;
   }
 
   // 기존 쿼리스트링 링크를 path 기반 상세 URL로 리다이렉트
@@ -20,13 +20,13 @@ export function LegacyCapsuleRedirectPage() {
 export default function CapsulePage() {
   const { slug } = useParams<{ slug: string }>();
   const capsuleSlug = slug ?? "";
-  const { data, isError, isLoading } = useCapsuleDetail(capsuleSlug);
+  const { data, isError } = useCapsuleDetail(capsuleSlug);
 
   if (!capsuleSlug || isError) {
-    return <NotFoundPage />;
+    return <ErrorPage />;
   }
 
-  if (isLoading || !data) {
+  if (!data) {
     return null;
   }
 

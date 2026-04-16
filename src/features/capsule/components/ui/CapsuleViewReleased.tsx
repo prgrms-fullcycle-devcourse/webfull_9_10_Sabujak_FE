@@ -126,7 +126,7 @@ export default function CapsuleViewReleased({
           >
             {capsule.title}
           </h2>
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex justify-center no-capture">
             <div className="flex-col items-center gap-3 rounded-xl bg-[#F5EFE6] px-4 py-3 text-gray-800 text-[14px]">
               <div>
                 이 타임캡슐은 {expiresAt.getFullYear()}년{" "}

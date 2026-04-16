@@ -53,7 +53,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
     <div ref={ref}>
       <PageLayout
         header={
-          <header className="relative px-6 pt-2.5 pb-2.5 no-capture">
+          <header className="relative px-6 pt-2.5 pb-2.5 sticky top-0 z-[1] bg-[#fdfaf5] no-capture">
             <button
               type="button"
               aria-label="뒤로가기"
@@ -118,7 +118,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
             {formatYearMonth(expiresAt)} • 소중한 마음들이 도착했어요
           </div>
 
-          <div className="mt-8 grid max-w-md grid-cols-2 gap-4">
+          <div className="mt-8 grid max-w-md grid-cols-2 gap-4 ml-auto mr-auto">
             {capsule.messages.map((msg, index) => (
               <div
                 key={msg.id}

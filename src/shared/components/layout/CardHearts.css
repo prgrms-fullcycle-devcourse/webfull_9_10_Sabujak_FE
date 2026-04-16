@@ -17,7 +17,7 @@
 
 /* 페이지 전체 배경 컨테이너 — 콘텐츠 뒤에 위치 */
 .card-hearts-page {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
   overflow: visible;
@@ -309,7 +309,7 @@
 }
 
 .page-heart-3 {
-  left: -5%;
+  left: -10%;
   top: 30%;
   width: 100px;
   height: 100px;
@@ -353,7 +353,7 @@
 }
 
 .page-heart-5 {
-  left: -27%;
+  left: -37%;
   top: 58%;
   width: 140px;
   height: 140px;
@@ -397,7 +397,7 @@
 }
 
 .page-heart-7 {
-  left: -4%;
+  left: -7%;
   bottom: 16%;
   width: 120px;
   height: 120px;

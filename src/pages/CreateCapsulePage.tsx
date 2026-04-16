@@ -389,7 +389,7 @@ export default function CreateCapsulePage() {
   return (
     <PageLayout
       header={
-        <header className="relative px-6 pt-2.5 pb-2.5">
+        <header className="relative px-6 pt-2.5 pb-2.5 sticky top-0 z-[1] bg-[#fdfaf5]">
           <button
             type="button"
             aria-label="뒤로가기"

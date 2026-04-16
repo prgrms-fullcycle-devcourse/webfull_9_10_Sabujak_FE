@@ -3,14 +3,14 @@ import CapsuleViewUpcoming from "../features/capsule/components/ui/CapsuleViewUp
 import CapsuleViewReleased from "../features/capsule/components/ui/CapsuleViewReleased";
 import { useCapsuleDetail } from "../features/capsule/hooks";
 import { buildCapsuleDetailPath } from "../shared/utils/routes";
-import { ErrorPage } from "../shared/components/feedback/ErrorPage";
+import NotFoundPage from "./NotFoundPage";
 
 export function LegacyCapsuleRedirectPage() {
   const [searchParams] = useSearchParams();
   const legacySlug = searchParams.get("slug");
 
   if (!legacySlug) {
-    return <ErrorPage />;
+    return <NotFoundPage />;
   }
 
   // 기존 쿼리스트링 링크를 path 기반 상세 URL로 리다이렉트
@@ -20,14 +20,14 @@ export function LegacyCapsuleRedirectPage() {
 export default function CapsulePage() {
   const { slug } = useParams<{ slug: string }>();
   const capsuleSlug = slug ?? "";
-  const { data, isError } = useCapsuleDetail(capsuleSlug);
-
-  if (!data) {
-    return;
-  }
+  const { data, isError, isLoading } = useCapsuleDetail(capsuleSlug);
 
   if (!capsuleSlug || isError) {
-    return <ErrorPage />;
+    return <NotFoundPage />;
+  }
+
+  if (isLoading || !data) {
+    return null;
   }
 
   if (!("messages" in data)) {

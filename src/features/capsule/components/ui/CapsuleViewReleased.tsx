@@ -118,11 +118,11 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
             {formatYearMonth(expiresAt)} • 소중한 마음들이 도착했어요
           </div>
 
-          <div className="mt-8 grid max-w-md grid-cols-2 gap-4">
+          <div className="mt-8 max-w-md columns-2 gap-4">
             {capsule.messages.map((msg, index) => (
               <div
                 key={msg.id}
-                className={`${colors[index]} flex aspect-square flex-col rounded-3xl p-6 transition-transform active:scale-95`}
+                className={`${colors[index]} mb-4 flex break-inside-avoid flex-col rounded-3xl p-6 transition-transform active:scale-95`}
               >
                 <span className="text-left text-[12px] text-gray-500">
                   {msg.nickname}

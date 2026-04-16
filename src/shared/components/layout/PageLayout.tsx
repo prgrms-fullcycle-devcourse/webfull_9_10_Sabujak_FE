@@ -47,7 +47,7 @@ export default function PageLayout({
     const contentClassNameText = `p-6 ${header ? "" : "pt-12"} ${bottomArea ? "pb-2" : "pb-10"} ${contentClassName}`.trim();
 
     return (
-        <div className="root-inner relative min-h-dvh min-w-2xs" data-enter-scope="true">
+        <div className="root-inner relative isolate min-h-dvh min-w-2xs" data-enter-scope="true">
             {!hideHearts && <CardHearts fullPage />}
             <div className="relative z-1 flex min-h-full w-full flex-col">
                 {header ? header : null}
@@ -60,7 +60,7 @@ export default function PageLayout({
 
                 {bottomArea ? (
                     <div className="fixed-bottom no-capture" style={{ height: `${bottomAreaHeight}px` }}>
-                        <div className="fixed bottom-0 left-0 right-0 z-10 bg-[#ffffff]">
+                        <div className="fixed bottom-0 left-0 right-0 z-10 bg-[#ffffff] no-capture">
                             <div
                                 // 이 div를 ref로 잡아 실제 높이를 측정한다.
                                 ref={bottomAreaRef}

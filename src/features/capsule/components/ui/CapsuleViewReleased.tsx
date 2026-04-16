@@ -50,54 +50,55 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
   const expiresAt = new Date(capsule.expiresAt);
 
   return (
-    <div ref={ref}>
-      <PageLayout
-        header={
-          <header className="relative px-6 pt-2.5 pb-2.5 sticky top-0 z-[1] bg-[#fdfaf5] no-capture">
+
+    <PageLayout
+      header={
+        <header className="relative px-6 pt-2.5 pb-2.5 sticky top-0 z-[1] bg-[#fdfaf5] no-capture">
+          <button
+            type="button"
+            aria-label="뒤로가기"
+            className="btn-prev absolute h-10 w-10 z-1"
+            onClick={() => void navigate(-1)}
+          />
+          <h1 className="flex justify-center">
             <button
               type="button"
-              aria-label="뒤로가기"
-              className="btn-prev absolute h-10 w-10 z-1"
-              onClick={() => void navigate(-1)}
-            />
-            <h1 className="flex justify-center">
-              <button
-                type="button"
-                className="flex justify-center"
-                aria-label="메인으로 이동"
-                onClick={() => void navigate("/")}
-              >
-                <img
-                  src={logoImage}
-                  alt="SABUJAK"
-                  aria-hidden="true"
-                  className="h-10 w-auto object-contain"
-                />
-              </button>
-            </h1>
-          </header>
-        }
-        bottomArea={
-          <>
-            <Button
-              variant="primary"
-              iconClassName="btn-icon-download"
-              onClick={() => void handleCapture()}
+              className="flex justify-center"
+              aria-label="메인으로 이동"
+              onClick={() => void navigate("/")}
             >
-              이미지로 저장하기
-            </Button>
-            <Button
-              variant="secondary"
-              iconClassName="btn-icon-share"
-              onClick={() => void handleShare()}
-            >
-              {canShare ? "친구들에게 주소 공유하기" : "주소 복사하기"}
-            </Button>
-          </>
-        }
-        contentClassName="flex flex-col items-center text-center"
-      >
-        <ConfettiCanvas />
+              <img
+                src={logoImage}
+                alt="SABUJAK"
+                aria-hidden="true"
+                className="h-10 w-auto object-contain"
+              />
+            </button>
+          </h1>
+        </header>
+      }
+      bottomArea={
+        <>
+          <Button
+            variant="primary"
+            iconClassName="btn-icon-download"
+            onClick={() => void handleCapture()}
+          >
+            이미지로 저장하기
+          </Button>
+          <Button
+            variant="secondary"
+            iconClassName="btn-icon-share"
+            onClick={() => void handleShare()}
+          >
+            {canShare ? "친구들에게 주소 공유하기" : "주소 복사하기"}
+          </Button>
+        </>
+      }
+      contentClassName="flex flex-col items-center text-center"
+    >
+      <ConfettiCanvas />
+      <div ref={ref}>
         <section className="w-full released">
           <p className="mt-2 text-center text-[14px] text-gray-400 no-capture">
             드디어 상자가 열렸어요!
@@ -134,7 +135,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
             ))}
           </div>
         </section>
-      </PageLayout>
-    </div>
+      </div>
+    </PageLayout>
   );
 }

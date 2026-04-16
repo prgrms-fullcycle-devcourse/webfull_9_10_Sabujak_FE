@@ -18,9 +18,10 @@ textarea:-webkit-autofill:focus {
 body {
   background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
 }
-#root:has(.main-page)  {
-    overflow: hidden;
-  }
+
+#root:has(.main-page) {
+  overflow: hidden;
+}
 
 #root {
   background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
@@ -235,6 +236,7 @@ input::placeholder,
 
 header {
   border-bottom: 1px solid #c8c8c8;
+
 }
 
 .notfound header {
@@ -247,6 +249,11 @@ header {
   background: linear-gradient(180deg, #f7f2e800 0%, #fdfbf7 50%);
   /* background: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, #fdfbf7 15%); */
 }
+
+.card-hearts-page{
+  display: none;
+}
+
 
 /*****************************
 ******************************
@@ -266,33 +273,46 @@ header {
   body:has(.main-page) {
     overflow: hidden;
   }
-  #root{
+
+  #root {
     overflow: hidden;
   }
-#root:has(.main-page) {
+
+  #root:has(.main-page) {
     overflow: initial;
-}
-  #root .root-inner::-webkit-scrollbar {
+  }
+
+  *::-webkit-scrollbar {
     width: 4px;
   }
 
-  #root .root-inner::-webkit-scrollbar-thumb {
+  *::-webkit-scrollbar-thumb {
     background: rgba(120, 120, 120, 0.45);
     border-radius: 9999px;
   }
 
-  #root .root-inner::-webkit-scrollbar-track {
+  *::-webkit-scrollbar-track {
     background: transparent;
   }
-
 
   #root .root-inner:has(.main-page) {
     overflow: inherit;
   }
 
-  #root,
-  .modal-menu {
+  main {
+    background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
+  }
+
+
+  header,
+  main,
+  .modal-menu,
+  .fixed-bottom,
+  .fixed-bottom>div {
+    width: 100%;
     max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   #root {
@@ -317,6 +337,9 @@ header {
   .modal-menu {
     margin: 0 auto;
   }
+.card-hearts-page{
+  display: block;
+}
 
 
 }

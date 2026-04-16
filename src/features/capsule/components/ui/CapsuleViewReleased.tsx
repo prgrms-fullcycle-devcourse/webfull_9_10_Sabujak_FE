@@ -15,7 +15,9 @@ interface CapsuleViewReleasedProps {
   capsule: CapsuleDetailResponseOneOfTwo;
 }
 
-export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProps) {
+export default function CapsuleViewReleased({
+  capsule,
+}: CapsuleViewReleasedProps) {
   const navigate = useNavigate();
   const { shareUrl, canShare } = useShare();
   const ref = useRef<HTMLDivElement>(null);
@@ -31,7 +33,9 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
   const handleCapture = async () => {
     if (!ref.current) return;
 
-    const rootInner = ref.current.querySelector(".root-inner") as HTMLElement | null;
+    const rootInner = ref.current.querySelector(
+      ".root-inner"
+    ) as HTMLElement | null;
     const originalHeight = rootInner?.style.height;
     const originalOverflow = rootInner?.style.overflow;
 
@@ -121,19 +125,25 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
             className="mt-3 text-center text-[20px] font-extrabold leading-snug text-gray-900"
           >
             {capsule.title}
-
           </h2>
           <div className="mt-6 flex justify-center">
             <div className="flex-col items-center gap-3 rounded-xl bg-[#F5EFE6] px-4 py-3 text-gray-800 text-[14px]">
-              <div>이 타임캡슐은 {expiresAt.toLocaleString()}에 만료됩니다.</div>
-              <CapsuleViewReleasedCountdown targetDate={expiresAt} height={20} />
+              <div>
+                이 타임캡슐은 {expiresAt.getFullYear()}년{" "}
+                {expiresAt.getMonth() + 1}월 {expiresAt.getDate()}일{" "}
+                {expiresAt.getHours()}시 {expiresAt.getMinutes()}분에 우주로 떠나요.
+              </div>
+              <CapsuleViewReleasedCountdown
+                targetDate={expiresAt}
+                height={20}
+              />
             </div>
           </div>
           <div className="mt-8 text-center text-[12px] text-gray-400">
             {formatYearMonth(expiresAt)} • 소중한 마음들이 도착했어요
           </div>
 
-          <div className="mt-8 max-w-md columns-2 gap-4">
+          <div className="mt-8 max-w-md columns-2 gap-4 ml-auto mr-auto">
             {capsule.messages.map((msg, index) => (
               <div
                 key={msg.id}

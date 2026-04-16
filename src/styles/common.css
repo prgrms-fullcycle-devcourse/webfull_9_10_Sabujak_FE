@@ -230,12 +230,14 @@ input::placeholder,
   /* background-color: #FDFBF7; */
 }
 
-header{
+header {
   border-bottom: 1px solid #c8c8c8;
 }
-.notfound header{
+
+.notfound header {
   border-bottom: 0;
 }
+
 .fixed-bottom>div {
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eaedef 100%); */
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eef8ff 100%); */
@@ -261,9 +263,12 @@ header{
   body {
     overflow: hidden;
   }
-  #root, .modal-menu{
+
+  #root,
+  .modal-menu {
     max-width: 480px;
   }
+
   #root {
     margin: auto;
     position: relative;

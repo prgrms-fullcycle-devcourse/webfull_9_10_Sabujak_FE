@@ -49,7 +49,7 @@ export default function PageLayout({
     return (
         <div className="root-inner relative isolate min-h-dvh min-w-2xs" data-enter-scope="true">
             {!hideHearts && <CardHearts fullPage />}
-            <div className="relative z-1 flex min-h-full w-full flex-col">
+            <div className="relative z-1 h-dvh flex min-h-full w-full flex-col">
                 {header ? header : null}
 
                 <main className="flex-1">

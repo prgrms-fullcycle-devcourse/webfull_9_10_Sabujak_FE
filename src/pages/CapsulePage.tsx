@@ -22,12 +22,12 @@ export default function CapsulePage() {
   const capsuleSlug = slug ?? "";
   const { data, isError } = useCapsuleDetail(capsuleSlug);
 
-  if (!data) {
-    return;
-  }
-
   if (!capsuleSlug || isError) {
     return <ErrorPage />;
+  }
+
+  if (!data) {
+    return null;
   }
 
   if (!("messages" in data)) {

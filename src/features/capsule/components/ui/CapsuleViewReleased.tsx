@@ -38,7 +38,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
       });
 
       const link = document.createElement("a");
-      link.download = "capture.png";
+      link.download = `sabujak-${capsule.slug}.png`;
       link.href = dataUrl;
       link.click();
     } catch (err) {

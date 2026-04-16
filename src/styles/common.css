@@ -266,6 +266,9 @@ header {
   body:has(.main-page) {
     overflow: hidden;
   }
+  #root{
+    overflow: hidden;
+  }
 #root:has(.main-page) {
     overflow: initial;
 }

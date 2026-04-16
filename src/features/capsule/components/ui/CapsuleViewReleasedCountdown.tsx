@@ -17,7 +17,7 @@ function CountdownRenderer({
 }: CountdownRenderProps & { height: number }) {
   if (completed) {
     return (
-      <div className="text-[14px] leading-relaxed">
+      <div className="text-[14px] leading-relaxed no-capture">
         이 타임캡슐은 0일 0시 0분 0초 후에 영구히 사라집니다.
       </div>
     );

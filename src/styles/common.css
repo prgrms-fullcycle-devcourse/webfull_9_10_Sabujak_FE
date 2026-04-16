@@ -27,7 +27,7 @@ body {
   /* background: linear-gradient(180deg, #f7f2e8 30%, #eef8ff 100%) */
   /* background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%); */
   /* letter-spacing: 0.1rem; */
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 
@@ -230,12 +230,14 @@ input::placeholder,
   /* background-color: #FDFBF7; */
 }
 
-header{
+header {
   border-bottom: 1px solid #c8c8c8;
 }
-.notfound header{
+
+.notfound header {
   border-bottom: 0;
 }
+
 .fixed-bottom>div {
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eaedef 100%); */
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eef8ff 100%); */
@@ -258,12 +260,33 @@ header{
 ******************************/
 
 @media (min-width: 768px) {
-  body {
+  body:has(.main-page) {
     overflow: hidden;
   }
-  #root, .modal-menu{
+
+  #root .root-inner::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  #root .root-inner::-webkit-scrollbar-thumb {
+    background: rgba(120, 120, 120, 0.45);
+    border-radius: 9999px;
+  }
+
+  #root .root-inner::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+
+  #root .root-inner:has(.main-page) {
+    overflow: inherit;
+  }
+
+  #root,
+  .modal-menu {
     max-width: 480px;
   }
+
   #root {
     margin: auto;
     position: relative;
@@ -273,8 +296,10 @@ header{
   #root .root-inner {
     /* background: linear-gradient(180deg, #f7f2e8 30%, #eef8ff 100%) */
     background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
-    overflow: inherit !important;
+    /* overflow: inherit !important; */
     /* letter-spacing: 0.1rem; */
+    height: 100vh;
+    overflow: auto;
   }
 
 
@@ -284,4 +309,6 @@ header{
   .modal-menu {
     margin: 0 auto;
   }
+
+
 }

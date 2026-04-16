@@ -34,7 +34,7 @@ export default function PageLayout({
 
         // 하단 영역 높이를 체크하고, 콜백에서 state를 갱신. fixed-bottom에 높이 추가
         const resizeObserver = new ResizeObserver(() => {
-            setBottomAreaHeight(element.offsetHeight);
+            setBottomAreaHeight(element.getBoundingClientRect().height);
         });
 
         resizeObserver.observe(element);
@@ -49,7 +49,7 @@ export default function PageLayout({
     return (
         <div className="root-inner relative min-h-dvh min-w-2xs" data-enter-scope="true">
             {!hideHearts && <CardHearts fullPage />}
-            <div className="relative z-1 flex min-h-dvh w-full flex-col">
+            <div className="relative z-1 flex min-h-full w-full flex-col">
                 {header ? header : null}
 
                 <main className="flex-1">

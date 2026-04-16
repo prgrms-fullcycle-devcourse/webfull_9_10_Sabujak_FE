@@ -96,7 +96,7 @@ export default function CapsuleViewUpcoming({
             onClick={() => void navigate(-1)}
           />
 
-          <div className="relative flex min-h-10 items-center justify-center">
+          <div className="relative flex min-h-10 items-center sticky top-0 z-[1] bg-[#fdfaf5] justify-center">
             <h1 className="flex justify-center">
               <button
                 type="button"

@@ -31,6 +31,15 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
   const handleCapture = async () => {
     if (!ref.current) return;
 
+    const rootInner = ref.current.querySelector(".root-inner") as HTMLElement | null;
+    const originalHeight = rootInner?.style.height;
+    const originalOverflow = rootInner?.style.overflow;
+
+    if (rootInner) {
+      rootInner.style.height = "auto";
+      rootInner.style.overflow = "visible";
+    }
+
     try {
       const dataUrl = await htmlToImage.toPng(ref.current, {
         backgroundColor: "#FDFBF7",
@@ -43,6 +52,11 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
       link.click();
     } catch (err) {
       console.error(err);
+    } finally {
+      if (rootInner) {
+        rootInner.style.height = originalHeight || "";
+        rootInner.style.overflow = originalOverflow || "";
+      }
     }
   };
 

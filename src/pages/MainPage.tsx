@@ -171,6 +171,7 @@ export default function MainPage() {
                     onChange={handleSlugChange}
                     className="h-[20px] rounded-[24px] !border-[#E5E5E5] !bg-white px-6"
                     inputClassName="text-center"
+                    maxLength={50}
                     rightSlot={
                       <Button
                         variant="sm"

@@ -444,6 +444,7 @@ export default function CreateCapsulePage() {
             placeholder="타임캡슐 제목을 입력해 주세요"
             value={title}
             onChange={handleTitleChange}
+            maxLength={100}
           />
         </Field>
 
@@ -457,6 +458,7 @@ export default function CreateCapsulePage() {
           <Input
             placeholder="타임캡슐 주소를 입력해 주세요"
             value={slug}
+            maxLength={50}
             rightSlot={
               <Button
                 variant="sm"

@@ -123,7 +123,7 @@ export default function CapsuleViewReleased({ capsule }: CapsuleViewReleasedProp
             {capsule.title}
 
           </h2>
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex justify-center no-capture">
             <div className="flex items-center gap-3 rounded-xl bg-[#F5EFE6] px-4 py-3 text-gray-800">
               <CapsuleViewReleasedCountdown targetDate={expiresAt} height={20}/>
             </div>

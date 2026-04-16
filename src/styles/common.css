@@ -18,6 +18,9 @@ textarea:-webkit-autofill:focus {
 body {
   background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
 }
+#root:has(.main-page)  {
+    overflow: hidden;
+  }
 
 #root {
   background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
@@ -263,7 +266,9 @@ header {
   body:has(.main-page) {
     overflow: hidden;
   }
-
+#root:has(.main-page) {
+    overflow: initial;
+}
   #root .root-inner::-webkit-scrollbar {
     width: 4px;
   }

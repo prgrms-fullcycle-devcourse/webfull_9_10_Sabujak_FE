@@ -87,6 +87,8 @@ export default function CreateCapsulePage() {
   const [openDate, setOpenDate] = useState<Date | null>(() => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
+    d.setSeconds(0);
+    d.setMilliseconds(0);
     return d;
   });
   const [password, setPassword] = useState("");
@@ -484,7 +486,13 @@ export default function CreateCapsulePage() {
           label="공개 날짜"
           helperText="오늘로부터 최대 1년 뒤까지만 설정할 수 있어요."
         >
-          <DatePicker value={openDate} onChange={setOpenDate} />
+          <DatePicker
+            value={openDate}
+            onChange={(date) => {
+              setOpenDate(date);
+              console.log("선택된 날짜:", date);
+            }}
+          />
         </Field>
 
         <Field

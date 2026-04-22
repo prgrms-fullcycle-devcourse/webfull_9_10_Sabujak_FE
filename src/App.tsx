@@ -13,8 +13,9 @@ import { Dim } from "./shared/components/ui/Dim";
 
 export default function App() {
   const dimCount = useDimStore((state) => state.useDimCount);
+
   return (
-    <>
+    <div className="frame">
       <HelmetProvider>
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -29,9 +30,9 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </HelmetProvider>
-        {dimCount > 0 && <Dim />}
-        <Modal />
-        <Loading />
-    </>
+      {dimCount > 0 && <Dim />}
+      <Modal />
+      <Loading />
+    </div>
   );
 }

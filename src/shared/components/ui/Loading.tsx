@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import HeartJar from "./HeartJar";
 import { useDimStore } from "../../store/useDimStore";
 import { useIsFetching, useIsMutating } from "@tanstack/react-query";
@@ -17,27 +17,23 @@ const Loading = ({
   const isMutating = useIsMutating();
   const isLoading = isFetching > 0 || isMutating > 0;
 
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setVisible(isLoading);
-  }, [isLoading]);
-
-  if (!visible) return null;
+  if (!isLoading) return null;
 
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-center backdrop-blur-sm bg-gray-900/10"
+      className="fixed inset-0 bg-transparent backdrop-blur-sm"
       style={{ zIndex }}
     >
-      <div className="flex min-h-48 items-center justify-center">
-        {typeof image === "string" ? (
-          <img src={image} alt="loading" className="h-48 w-48 object-contain" />
-        ) : (
-          image
-        )}
+      <div className="absolute top-[50dvh] left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+        <div className="flex min-h-48 w-48 items-center justify-center">
+          {typeof image === "string" ? (
+            <img src={image} alt="loading" className="h-48 w-48 object-contain" />
+          ) : (
+            image
+          )}
+        </div>
+        <p className="mt-6 text-center text-xl font-bold text-white">{text}</p>
       </div>
-      <p className="mt-6 text-center text-xl font-bold text-white">{text}</p>
     </div>
   );
 };

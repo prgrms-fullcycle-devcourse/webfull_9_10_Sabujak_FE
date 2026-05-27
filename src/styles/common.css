@@ -17,10 +17,16 @@ textarea:-webkit-autofill:focus {
 
 body {
   background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
+  overflow: hidden scroll;
+}
+
+main {
+    height: max-content;
+    overflow: unset;
 }
 
 #root:has(.main-page) {
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #root {
@@ -243,11 +249,15 @@ header {
   border-bottom: 0;
 }
 
+.fixed-bottom {
+  background: transparent;
+}
 .fixed-bottom>div {
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eaedef 100%); */
   /* background: linear-gradient(180deg, #f7f2e800 0%, #eef8ff 100%); */
-  background: linear-gradient(180deg, #f7f2e800 0%, #fdfbf7 50%);
-  /* background: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, #fdfbf7 15%); */
+  /* background: linear-gradient(180deg, #f7f2e800 0%, #fdfbf7 50%); */
+  background: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, #fdfbf7 15%);
+  /* background: transparent; */
 }
 
 .card-hearts-page{
@@ -261,6 +271,22 @@ header {
 ******************************
 ******************************/
 
+/*****************************
+******************************
+ 모달
+******************************
+******************************/
+.modal-menu{
+  /* background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%); */
+  background: var(--color-stone-50);
+}
+
+.root-inner {
+  transition: filter 0.15s;
+}
+body.is-loading .root-inner {
+  filter: blur(4px);
+}
 
 
 /*****************************
@@ -270,16 +296,14 @@ header {
 ******************************/
 
 @media (min-width: 768px) {
-  body:has(.main-page) {
-    overflow: hidden;
-  }
-
-  #root {
-    overflow: hidden;
-  }
-
-  #root:has(.main-page) {
-    overflow: initial;
+  .frame {
+    overflow: visible;
+    margin: auto;
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100dvh;
+    transform: translate(0, 0);
   }
 
   *::-webkit-scrollbar {
@@ -295,12 +319,8 @@ header {
     background: transparent;
   }
 
-  #root .root-inner:has(.main-page) {
-    overflow: inherit;
-  }
-
   main {
-    background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
+    /* background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%); */
   }
 
 
@@ -315,19 +335,8 @@ header {
     margin-right: auto;
   }
 
-  #root {
-    margin: auto;
-    position: relative;
-    transform: translate(0, 0);
-  }
-
   #root .root-inner {
-    /* background: linear-gradient(180deg, #f7f2e8 30%, #eef8ff 100%) */
     background: linear-gradient(180deg, #FDFBF7 50%, #FFF7EB 100%);
-    /* overflow: inherit !important; */
-    /* letter-spacing: 0.1rem; */
-    height: 100vh;
-    overflow: auto;
   }
 
 

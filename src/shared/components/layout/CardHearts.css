@@ -17,7 +17,7 @@
 
 /* 페이지 전체 배경 컨테이너 — 콘텐츠 뒤에 위치 */
 .card-hearts-page {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
   overflow: hidden;

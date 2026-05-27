@@ -1,4 +1,5 @@
 import "./CardHearts.css";
+import { createPortal } from "react-dom";
 
 type CardHeartsProps = {
   showFront?: boolean;
@@ -7,7 +8,7 @@ type CardHeartsProps = {
 
 export default function CardHearts({ showFront = false, fullPage = false }: CardHeartsProps) {
   if (fullPage) {
-    return (
+    const pageHearts = (
       <div className="card-hearts-page" aria-hidden="true">
         <span className="main-page-card-heart page-heart-1 main-page-card-heart-yellow" />
         <span className="main-page-card-heart page-heart-2 main-page-card-heart-blue main-page-card-heart-lines" />
@@ -21,6 +22,12 @@ export default function CardHearts({ showFront = false, fullPage = false }: Card
         <span className="main-page-card-heart page-heart-10 main-page-card-heart-blue" />
       </div>
     );
+
+    if (typeof document === "undefined") {
+      return null;
+    }
+
+    return createPortal(pageHearts, document.body);
   }
 
   return (
